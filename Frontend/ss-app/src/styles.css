@@ -1,1 +1,52 @@
-/* You can add global styles to this file, and also import other style files */
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+:root {
+  --bg: #FFFFFF;
+  --surface: #1f1f1f;
+  --surface-2: #181818;
+  --border: #2b2b2b;
+
+  --text: #ffffff;
+  --muted: #b3b3b3;
+
+  --accent: #e50914; /* PulseScreen red */
+  --accent-contrast: #ffffff;
+
+  /* feedback */
+  --success: #22c55e;
+  --warn: #f59e0b;
+  --error: #ef4444;
+}
+
+/* Base */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+html { color-scheme: dark; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Gelasio", serif;;
+}
+
+/* Images & links */
+img { display: block; max-width: 100%; }
+a { color: #0aa6ff; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Scrollbar (WebKit) */
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 999px; }
+*::-webkit-scrollbar-thumb:hover { background: #3a3a3a; }
+
+
+/* ===================== Angular Material ===================== */
+
+/* Toolbar */
+.mat-toolbar {
+  background: rgba(24, 24, 27) !important;
+  color: var(--text) !important;
+  border-bottom: 1px solid var(--border);
+}
