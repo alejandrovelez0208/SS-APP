@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { SharedModule } from '../shared/shared-module';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -8,9 +8,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   templateUrl: './signup.html',
   styleUrl: './signup.css',
 })
-export class signup implements OnInit {
-
+export class Signup {
   signupForm !: FormGroup;
+  selectedType: 'escort' | 'member' | null = null;
 
   constructor(private fb: FormBuilder) {
     this.fb.group({
@@ -21,7 +21,16 @@ export class signup implements OnInit {
     });
   }
 
-  ngOnInit(): void {
+  selectType(type: 'escort' | 'member'): void {
+    this.selectedType = type;
+  }
 
+  continue(): void {
+    if (!this.selectType) {
+      return;
+    }
+  }
+
+  ngOnInit(): void {
   }
 }

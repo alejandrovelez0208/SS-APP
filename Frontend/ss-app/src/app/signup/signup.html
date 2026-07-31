@@ -6,13 +6,24 @@
         <span class="logo-text">SWEETSCORT</span>
     </div>
 
-    
-    <mat-card class="signup-card" appearance="outlined">
-        <h1>Sign Up</h1>
-        <p class="subtitle">Create an account to start watching</p>
-    </mat-card>
 
-    <form [formGroup]="signupForm" class="form">
+    <div class="profile-type-container">
+        <h1>Profile type</h1>
 
-    </form>
+        <div class="options">
+            <mat-card class="profile-card" [class.type-escort]="true" [class.selected]="selectedType === 'escort'"
+                (click)="selectType('escort')">
+                <div class="card-content">
+                    <h2>Escort</h2>
+                </div>
+            </mat-card>
+
+            <mat-card class="profile-card" [class.type-member]="true" [class.selected]="selectedType === 'member'"
+                (click)="selectType('member')">
+                <div class="card-content">
+                    <h2>Member</h2>
+                </div>
+            </mat-card>
+        </div>
+    </div>
 </div>
