@@ -1,9 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Gelasio:ital,wght@0,400..700;1,400..700&display=swap');
-
-body {
-    font-family: 'Poppins', sans-serif;
-}
-
 .landing-container {
   background: #FFFF;
   color: #fff;
@@ -11,16 +5,12 @@ body {
   width: 100vw;
   position: relative;
   overflow: hidden;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
 /* Background collage + heavy vignette */
 .bg {
   position: absolute;
   inset: 0;
-/*   background-image:
-    linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.85) 100%),
-    url('/landing.png'); */
   background-size: cover;
   background-position: center;
   filter: brightness(0.95);
@@ -32,57 +22,51 @@ body {
   position: relative;
   z-index: 2;
   padding: 18px 32px;
-  background: #141414;;
+  background: black;
 
-  .brand-text {
-    font-size: 28px;
-    font-weight: 900;
-    color: #e50914;
-    letter-spacing: -0.5px;
-  }
-  .spacer { flex: 1; }
-
-  .lang-btn {
-    margin-right: 12px;
-    background: rgba(0,0,0,0.6);
-    border: 1px solid rgba(255,255,255,0.3);
-    color: #fff;
-    border-radius: 6px;
-    padding: 4px 10px;
-    line-height: 24px;
-    .mat-icon { font-size: 20px; height: 20px; width: 20px; }
+  .spacer {
+    flex: 1;
   }
 
   .signin-btn {
-    background: #e50914 !important;
-    color: #fff !important;
+    background: #7A0019 !important;
+    border: none;
     border-radius: 6px;
-    padding: 6px 14px;
-    font-weight: 600;
+    padding: 12px 22px;
+    font-family: 'Inter', sans-serif !important;
+    transition: .3s;
   }
 }
 
 .logo {
   display: flex;
   align-items: center;
-  gap: 12px;
   font-size: 24px;
   font-weight: 700;
-  letter-spacing: -0.5px;
+  letter-spacing: 1px;
   flex-shrink: 0;
+  gap: 0px;
 }
 
-.logo-icon {
-  font-size: 32px;
-  width: 32px;
-  height: 32px;
-  color: #e50914;
+.logo img {
+  width: auto;
+  height: 50px;
+  margin-right: -10px;
+}
+
+.logo span {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  color: var(--text);
 }
 
 .logo-text {
-  background: linear-gradient(135deg, #e50914 0%, #ff6b6b 100%);
+  background: #7A0019;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  font-family: "Gelasio", serif;
+  font-family: 'Cormorant Garamond', serif !important;
+  font-size: 3rem;
+  font-weight: bold;
+  letter-spacing: 4px;
 }
