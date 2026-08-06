@@ -3,27 +3,38 @@
 
     <div class="logo">
         <img src="/logo.png" alt="SweetScort">
-        <span class="logo-text">WEETSCORT</span>
+        <div class="logo-title">
+            <span class="logo-text">WEETSCORT</span>
+            <div class="divider">
+                <div class="line"></div>
+                <div class="diamond"></div>
+                <div class="line"></div>
+            </div>
+        </div>
     </div>
 
-
     <div class="profile-type-container">
-        <h1>Profile type</h1>
+        <h1>Profile Type</h1>
 
+        @if(fields[currentStep].type === 'card-select') {
         <div class="options">
-            <mat-card class="profile-card" [class.type-escort]="true" [class.selected]="selectedType === 'escort'"
-                (click)="selectType('escort')">
-                <div class="card-content">
-                    <h2>Escort</h2>
-                </div>
-            </mat-card>
 
-            <mat-card class="profile-card" [class.type-member]="true" [class.selected]="selectedType === 'member'"
-                (click)="selectType('member')">
+            @for(option of fields[currentStep].options; track option.value) {
+            <mat-card class="profile-card" [class]="option.class" [class.selected]="selectedType === option.value"
+                (click)="selectType(option.value)">
+
                 <div class="card-content">
-                    <h2>Member</h2>
+                    <div>
+                        <img class="profile-image" [src]="option.img" alt="{{ option.title }}">
+                    </div>
+                    <div>
+                        <h2>{{ option.title }}</h2>
+                        <p>{{ option.description }}</p>
+                    </div>
                 </div>
             </mat-card>
+            }
         </div>
+        }
     </div>
 </div>
