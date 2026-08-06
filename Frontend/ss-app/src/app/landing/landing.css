@@ -1,3 +1,4 @@
+/* Main container - White background, full viewport height */
 .landing-container {
   background: #FFFF;
   color: #fff;
@@ -7,7 +8,7 @@
   overflow: hidden;
 }
 
-/* Background collage + heavy vignette */
+/* Background image layer */
 .bg {
   position: absolute;
   inset: 0;
@@ -17,17 +18,21 @@
   z-index: 1;
 }
 
-/* Top bar */
+/* Top toolbar - Black background, flex layout */
 .topbar {
   position: relative;
   z-index: 2;
   padding: 18px 32px;
   background: black;
+  display: flex;
+  align-items: center;
 
+  /* Spacer - Pushes sign-in button to the right */
   .spacer {
     flex: 1;
   }
 
+  /* Sign-in button - Burgundy color */
   .signin-btn {
     background: #7A0019 !important;
     border: none;
@@ -38,6 +43,7 @@
   }
 }
 
+/* Logo - Horizontal alignment of image and text */
 .logo {
   display: flex;
   align-items: center;
@@ -48,25 +54,58 @@
   gap: 0px;
 }
 
+/* Logo image */
 .logo img {
   width: auto;
   height: 50px;
   margin-right: -10px;
 }
 
-.logo span {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 2rem;
-  color: var(--text);
+/* Logo text container */
+.logo-title {
+  position: relative;
+  display: inline-block;
 }
 
+/* "SWEETSCORT" text with burgundy gradient effect */
 .logo-text {
   background: #7A0019;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   font-family: 'Cormorant Garamond', serif !important;
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: bold;
   letter-spacing: 4px;
+}
+
+/* Divider with lines and diamond */
+.divider {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0px;
+}
+
+/* Side lines of the divider */
+.line {
+  width: 90px;
+  height: 1px;
+  background: #7A0019;
+  flex: none;
+}
+
+/* Decorative diamond */
+.diamond {
+  width: 10px;
+  height: 10px;
+  margin: 0 14px;
+  border: 2px solid #7A0019;
+  transform: rotate(45deg);
+  background: #111111;
 }

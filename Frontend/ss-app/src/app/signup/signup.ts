@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { SharedModule } from '../shared/shared-module';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { SIGN_UP_FIELDS } from './fields/sign-up.fields';
 
 @Component({
   selector: 'app-signup',
@@ -9,28 +10,37 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrl: './signup.css',
 })
 export class Signup {
-  signupForm !: FormGroup;
+  fields = SIGN_UP_FIELDS;
+
+  currentStep = 0;
+
+  signupForm!: FormGroup;
+
   selectedType: 'escort' | 'member' | null = null;
 
   constructor(private fb: FormBuilder) {
-    this.fb.group({
-      fullName: ['', [Validators.required, Validators.minLength(2)]],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(2)]],
-      confirmPassword: ['', [Validators.required]] //Continue after..
-    });
-  }
 
-  selectType(type: 'escort' | 'member'): void {
-    this.selectedType = type;
+    this.signupForm = this.fb.group({
+      profileType: [null],
+      username: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', Validators.required]
+    });
+
+  }
+  selectType(type: string): void {
+    this.selectedType = type as 'escort' | 'member';
   }
 
   continue(): void {
-    if (!this.selectType) {
+
+    if (!this.selectedType) {
       return;
     }
+
+    this.currentStep++;
+
   }
 
-  ngOnInit(): void {
-  }
 }

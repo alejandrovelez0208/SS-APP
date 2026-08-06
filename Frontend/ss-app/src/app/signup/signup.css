@@ -11,9 +11,6 @@
 .bg {
   position: absolute;
   inset: 0;
-  background-size: cover;
-  background-position: center;
-  filter: brightness(0.9);
   z-index: 1;
 }
 
@@ -42,7 +39,6 @@
   line-height: 1.2;
 }
 
-
 .logo img {
   width: auto;
   height: 50px;
@@ -50,112 +46,103 @@
 }
 
 .logo span {
-  font-family: 'Cormorant Garamond', serif;
   font-size: 2rem;
   color: var(--text);
 }
 
-/* The card */
-.signup-card {
+.logo-title {
   position: relative;
-  z-index: 2;
-  margin: 0 auto;
-  margin-top: clamp(64px, 12vh, 120px);
-  width: min(92vw, 440px);
-  padding: 36px 40px 28px;
-  background: rgba(0, 0, 0, 0.75) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 6px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
 }
 
-/* Outline field borders */
-:host ::ng-deep .signup-card .mdc-text-field--outlined .mdc-notched-outline__leading,
-:host ::ng-deep .signup-card .mdc-text-field--outlined .mdc-notched-outline__notch,
-:host ::ng-deep .signup-card .mdc-text-field--outlined .mdc-notched-outline__trailing {
-  border-color: rgba(255, 255, 255, 0.35);
+.divider {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-:host ::ng-deep .signup-card .mdc-text-field--focused .mdc-notched-outline__leading,
-:host ::ng-deep .signup-card .mdc-text-field--focused .mdc-notched-outline__notch,
-:host ::ng-deep .signup-card .mdc-text-field--focused .mdc-notched-outline__trailing {
-  border-color: #fff;
+.line {
+  width: 90px;
+  height: 1px;
+  background: #7A0019;
 }
 
-:host ::ng-deep .signup-card .mdc-text-field .mdc-floating-label,
-:host ::ng-deep .signup-card .mat-mdc-form-field-hint-wrapper,
-:host ::ng-deep .signup-card .mat-mdc-form-field-subscript-wrapper {
-  color: #b3b3b3 !important;
-}
-
-/* Mobile spacing tweaks */
-@media (max-width: 600px) {
-  .signup-card {
-    padding: 28px 24px 24px;
-  }
+.diamond {
+  width: 10px;
+  height: 10px;
+  margin: 0 14px;
+  border: 2px solid #7A0019;
+  transform: rotate(45deg);
 }
 
 .profile-type-container {
   position: relative;
   z-index: 2;
-  width: 100%;
-  min-height: 100vh;
+  padding-top: 140px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 100px;
-  box-sizing: border-box;
 }
 
 .profile-type-container h1 {
-  margin: 0 0 30px;
-  color: #fff;
   font-size: 28px;
   font-weight: 500;
-  text-align: center;
+  margin-bottom: 30px;
 }
 
 .options {
-  position: relative;
-  z-index: 2;
   display: flex;
-  justify-content: center;
-  gap: 12px;
-  width: 100%;
-}
-
-.card-content h2 {
-  margin: 0;
-
-  color: #fff;
-  font-size: 18px;
-  font-weight: 700;
+  gap: 20px;
 }
 
 .profile-card {
   width: 345px;
   height: 210px;
-  display: flex;
-  flex-direction: row;
-  background: rgba(0, 0, 0, 0.75);
-  border: 2px solid rgba(255, 255, 255, 0.25);
-  border-radius: 6px;
   cursor: pointer;
-  padding: 18px;
-  box-sizing: border-box;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 6px;
+  background: black !important;
+  border: 2px solid rgba(255, 255, 255, .25) !important;
+  transition: .2s;
 }
 
 .profile-card:hover {
-  border-color: rgba(255, 255, 255, 0.6);
+  border-color: #9c9c9c !important;
 }
 
-.profile-card.type-escort.selected {
-  border-color: #0384da;
-  box-shadow: 0 0 12px rgba(233, 30, 140, 0.4);
+.profile-card.selected.type-escort {
+  border-color: #7A0019;
+  box-shadow: 0 0 18px rgba(122, 0, 25, .55);
 }
 
-.profile-card.type-member.selected {
-  border-color: #00e01e;
-  box-shadow: 0 0 12px rgba(33, 150, 243, 0.4);
+.profile-card.selected.type-member {
+  border-color: #C9A96E;
+  box-shadow: 0 0 18px rgba(201, 169, 110, .45);
+}
+
+.card-content {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 16px;
+}
+
+.card-content img {
+  width: 50px;
+  flex-shrink: 0;
+}
+
+.card-content h2 {
+  margin: 0 0 6px;
+}
+
+.card-content p {
+  margin: 0;
+}
+
+.type-escort img {
+  filter: brightness(0) saturate(100%) invert(12%) sepia(91%) saturate(2600%) hue-rotate(332deg);
+}
+
+.type-member img {
+  filter: brightness(0) saturate(100%) invert(72%) sepia(30%) saturate(420%) hue-rotate(6deg);
 }
