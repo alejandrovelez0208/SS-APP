@@ -2,8 +2,15 @@
     <div class="bg"></div>
 
     <div class="logo">
-        <mat-icon class="logo-icon"></mat-icon>
-        <span class="logo-text">SWEETSCORT</span>
+        <img src="/logo.png" alt="SweetScort">
+        <div class="logo-title">
+            <span class="logo-text">WEETSCORT</span>
+            <div class="divider">
+                <div class="line"></div>
+                <div class="diamond"></div>
+                <div class="line"></div>
+            </div>
+        </div>
     </div>
 
     <mat-card class="auth-card" (ngSubmit)="submit()" appearance="outlined">
@@ -49,7 +56,7 @@
             <button type="button" class="link-btn forgot" (click)="forgot()">Forgot Password ?</button>
 
             <div class="signup">
-                <span>New to PulseScreen?</span>
+                <span>New to SweetScort?</span>
                 <a routerLink="/signup" class="link">Sign up now.</a>
             </div>
         </form>

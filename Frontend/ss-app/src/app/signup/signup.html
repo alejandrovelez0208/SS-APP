@@ -35,7 +35,8 @@
                 </mat-card>
                 }
             </div>
-            <button mat-flat-button class="nextstep-btn" (click)="continue()" [disabled]="hide">NEXT STEP</button>
+            <button mat-flat-button class="nextstep-btn" type="button" (click)="continue()" [disabled]="hide()">NEXT
+                STEP</button>
             }
 
             @if(fields[currentStep].type === 'username-select' && selectedType == 'member') {
@@ -47,8 +48,63 @@
                 </mat-form-field>
             </div>
             <div class="btn-row">
-                <a class="back-btn" (click)="back()"><-BACK</a>
-                <button mat-flat-button class="nextstep-btn" (click)="continue()" [disabled]="hide">NEXT STEP</button>
+                <a class="back-btn" (click)="back()">BACK</a>
+                <button mat-flat-button class="nextstep-btn" type="button" (click)="continue()"
+                    [disabled]="signupForm.get('userName')?.invalid">NEXT STEP</button>
+            </div>
+            }
+
+            @if (fields[currentStep].type === 'emailandpassword-select' && selectedType == 'member') {
+            <mat-form-field appearance="outline" class="field">
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email">
+                <mat-icon matPrefix>email</mat-icon>
+
+                @if (signupForm.get('email')?.hasError('required')) {
+                <mat-error>Email is required</mat-error>
+                }
+                @if (signupForm.get('email')?.hasError('email')) {
+                <mat-error>Please enter a valid email</mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="field">
+                <mat-label>Password</mat-label>
+                <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
+                <mat-icon matPrefix>lock</mat-icon>
+                <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword" tabIndex="-1">
+                    <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+
+                @if (signupForm.get('password')?.hasError('required')) {
+                <mat-error>Password is required</mat-error>
+                }
+                @if (signupForm.get('password')?.hasError('minlength')) {
+                <mat-error>Password must be at least 6 characters</mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="field">
+                <mat-label>Confirm Password</mat-label>
+                <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirmPassword">
+                <mat-icon matPrefix>lock_outline</mat-icon>
+                <button mat-icon-button matSuffix type="button" (click)="hideConfirmPassword = !hideConfirmPassword"
+                    tabIndex="-1">
+                    <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+
+                @if (signupForm.get('confirmPassword')?.hasError('required')) {
+                <mat-error>Confirm password is required</mat-error>
+                }
+                @if (signupForm.get('confirmPassword')?.hasError('passwordMismatch') &&
+                !signupForm.get('confirmPassword')?.hasError('required')) {
+                <mat-error>Password do not match</mat-error>
+                }
+            </mat-form-field>
+            <div class="btn-row">
+                <a class="back-btn" (click)="back()">BACK</a>
+                <button mat-flat-button class="nextstep-btn" type="button" (click)="continue()"
+                    [disabled]="!validationCredentials">NEXT STEP</button>
             </div>
             }
         </form>
