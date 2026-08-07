@@ -1,6 +1,10 @@
+:root {
+  --font-family: 'Inter', sans-serif;
+}
+
 /* Page frame */
 .signup-page {
-  font-family: 'Cormorant Garamond', serif !important;
+  font-family: var(--font-family);
   min-height: 100vh;
   min-height: 100dvh;
   width: 100vw;
@@ -84,9 +88,18 @@
 }
 
 .profile-type-container h1 {
+  display: flex;
+  justify-content: center;
   font-size: 28px;
   font-weight: 500;
   margin-bottom: 30px;
+}
+
+/* Form */
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .options {
@@ -145,4 +158,57 @@
 
 .type-member img {
   filter: brightness(0) saturate(100%) invert(72%) sepia(30%) saturate(420%) hue-rotate(6deg);
+}
+
+.btn-row {
+  display: flex;
+  gap: 16px;
+}
+
+.nextstep-btn {
+  font-family: var(--font-family);
+  background: #B11226 !important;
+  margin-top: 20px;
+}
+
+a{
+  margin-top: 30px;
+  color: red;
+  cursor: pointer;
+}
+
+.field {
+  width: 100%;
+
+  .mat-mdc-input-element {
+    color: #fff;
+  }
+
+  .mat-mdc-form-field-icon-prefix .mat-icon {
+    color: rgba(255, 255, 255, 0.7);
+    margin-right: 8px;
+  }
+
+  .mat-mdc-form-field-icon-suffix .mat-icon {
+    color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+/* Outline field borders */
+:host ::ng-deep .field .mdc-text-field--outlined .mdc-notched-outline__leading,
+:host ::ng-deep .field .mdc-text-field--outlined .mdc-notched-outline__notch,
+:host ::ng-deep .field .mdc-text-field--outlined .mdc-notched-outline__trailing {
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+:host ::ng-deep .field .mdc-text-field--focused .mdc-notched-outline__leading,
+:host ::ng-deep .field .mdc-text-field--focused .mdc-notched-outline__notch,
+:host ::ng-deep .field .mdc-text-field--focused .mdc-notched-outline__trailing {
+  border-color: #fff;
+}
+
+:host ::ng-deep .field .mdc-text-field .mdc-floating-label,
+:host ::ng-deep .field .mat-mdc-form-field-hint-wrapper,
+:host ::ng-deep .field .mat-mdc-form-field-subscript-wrapper {
+  color: #b3b3b3 !important;
 }

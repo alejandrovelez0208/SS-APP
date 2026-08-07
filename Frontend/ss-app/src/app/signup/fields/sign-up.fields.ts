@@ -21,7 +21,7 @@ export const SIGN_UP_FIELDS = [
   },
   {
     key: 'username',
-    type: 'text',
+    type: 'username-select',
     label: 'Username'
   }
 ];

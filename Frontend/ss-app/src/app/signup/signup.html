@@ -14,27 +14,43 @@
     </div>
 
     <div class="profile-type-container">
-        <h1>Profile Type</h1>
+        <form [formGroup]="signupForm" class="form">
+            @if(fields[currentStep].type === 'card-select') {
+            <h1>Profile Type</h1>
 
-        @if(fields[currentStep].type === 'card-select') {
-        <div class="options">
+            <div class="options">
+                @for(option of fields[currentStep].options; track option.value) {
+                <mat-card class="profile-card" [class]="option.class" [class.selected]="selectedType === option.value"
+                    (click)="selectType(option.value)">
 
-            @for(option of fields[currentStep].options; track option.value) {
-            <mat-card class="profile-card" [class]="option.class" [class.selected]="selectedType === option.value"
-                (click)="selectType(option.value)">
-
-                <div class="card-content">
-                    <div>
-                        <img class="profile-image" [src]="option.img" alt="{{ option.title }}">
+                    <div class="card-content">
+                        <div>
+                            <img class="profile-image" [src]="option.img" alt="{{ option.title }}">
+                        </div>
+                        <div>
+                            <h2>{{ option.title }}</h2>
+                            <p>{{ option.description }}</p>
+                        </div>
                     </div>
-                    <div>
-                        <h2>{{ option.title }}</h2>
-                        <p>{{ option.description }}</p>
-                    </div>
-                </div>
-            </mat-card>
+                </mat-card>
+                }
+            </div>
+            <button mat-flat-button class="nextstep-btn" (click)="continue()" [disabled]="hide">NEXT STEP</button>
             }
-        </div>
-        }
+
+            @if(fields[currentStep].type === 'username-select' && selectedType == 'member') {
+            <div class="options">
+                <mat-form-field appearance="outline" class="field">
+                    <mat-label>{{fields[currentStep].label}}</mat-label>
+                    <input matInput formControlName="userName">
+                    <mat-icon matPrefix>person</mat-icon>
+                </mat-form-field>
+            </div>
+            <div class="btn-row">
+                <a class="back-btn" (click)="back()"><-BACK</a>
+                <button mat-flat-button class="nextstep-btn" (click)="continue()" [disabled]="hide">NEXT STEP</button>
+            </div>
+            }
+        </form>
     </div>
 </div>
