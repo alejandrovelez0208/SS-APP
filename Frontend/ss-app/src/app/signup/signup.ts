@@ -18,11 +18,13 @@ export class Signup {
 
   selectedType: 'escort' | 'member' | null = null;
 
+  hide = true;
+
   constructor(private fb: FormBuilder) {
 
     this.signupForm = this.fb.group({
       profileType: [null],
-      username: ['', [Validators.required]],
+      userName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required]
@@ -30,17 +32,22 @@ export class Signup {
 
   }
   selectType(type: string): void {
+    this.hide = false;
     this.selectedType = type as 'escort' | 'member';
   }
 
   continue(): void {
-
     if (!this.selectedType) {
       return;
     }
-
     this.currentStep++;
+  }
 
+  back(): void {
+    if (this.currentStep === 0) {
+      return;
+    }
+    this.currentStep--;
   }
 
 }
