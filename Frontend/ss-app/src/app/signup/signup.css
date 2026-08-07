@@ -212,3 +212,13 @@ a{
 :host ::ng-deep .field .mat-mdc-form-field-subscript-wrapper {
   color: #b3b3b3 !important;
 }
+
+/*Auto fill*/
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #141011 inset !important;
+  -webkit-text-fill-color: #fff !important;
+  caret-color: #fff;
+}
