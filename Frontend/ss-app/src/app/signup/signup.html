@@ -107,6 +107,57 @@
                     [disabled]="!validationCredentials">NEXT STEP</button>
             </div>
             }
+
+            @if (fields[currentStep].type === 'infoGeneral-select' && selectedType == 'member') {
+            <div class="avatar-upload" >
+                <label class="avatar-upload__label">Profile Picture</label>
+
+                <div class="avatar-upload__body">
+                    <div class="avatar-upload__preview" [class.has-image]="previewUrl()">
+                        @if (previewUrl()) {
+                        <img [src]="previewUrl()" alt="Vista previa de perfil">
+                        } @else {
+                        <mat-icon class="avatar-upload__placeholder-icon">person</mat-icon>
+                        }
+                    </div>
+
+                    <input #fileInput type="file" hidden accept="image/*" (change)="onFileSelected($event)">
+
+                    <button mat-stroked-button type="button" class="avatar-upload__btn" (click)="fileInput.click()">
+                        <mat-icon>photo_camera</mat-icon>
+                        {{ previewUrl() ? 'Cambiar foto' : 'Seleccionar foto' }}
+                    </button>
+                </div>
+            </div>
+
+            <mat-form-field appearance="outline" class="field">
+                <mat-label>How do you identify?</mat-label>
+                <mat-select [formControl]="genderOption">
+                    @for (opcion of genders; track $index) {
+                    <mat-option [value]="opcion">
+                        {{ opcion }}
+                    </mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="field">
+                <mat-label>What are you looking for?</mat-label>
+                <mat-select [formControl]="preferenceOption">
+                    @for (opcion of preferences; track $index) {
+                    <mat-option [value]="opcion">
+                        {{opcion}}
+                    </mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+
+            <div class="btn-row">
+                <a class="back-btn" (click)="back()">BACK</a>
+                <button mat-flat-button class="nextstep-btn" type="button" (click)="continue()"
+                    [disabled]="!validationCredentials">NEXT STEP</button>
+            </div>
+            }
         </form>
     </div>
 </div>

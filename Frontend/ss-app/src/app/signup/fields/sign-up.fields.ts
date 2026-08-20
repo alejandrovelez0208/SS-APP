@@ -28,5 +28,10 @@ export const SIGN_UP_FIELDS = [
     key: 'emailandpassword',
     type: 'emailandpassword-select',
     label: 'email'
+  },
+  {
+    key: 'infoGeneral',
+    type: 'infoGeneral-select',
+    label: 'infoGeneral'
   }
 ];

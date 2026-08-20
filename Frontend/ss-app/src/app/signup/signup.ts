@@ -1,8 +1,10 @@
 import { Component, signal } from '@angular/core';
 import { SharedModule } from '../shared/shared-module';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SIGN_UP_FIELDS } from './fields/sign-up.fields';
 import { AuthService } from '../services/auth/auth-service';
+import { Gender } from '../shared/enums/gender';
+import { Preference } from '../shared/enums/preference';
 
 @Component({
   selector: 'app-signup',
@@ -23,6 +25,15 @@ export class Signup {
 
   hidePassword = true;
   hideConfirmPassword = true;
+
+  genderOption = new FormControl([]);
+  genders = Object.values(Gender);
+
+  preferenceOption = new FormControl([]);
+  preferences = Object.values(Preference);
+
+  selectedFile = signal<File | null>(null);
+  previewUrl = signal<string | ArrayBuffer | null>(null);
 
   constructor(private fb: FormBuilder, private authService: AuthService) {
 
@@ -59,5 +70,18 @@ export class Signup {
     return this.signupForm.get('email')?.valid === true &&
       this.signupForm.get('password')?.valid === true &&
       this.signupForm.get('confirmPassword')?.valid === true;
+  }
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (!file) return;
+
+    this.selectedFile.set(file);
+
+    const reader = new FileReader();
+    reader.onload = () => this.previewUrl.set(reader.result);
+    reader.readAsDataURL(file);
   }
 }
