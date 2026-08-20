@@ -99,3 +99,34 @@ body::after {
       transparent 75%);
 
 }
+
+.cdk-overlay-pane .mat-mdc-select-panel {
+  background: #141011 !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+  padding: 6px !important;
+}
+
+.cdk-overlay-pane .mat-mdc-option {
+  color: rgba(255, 255, 255, 0.85) !important;
+  border-radius: 6px;
+  margin: 2px 0;
+}
+
+.cdk-overlay-pane .mat-mdc-option:hover:not(.mdc-list-item--disabled) {
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+.cdk-overlay-pane .mat-mdc-option.mdc-list-item--selected {
+  background: rgba(122, 0, 25, 0.25) !important;
+  color: #fff !important;
+}
+
+.cdk-overlay-pane .mat-mdc-option .mat-pseudo-checkbox {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.cdk-overlay-pane .mat-mdc-option.mdc-list-item--selected .mat-pseudo-checkbox {
+  color: #7A0019 !important;
+}
