@@ -5,7 +5,6 @@
   width: 100vw;
   position: relative;
   overflow: hidden;
-  font-family: 'Cormorant Garamond', serif !important;
 }
 
 /* PulseScreen logo */
@@ -40,6 +39,7 @@
 }
 
 .logo-text {
+  font-family: 'Cormorant Garamond', serif !important;
   background: #7A0019;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

@@ -1,3 +1,13 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
 :root {
 
   --background: #111111;
@@ -13,11 +23,14 @@
 
 /* Base */
 * {
+  font-family: inherit !important;
   box-sizing: border-box;
 }
 
 html,
 body {
+  /* Default font family */
+  font-family: 'Inter', sans-serif !important;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -31,7 +44,6 @@ html {
 body {
   background: var(--background);
   color: var(--text);
-  font-family: 'Inter', sans-serif !important;
   overflow-x: hidden;
   position: relative;
 }
@@ -129,4 +141,23 @@ body::after {
 
 .cdk-overlay-pane .mat-mdc-option.mdc-list-item--selected .mat-pseudo-checkbox {
   color: #7A0019 !important;
+}
+
+/* Icon letter default */
+.mat-mdc-form-field-icon-prefix .mat-icon {
+  font-family: 'Material Icons' !important;
+}
+
+.mat-mdc-form-field-icon-suffix .mat-icon {
+  font-family: 'Material Icons' !important;
+}
+
+/*Auto fill*/
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #141011 inset !important;
+  -webkit-text-fill-color: #fff !important;
+  caret-color: #fff;
 }

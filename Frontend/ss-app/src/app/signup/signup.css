@@ -1,10 +1,5 @@
-:root {
-  --font-family: 'Inter', sans-serif;
-}
-
 /* Page frame */
 .signup-page {
-  font-family: var(--font-family);
   min-height: 100vh;
   min-height: 100dvh;
   width: 100vw;
@@ -166,7 +161,6 @@
 }
 
 .nextstep-btn {
-  font-family: var(--font-family);
   background: #B11226 !important;
   margin-top: 20px;
 }
@@ -221,16 +215,6 @@ a {
 
 :host ::ng-deep .field .mat-mdc-select-placeholder {
   color: rgba(255, 255, 255, 0.4);
-}
-
-/*Auto fill*/
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 1000px #141011 inset !important;
-  -webkit-text-fill-color: #fff !important;
-  caret-color: #fff;
 }
 
 .avatar-upload {
