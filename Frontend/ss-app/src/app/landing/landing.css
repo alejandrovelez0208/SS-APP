@@ -38,7 +38,6 @@
     border: none;
     border-radius: 6px;
     padding: 12px 22px;
-    font-family: 'Inter', sans-serif !important;
     transition: .3s;
   }
 }
@@ -67,13 +66,12 @@
   display: inline-block;
 }
 
-/* "SWEETSCORT" text with burgundy gradient effect */
 .logo-text {
+  font-family: 'Cormorant Garamond', serif !important;
   background: #7A0019;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  font-family: 'Cormorant Garamond', serif !important;
   font-size: 2rem;
   font-weight: bold;
   letter-spacing: 4px;
