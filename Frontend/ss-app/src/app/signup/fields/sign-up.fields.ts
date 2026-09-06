@@ -20,6 +20,12 @@ export const SIGN_UP_FIELDS = [
     ]
   },
   {
+
+  }
+];
+
+export const MEMBER_FIELDS = [
+  {
     key: 'username',
     type: 'username-select',
     label: 'Username'
@@ -34,4 +40,4 @@ export const SIGN_UP_FIELDS = [
     type: 'infoGeneral-select',
     label: 'infoGeneral'
   }
-];
+]
