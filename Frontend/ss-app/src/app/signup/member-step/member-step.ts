@@ -13,6 +13,8 @@ import { Preference } from '../../shared/enums/preference';
 })
 export class MemberStep {
   @Input() memberform!: FormGroup;
+  @Input() escortform!: FormGroup;
+  
   @Output() backToProfileType = new EventEmitter<void>();
 
   /*Member Fields*/

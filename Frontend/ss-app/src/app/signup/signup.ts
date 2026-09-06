@@ -6,16 +6,16 @@ import { AuthService } from '../services/auth/auth-service';
 import { Gender } from '../shared/enums/gender';
 import { Preference } from '../shared/enums/preference';
 import { MemberStep } from './member-step/member-step';
+import { EscortStep } from './escort-step/escort-step';
 
 @Component({
   selector: 'app-signup',
-  imports: [SharedModule, MemberStep],
+  imports: [SharedModule, MemberStep, EscortStep],
   templateUrl: './signup.html',
   styleUrl: './signup.css',
 })
 export class Signup {
   fields = SIGN_UP_FIELDS;
-
   currentStep = 0;
 
   signupForm!: FormGroup;
@@ -23,7 +23,6 @@ export class Signup {
   selectedType: 'escort' | 'member' | null = null;
 
   hide = signal(true);
-
   hidePassword = true;
   hideConfirmPassword = true;
 
@@ -59,12 +58,19 @@ export class Signup {
           Validators.required,
           this.authService.passwordMatchValidator('password')
         ]]
+      }),
+      escort: this.fb.group({
+         accountType: ['', [Validators.required]]
       })
     });
   }
 
   get memberForm(): FormGroup {
     return this.signupForm.get('member') as FormGroup;
+  }
+
+  get escortForm(): FormGroup {
+    return this.signupForm.get('escort') as FormGroup;
   }
 
   selectType(type: string): void {

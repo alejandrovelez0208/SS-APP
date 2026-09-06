@@ -1,4 +1,5 @@
 
+**06-09*2026**: New components are created.
 **05-09*2026**: New components are created if sign In is refactored.
 **04-09*2026**: Changes are made to the typography.
 **19-08*2026**: Implemente logig buttons in signIn.

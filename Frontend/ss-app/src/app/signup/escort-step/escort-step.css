@@ -1,0 +1,135 @@
+.escort-step {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 950px;
+    margin: 0 auto;
+}
+
+.step-title {
+    color: #fff;
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.radio-group-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+/* Base card style */
+.custom-radio {
+    display: flex;
+    width: 100% !important;
+    box-sizing: border-box;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 8px 10px;
+    background-color: #121212;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.custom-radio:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Selected card status */
+:host ::ng-deep .custom-radio.mat-mdc-radio-checked {
+    border-color: #00e676 !important;
+    background-color: rgba(0, 230, 118, 0.04);
+}
+
+/* --- CLEANING AND FIXING THE ICON / CHECK --- */
+
+/* We completely hide the default Material circles */
+:host ::ng-deep .custom-radio .mdc-radio__outer-circle,
+:host ::ng-deep .custom-radio .mdc-radio__inner-circle {
+    display: none !important;
+}
+
+/* Force the radio's inner container to occupy its own clean space */
+:host ::ng-deep .custom-radio .mat-mdc-radio-touch-target {
+    display: none;
+}
+
+/* We create a clean visual check mark using the radio container */
+:host ::ng-deep .custom-radio.mat-mdc-radio-checked .mdc-radio {
+    position: relative;
+    width: 10px;
+    height: 10px;
+    background-color: #00e676;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* We draw the "v" of the check perfectly centered */
+:host ::ng-deep .custom-radio.mat-mdc-radio-checked .mdc-radio::after {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 13px;
+    width: 3px;
+    height: 11px;
+    border: solid #121212;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* When NOT selected, we display a clean, subtle gray circle */
+:host ::ng-deep .custom-radio:not(.mat-mdc-radio-checked) .mdc-radio {
+    position: relative;
+    width: 10px;
+    height: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    background: transparent;
+}
+
+:host ::ng-deep .custom-radio .mdc-form-field {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+:host ::ng-deep .custom-radio .mdc-label {
+    color: rgba(255, 255, 255, 0.85) !important;
+    padding-left: 14px !important;
+    font-size: 1rem;
+}
+
+:host ::ng-deep .custom-radio.mat-mdc-radio-checked .mdc-label {
+    color: #00e676 !important;
+    font-weight: 500;
+}
+
+.btn-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+}
+
+.nextstep-btn {
+    background: #B11226 !important;
+    margin-top: 20px;
+}
+
+.profile-card {
+  width: 345px;
+  height: 210px;
+  cursor: pointer;
+  border-radius: 6px;
+  background: black !important;
+  border: 2px solid rgba(255, 255, 255, 0.25) !important;
+  transition: 0.2s;
+}
