@@ -40,4 +40,27 @@ export const MEMBER_FIELDS = [
     type: 'infoGeneral-select',
     label: 'infoGeneral'
   }
+];
+
+export const ESCORT_FIELDS = [
+  {
+    key: 'escort-or-agency',
+    type: 'escort-or-agency-radio',
+  },
+  {
+
+  }
+]
+
+export const INDEPENDENT_ESCORT_FIELDS = [
+  {
+    key: 'username',
+    type: 'username-select',
+    label: 'Username'
+  },
+  {
+    key: 'emailandpassword',
+    type: 'emailandpassword-select',
+    label: 'email'
+  }
 ]

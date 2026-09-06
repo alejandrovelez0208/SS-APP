@@ -23,6 +23,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatRadioModule } from '@angular/material/radio';
 
 export const MATERIAL_MODULES = [
   MatIconModule,
@@ -46,6 +47,7 @@ export const MATERIAL_MODULES = [
   MatSliderModule,
   MatToolbarModule,
   MatExpansionModule,
+  MatRadioModule,
 ];
 
 @NgModule({

@@ -1,0 +1,17 @@
+<div class="independent-escort-step" [formGroup]="independentEscortform">
+    @if(fields[currentStep].type === 'username-select') {
+    <div class="options">
+        <mat-form-field appearance="outline" class="field">
+            <mat-label>{{fields[currentStep].label}}</mat-label>
+            <input matInput formControlName="userName">
+            <mat-icon matPrefix>person</mat-icon>
+        </mat-form-field>
+    </div>
+    <div class="btn-row">
+        <a class="back-btn" (click)="back()">BACK</a>
+        <button mat-flat-button class="nextstep-btn" type="button" (click)="continue()"
+            [disabled]="independentEscortform.get('userName')?.invalid">NEXT STEP</button>
+    </div>
+    }
+    <!-- Terminar... -->
+</div>
