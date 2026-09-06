@@ -1,14 +1,15 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, signal, ViewChild } from '@angular/core';
 import { SharedModule } from '../shared/shared-module';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SIGN_UP_FIELDS } from './fields/sign-up.fields';
 import { AuthService } from '../services/auth/auth-service';
 import { Gender } from '../shared/enums/gender';
 import { Preference } from '../shared/enums/preference';
+import { MemberStep } from './member-step/member-step';
 
 @Component({
   selector: 'app-signup',
-  imports: [SharedModule],
+  imports: [SharedModule, MemberStep],
   templateUrl: './signup.html',
   styleUrl: './signup.css',
 })
@@ -35,17 +36,37 @@ export class Signup {
   selectedFile = signal<File | null>(null);
   previewUrl = signal<string | ArrayBuffer | null>(null);
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private cdr: ChangeDetectorRef) {
 
     this.signupForm = this.fb.group({
       profileType: [null],
-      userName: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(20)]],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required, this.authService.passwordMatchValidator('password')]]
-    });
 
+      member: this.fb.group({
+        userName: ['', [
+          Validators.required,
+          Validators.minLength(4),
+          Validators.maxLength(20)
+        ]],
+        email: ['', [
+          Validators.required,
+          Validators.email
+        ]],
+        password: ['', [
+          Validators.required,
+          Validators.minLength(6)
+        ]],
+        confirmPassword: ['', [
+          Validators.required,
+          this.authService.passwordMatchValidator('password')
+        ]]
+      })
+    });
   }
+
+  get memberForm(): FormGroup {
+    return this.signupForm.get('member') as FormGroup;
+  }
+
   selectType(type: string): void {
     this.hide.set(false);
     this.selectedType = type as 'escort' | 'member';
@@ -57,6 +78,7 @@ export class Signup {
     }
     this.hide.set(true);
     this.currentStep++;
+    this.cdr.detectChanges();
   }
 
   back(): void {
@@ -64,6 +86,7 @@ export class Signup {
       return;
     }
     this.currentStep--;
+    this.cdr.detectChanges();
   }
 
   get validationCredentials(): boolean {
