@@ -18,37 +18,19 @@ export class EscortStep {
 
   showContent: Boolean = false;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private cdr: ChangeDetectorRef) {
-    this.signupForm = this.fb.group({
-      member: this.fb.group({
-        userName: ['', [
-          Validators.required,
-          Validators.minLength(4),
-          Validators.maxLength(20)
-        ]],
-        email: ['', [
-          Validators.required,
-          Validators.email
-        ]],
-        password: ['', [
-          Validators.required,
-          Validators.minLength(6)
-        ]],
-        confirmPassword: ['', [
-          Validators.required,
-          this.authService.passwordMatchValidator('password')
-        ]]
-      })
-    })
-  }
+  constructor(private cdr: ChangeDetectorRef) { }
 
   activateIf() {
     this.showContent = true;
   }
 
   get independentEscortForm(): FormGroup {
-    return this.signupForm.get('member') as FormGroup;
+    return this.escortform.get('independentEscort') as FormGroup;
   }
+
+  /*   get agencyForm(): FormGroup {
+      return this.escortform.get('agency') as FormGroup;
+    } */
 
   back(): void {
     this.cdr.detectChanges();
