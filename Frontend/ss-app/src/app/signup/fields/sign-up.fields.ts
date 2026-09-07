@@ -60,7 +60,15 @@ export const INDEPENDENT_ESCORT_FIELDS = [
   },
   {
     key: 'emailandpassword',
-    type: 'emailandpassword-select',
-    label: 'email'
+    type: 'email-and-password-select',
+    label: 'Email'
+  },
+  {
+    key: 'infoGeneral',
+    type: 'info-general-select',
+  },
+  {
+    key: 'infoAttributes',
+    type: 'info-attributes-select',
   }
 ]

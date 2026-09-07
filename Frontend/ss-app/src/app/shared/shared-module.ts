@@ -24,6 +24,8 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 export const MATERIAL_MODULES = [
   MatIconModule,
@@ -48,6 +50,8 @@ export const MATERIAL_MODULES = [
   MatToolbarModule,
   MatExpansionModule,
   MatRadioModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
 ];
 
 @NgModule({

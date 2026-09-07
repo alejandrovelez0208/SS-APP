@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { SharedModule } from '../../shared/shared-module';
 import { MEMBER_FIELDS } from '../fields/sign-up.fields';
 import { Form, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Gender } from '../../shared/enums/gender';
 import { Preference } from '../../shared/enums/preference';
+import { GENDER } from '../../shared/enums/gender';
 
 @Component({
   selector: 'app-member-step',
@@ -26,7 +26,7 @@ export class MemberStep {
   selectedFile = signal<File | null>(null);
   previewUrl = signal<string | ArrayBuffer | null>(null);
   genderOption = new FormControl([]);
-  genders = Object.values(Gender);
+  genders = Object.values(GENDER);
   preferenceOption = new FormControl([]);
   preferences = Object.values(Preference);
 

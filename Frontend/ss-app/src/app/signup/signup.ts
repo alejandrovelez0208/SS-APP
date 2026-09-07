@@ -3,10 +3,10 @@ import { SharedModule } from '../shared/shared-module';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SIGN_UP_FIELDS } from './fields/sign-up.fields';
 import { AuthService } from '../services/auth/auth-service';
-import { Gender } from '../shared/enums/gender';
 import { Preference } from '../shared/enums/preference';
 import { MemberStep } from './member-step/member-step';
 import { EscortStep } from './escort-step/escort-step';
+import { GENDER } from '../shared/enums/gender';
 
 @Component({
   selector: 'app-signup',
@@ -27,7 +27,7 @@ export class Signup {
   hideConfirmPassword = true;
 
   genderOption = new FormControl([]);
-  genders = Object.values(Gender);
+  genders = Object.values(GENDER);
 
   preferenceOption = new FormControl([]);
   preferences = Object.values(Preference);
@@ -59,9 +59,26 @@ export class Signup {
           this.authService.passwordMatchValidator('password')
         ]]
       }),
+
       escort: this.fb.group({
-         accountType: ['', [Validators.required]]
-      })
+        accountType: ['', [Validators.required]],
+        independentEscort: this.fb.group({
+          userName: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(20)]],
+          email: ['', [Validators.required, Validators.email]],
+          password: ['', [Validators.required, Validators.minLength(6)]],
+          confirmPassword: ['', [Validators.required, this.authService.passwordMatchValidator('password')]],
+          nameCompanion: ['', Validators.required],
+          gender: ['', Validators.required],
+          age: [18, Validators.required],
+          hairColor: [''],
+          height: [1.6],
+          weight: [60]
+        }),
+
+        agency: this.fb.group({
+          // campos de agency-step cuando los definas
+        }),
+      }),
     });
   }
 
@@ -72,6 +89,14 @@ export class Signup {
   get escortForm(): FormGroup {
     return this.signupForm.get('escort') as FormGroup;
   }
+
+  get independentEscortForm(): FormGroup {
+    return this.signupForm.get('independentEscort') as FormGroup;
+  }
+
+  /*   get agencyForm(): FormGroup {
+      return this.signupForm.get('agency') as FormGroup;
+    } */
 
   selectType(type: string): void {
     this.hide.set(false);

@@ -1,4 +1,4 @@
-.member-step {
+.independent-escort-step {
     position: relative;
     z-index: 2;
     display: flex;
@@ -13,7 +13,6 @@
 .field {
     width: 100%;
 
-    /* en vez de 170% */
     .mat-mdc-input-element {
         color: #fff;
     }
@@ -145,12 +144,6 @@ a {
     height: 20px;
 }
 
-/* .general-info{
-  display: block;
-  width: 60%;
-  justify-content: center;
-}
- */
 :host ::ng-deep .avatar-upload__btn .mat-icon,
 :host ::ng-deep .avatar-upload__preview .mat-icon {
     font-family: 'Material Icons' !important;
@@ -162,4 +155,44 @@ a {
     white-space: nowrap;
     word-wrap: normal;
     direction: ltr;
+}
+
+.slider-group,
+.slider-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    /* en vez de center */
+}
+
+.slider-container-wide,
+.slider-container {
+    width: 100%;
+    /* ocupa todo el ancho del contenedor padre, sin centrar */
+}
+
+.slider-container-wide mat-slider,
+.slider-container mat-slider {
+    width: 100%;
+
+    --mdc-slider-active-track-height: 8px;
+    --mdc-slider-inactive-track-height: 8px;
+    --mdc-slider-handle-height: 26px;
+    --mdc-slider-handle-width: 26px;
+    --mdc-slider-active-track-color: #B11226;
+    --mdc-slider-handle-color: #B11226;
+    --mdc-slider-focus-handle-color: #B11226;
+    --mdc-slider-hover-handle-color: #B11226;
+    --mdc-slider-with-tick-marks-active-container-color: #fff;
+    --mdc-slider-with-tick-marks-inactive-container-color: rgba(255, 255, 255, 0.4);
+}
+
+.step-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: #fff;
+    margin-bottom: 8px;
+    display: block;
+    text-align: left;
 }
