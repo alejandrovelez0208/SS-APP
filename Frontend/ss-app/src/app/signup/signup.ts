@@ -52,7 +52,9 @@ export class Signup {
           age: [18, Validators.required],
           hairColor: [''],
           height: [1.6],
-          weight: [60]
+          weight: [60],
+          orientation: ['', Validators.required],
+          nationality: ['', Validators.required]
         }),
 
         agency: this.fb.group({

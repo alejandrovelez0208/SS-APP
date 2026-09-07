@@ -70,7 +70,7 @@
     </div>
 
     <div class="toggle-group">
-        <mat-label class="step-title">Orientación</mat-label>
+        <mat-label class="step-title">Orientation</mat-label>
         <mat-button-toggle-group formControlName="orientation" class="custom-toggle-group">
             <mat-button-toggle value="heterosexual">Heterosexual</mat-button-toggle>
             <mat-button-toggle value="bisexual">Bisexual</mat-button-toggle>
@@ -78,7 +78,19 @@
         </mat-button-toggle-group>
     </div>
 
-
+    <mat-form-field appearance="outline" class="field nationality-field">
+        <mat-label>Nationality</mat-label>
+        <mat-icon matPrefix>public</mat-icon>
+        <input type="text" matInput [formControl]="nationalityControl" [matAutocomplete]="auto"
+            placeholder="Busca tu nacionalidad...">
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" panelClass="nationality-autocomplete-panel">
+            @for (nation of filteredNationalities | async; track nation.codes.alpha_2) {
+            <mat-option [value]="nation">
+                {{ nation.names.common }}
+            </mat-option>
+            }
+        </mat-autocomplete>
+    </mat-form-field>
 
     <div class="btn-row">
         <a class="back-btn" (click)="back()">BACK</a>

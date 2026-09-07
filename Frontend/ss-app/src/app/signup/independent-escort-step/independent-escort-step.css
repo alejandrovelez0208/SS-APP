@@ -198,7 +198,7 @@ a {
 }
 
 /* General Container */
-.toggle-group{  
+.toggle-group {
     width: 100%;
 }
 
@@ -225,4 +225,27 @@ a {
 :host ::ng-deep .custom-toggle-group .mat-button-toggle-국의-element,
 :host ::ng-deep .mat-button-toggle-ripple {
     border-radius: 8px !important;
+}
+
+/* Nationality field */
+.nationality-field {
+    margin-top: 40px;
+}
+
+::ng-deep .nationality-autocomplete-panel {
+    background: #1e1e1e !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+}
+
+::ng-deep .nationality-autocomplete-panel .mat-mdc-option {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+::ng-deep .nationality-autocomplete-panel .mat-mdc-option:hover:not(.mat-mdc-option-disabled) {
+    background: rgba(255, 255, 255, 0.08) !important;
+}
+
+::ng-deep .nationality-autocomplete-panel .mat-mdc-option.mat-mdc-option-active {
+    background: rgba(255, 255, 255, 0.12) !important;
 }
