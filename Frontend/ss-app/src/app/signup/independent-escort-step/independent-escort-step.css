@@ -196,3 +196,56 @@ a {
     display: block;
     text-align: left;
 }
+
+/* General Container */
+.toggle-group {
+    width: 100%;
+}
+
+.custom-toggle-group {
+    background: transparent !important;
+    border: none !important;
+    display: flex;
+    gap: 10px;
+}
+
+:host ::ng-deep .custom-toggle-group .mat-button-toggle {
+    background-color: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 8px !important;
+    color: #ffffff !important;
+    overflow: hidden;
+}
+
+:host ::ng-deep .custom-toggle-group .mat-button-toggle-checked {
+    background-color: #B11226 !important;
+    border-color: #B11226 !important;
+}
+
+:host ::ng-deep .custom-toggle-group .mat-button-toggle-국의-element,
+:host ::ng-deep .mat-button-toggle-ripple {
+    border-radius: 8px !important;
+}
+
+/* Nationality field */
+.nationality-field {
+    margin-top: 40px;
+}
+
+::ng-deep .nationality-autocomplete-panel {
+    background: #1e1e1e !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+}
+
+::ng-deep .nationality-autocomplete-panel .mat-mdc-option {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+::ng-deep .nationality-autocomplete-panel .mat-mdc-option:hover:not(.mat-mdc-option-disabled) {
+    background: rgba(255, 255, 255, 0.08) !important;
+}
+
+::ng-deep .nationality-autocomplete-panel .mat-mdc-option.mat-mdc-option-active {
+    background: rgba(255, 255, 255, 0.12) !important;
+}

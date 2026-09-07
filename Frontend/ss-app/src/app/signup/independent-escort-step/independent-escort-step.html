@@ -1,74 +1,10 @@
 <div class="independent-escort-step" [formGroup]="independentEscortform">
-    @if(fields[currentStep].type === 'username-select') {
-    <div class="options">
-        <mat-form-field appearance="outline" class="field">
-            <mat-label>{{fields[currentStep].label}}</mat-label>
-            <input matInput formControlName="userName">
-            <mat-icon matPrefix>person</mat-icon>
-        </mat-form-field>
-    </div>
-    <div class="btn-row">
-        <a class="back-btn" (click)="back()">BACK</a>
-        <button mat-flat-button class="nextstep-btn" type="button" (click)="continue()"
-            [disabled]="independentEscortform.get('userName')?.invalid">NEXT STEP</button>
-    </div>
+    @if (currentStep === 0 || currentStep === 1) {
+    <app-credentials-step [form]="independentEscortform" [stepIndex]="currentStep" (next)="continue()"
+        (back)="back()" />
     }
 
-    @if (fields[currentStep].type === 'email-and-password-select') {
-    <mat-form-field appearance="outline" class="field">
-        <mat-label>{{fields[currentStep].label}}</mat-label>
-        <input matInput formControlName="email">
-        <mat-icon matPrefix>email</mat-icon>
-
-        @if (independentEscortform.get('email')?.hasError('required')) {
-        <mat-error>Email is required</mat-error>
-        }
-        @if (independentEscortform.get('email')?.hasError('email')) {
-        <mat-error>Please enter a valid email</mat-error>
-        }
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="field">
-        <mat-label>Password</mat-label>
-        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
-        <mat-icon matPrefix>lock</mat-icon>
-        <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword" tabIndex="-1">
-            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-        </button>
-
-        @if (independentEscortform.get('password')?.hasError('required')) {
-        <mat-error>Password is required</mat-error>
-        }
-        @if (independentEscortform.get('password')?.hasError('minlength')) {
-        <mat-error>Password must be at least 6 characters</mat-error>
-        }
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="field">
-        <mat-label>Confirm Password</mat-label>
-        <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirmPassword">
-        <mat-icon matPrefix>lock_outline</mat-icon>
-        <button mat-icon-button matSuffix type="button" (click)="hideConfirmPassword = !hideConfirmPassword"
-            tabIndex="-1">
-            <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-        </button>
-
-        @if (independentEscortform.get('confirmPassword')?.hasError('required')) {
-        <mat-error>Confirm password is required</mat-error>
-        }
-        @if (independentEscortform.get('confirmPassword')?.hasError('passwordMismatch') &&
-        !independentEscortform.get('confirmPassword')?.hasError('required')) {
-        <mat-error>Password do not match</mat-error>
-        }
-    </mat-form-field>
-    <div class="btn-row">
-        <a class="back-btn" (click)="back()">BACK</a>
-        <button mat-flat-button class="nextstep-btn" type="button" (click)="continue()"
-            [disabled]="!validationCredentials">NEXT STEP</button>
-    </div>
-    }
-
-    @if (fields[currentStep].type === 'info-general-select') {
+    @if (currentStep === 2) {
     <mat-form-field appearance="outline" class="field">
         <mat-label>Name of the companion</mat-label>
         <input matInput formControlName="nameCompanion">
@@ -77,7 +13,7 @@
 
     <mat-form-field appearance="outline" class="field">
         <mat-label>Sexo</mat-label>
-        <mat-icon matPrefix>{{ validateSex }}</mat-icon>
+        <mat-icon matPrefix> {{ validateSex }}</mat-icon>
         <mat-select formControlName="gender">
             @for (opcion of genders; track $index) {
             <mat-option [value]="opcion">
@@ -114,9 +50,9 @@
     </div>
     }
 
-    @if (fields[currentStep].type === 'info-attributes-select') {
+    @if (currentStep === 3) {
     <div class="slider-group">
-        <label class="step-title">Height: {{ formatHeight(heightValue()) }}</label>
+        <mat-label class="step-title">Height: {{ formatHeight(heightValue()) }}</mat-label>
         <div class="slider-container-wide">
             <mat-slider min="1.0" max="2.2" step="0.1">
                 <input matSliderThumb formControlName="height" (valueChange)="onHeightChange($event)">
@@ -125,7 +61,7 @@
     </div>
 
     <div class="slider-group">
-        <label class="step-title">Weight: {{ formatWeight(independentEscortform.get('weight')?.value) }}</label>
+        <mat-label class="step-title">Weight: {{ formatWeight(independentEscortform.get('weight')?.value) }}</mat-label>
         <div class="slider-container-wide">
             <mat-slider min="40" max="150" step="1">
                 <input matSliderThumb formControlName="weight">
@@ -133,11 +69,32 @@
         </div>
     </div>
 
+    <div class="toggle-group">
+        <mat-label class="step-title">Orientation</mat-label>
+        <mat-button-toggle-group formControlName="orientation" class="custom-toggle-group">
+            <mat-button-toggle value="heterosexual">Heterosexual</mat-button-toggle>
+            <mat-button-toggle value="bisexual">Bisexual</mat-button-toggle>
+            <mat-button-toggle value="gay">Gay</mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
+
+    <mat-form-field appearance="outline" class="field nationality-field">
+        <mat-label>Nationality</mat-label>
+        <mat-icon matPrefix>public</mat-icon>
+        <input type="text" matInput [formControl]="nationalityControl" [matAutocomplete]="auto"
+            placeholder="Busca tu nacionalidad...">
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" panelClass="nationality-autocomplete-panel">
+            @for (nation of filteredNationalities | async; track nation.codes.alpha_2) {
+            <mat-option [value]="nation">
+                {{ nation.names.common }}
+            </mat-option>
+            }
+        </mat-autocomplete>
+    </mat-form-field>
 
     <div class="btn-row">
         <a class="back-btn" (click)="back()">BACK</a>
         <button mat-flat-button class="nextstep-btn" type="button" (click)="continue()">NEXT STEP</button>
     </div>
     }
-
 </div>

@@ -1,22 +1,28 @@
-import { Component, EventEmitter, Input, OnInit, Output, signal } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output, signal } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { SharedModule } from '../../shared/shared-module';
-import { INDEPENDENT_ESCORT_FIELDS } from '../fields/sign-up.fields';
 import { HAIR_COLOR } from '../../shared/enums/hairColor';
 import { GENDER } from '../../shared/enums/gender';
+import { CredentialsStep } from '../credentials-step/credentials-step';
+import { HttpClient } from '@angular/common/http';
+import { map, Observable, startWith } from 'rxjs';
 
 @Component({
   selector: 'app-independent-escort-step',
-  imports: [SharedModule],
+  imports: [SharedModule, CredentialsStep],
   templateUrl: './independent-escort-step.html',
   styleUrl: './independent-escort-step.css',
 })
 export class IndependentEscortStep implements OnInit {
+  private http = inject(HttpClient);
+  nationalities: any[] = [];
+  nationalityControl = new FormControl<string | any>('');
+  filteredNationalities!: Observable<any[]>;
+
   @Input() independentEscortform!: FormGroup;
 
   @Output() backToProfileType = new EventEmitter<void>();
 
-  fields = INDEPENDENT_ESCORT_FIELDS;
   currentStep = 0;
 
   hide = signal(true);
@@ -31,6 +37,14 @@ export class IndependentEscortStep implements OnInit {
   ageValue = signal(18);
 
   ngOnInit(): void {
+    this.http.get<any>('/data/nationalities.json').subscribe({
+      next: (data) => {
+        this.nationalities = data?.data?.objects ?? [];
+        this.setupFilter();
+      },
+      error: (err) => console.error('Error al cargar nacionalidades', err)
+    });
+
     this.heightValue.set(this.independentEscortform.get('height')?.value ?? 1.6);
     this.weightValue.set(this.independentEscortform.get('weight')?.value ?? 60);
     this.ageValue.set(this.independentEscortform.get('age')?.value ?? 18);
@@ -42,6 +56,7 @@ export class IndependentEscortStep implements OnInit {
   }
 
   back(): void {
+    console.log(this.currentStep);
     if (this.currentStep === 0) {
       this.backToProfileType.emit();
       return;
@@ -84,5 +99,26 @@ export class IndependentEscortStep implements OnInit {
   formatWeight(value: number): string {
     if (!value) return '60 kg';
     return value + ' kg';
+  }
+
+  private setupFilter(): void {
+    this.filteredNationalities = this.nationalityControl.valueChanges.pipe(
+      startWith(''),
+      map(value => {
+        const name = typeof value === 'string' ? value : value?.names?.common;
+        return name ? this._filter(name) : this.nationalities.slice();
+      })
+    );
+  }
+
+  private _filter(name: string): any[] {
+    const filterValue = name.toLowerCase();
+    return this.nationalities.filter(nation =>
+      nation.names.common.toLowerCase().includes(filterValue)
+    );
+  }
+
+  displayFn(nation: any): string {
+    return nation && nation.names ? nation.names.common : '';
   }
 }
