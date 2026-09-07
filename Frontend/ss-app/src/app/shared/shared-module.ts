@@ -26,6 +26,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 export const MATERIAL_MODULES = [
   MatIconModule,
@@ -52,6 +53,7 @@ export const MATERIAL_MODULES = [
   MatRadioModule,
   MatDatepickerModule,
   MatNativeDateModule,
+  MatButtonToggleModule,
 ];
 
 @NgModule({

@@ -10,6 +10,7 @@
 
 
     <div class="btn-row">
+        <a class="back-btn" (click)="back()">BACK</a>
         <button mat-flat-button class="nextstep-btn" type="button" (click)="activateIf()"
             [disabled]="escortform.get('accountType')?.invalid">NEXT STEP</button>
     </div>

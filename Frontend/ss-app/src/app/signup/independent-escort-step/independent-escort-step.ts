@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output, signal } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { SharedModule } from '../../shared/shared-module';
-import { INDEPENDENT_ESCORT_FIELDS } from '../fields/sign-up.fields';
 import { HAIR_COLOR } from '../../shared/enums/hairColor';
 import { GENDER } from '../../shared/enums/gender';
+import { CredentialsStep } from '../credentials-step/credentials-step';
 
 @Component({
   selector: 'app-independent-escort-step',
-  imports: [SharedModule],
+  imports: [SharedModule, CredentialsStep],
   templateUrl: './independent-escort-step.html',
   styleUrl: './independent-escort-step.css',
 })
@@ -16,7 +16,6 @@ export class IndependentEscortStep implements OnInit {
 
   @Output() backToProfileType = new EventEmitter<void>();
 
-  fields = INDEPENDENT_ESCORT_FIELDS;
   currentStep = 0;
 
   hide = signal(true);
@@ -42,6 +41,7 @@ export class IndependentEscortStep implements OnInit {
   }
 
   back(): void {
+    console.log(this.currentStep);
     if (this.currentStep === 0) {
       this.backToProfileType.emit();
       return;

@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { SharedModule } from '../../shared/shared-module';
-import { MEMBER_FIELDS } from '../fields/sign-up.fields';
 import { Form, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Preference } from '../../shared/enums/preference';
 import { GENDER } from '../../shared/enums/gender';
+import { CredentialsStep } from '../credentials-step/credentials-step';
 
 @Component({
   selector: 'app-member-step',
-  imports: [SharedModule, ReactiveFormsModule],
+  imports: [SharedModule, CredentialsStep, ReactiveFormsModule],
   templateUrl: './member-step.html',
   styleUrl: './member-step.css',
 })
@@ -17,8 +17,6 @@ export class MemberStep {
   
   @Output() backToProfileType = new EventEmitter<void>();
 
-  /*Member Fields*/
-  fields = MEMBER_FIELDS;
   currentStep = 0;
   hide = signal(true);
   hidePassword = true;

@@ -43,7 +43,7 @@
             <app-member-step [memberform]="memberForm" (backToProfileType)="back()" />
             }
             @else if (selectedType === 'escort' && fields[currentStep].type !== 'card-select') {
-            <app-escort-step [escortform]="escortForm" />
+            <app-escort-step [escortform]="escortForm" (backToProfileType)="back()" />
             }
         </form>
     </div>

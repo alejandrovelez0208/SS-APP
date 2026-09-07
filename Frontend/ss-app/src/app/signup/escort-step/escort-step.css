@@ -133,3 +133,8 @@
   border: 2px solid rgba(255, 255, 255, 0.25) !important;
   transition: 0.2s;
 }
+a {
+  margin-top: 30px;
+  color: red;
+  cursor: pointer;
+}

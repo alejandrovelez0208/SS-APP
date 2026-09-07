@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SharedModule } from '../../shared/shared-module';
 import { ESCORT_FIELDS } from '../fields/sign-up.fields';
@@ -14,9 +14,13 @@ import { AuthService } from '../../services/auth/auth-service';
 export class EscortStep {
   @Input() escortform!: FormGroup;
 
+  @Output() backToProfileType = new EventEmitter<void>();
+
   signupForm!: FormGroup;
 
   showContent: Boolean = false;
+
+  currentStep = 0;
 
   constructor(private cdr: ChangeDetectorRef) { }
 
@@ -33,6 +37,12 @@ export class EscortStep {
     } */
 
   back(): void {
+    if (this.currentStep === 0) {
+      console.log(this.currentStep);
+      this.backToProfileType.emit();
+      return;
+    }
+    this.currentStep--;
     this.cdr.detectChanges();
   }
 }

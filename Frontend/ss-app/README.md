@@ -1,4 +1,5 @@
 
+**07-09*2026**: Changes are implemented en Credentials.
 **07-09*2026**: Changes are implemented.
 **06-09*2026**: New components are created.
 **05-09*2026**: New components are created if sign In is refactored.

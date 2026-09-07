@@ -7,6 +7,7 @@ import { Preference } from '../shared/enums/preference';
 import { MemberStep } from './member-step/member-step';
 import { EscortStep } from './escort-step/escort-step';
 import { GENDER } from '../shared/enums/gender';
+import { createCredentialsFormGroup } from './credentials-step/credentials-form.factory';
 
 @Component({
   selector: 'app-signup',
@@ -40,33 +41,12 @@ export class Signup {
     this.signupForm = this.fb.group({
       profileType: [null],
 
-      member: this.fb.group({
-        userName: ['', [
-          Validators.required,
-          Validators.minLength(4),
-          Validators.maxLength(20)
-        ]],
-        email: ['', [
-          Validators.required,
-          Validators.email
-        ]],
-        password: ['', [
-          Validators.required,
-          Validators.minLength(6)
-        ]],
-        confirmPassword: ['', [
-          Validators.required,
-          this.authService.passwordMatchValidator('password')
-        ]]
-      }),
+      member: createCredentialsFormGroup(this.authService),
 
       escort: this.fb.group({
         accountType: ['', [Validators.required]],
         independentEscort: this.fb.group({
-          userName: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(20)]],
-          email: ['', [Validators.required, Validators.email]],
-          password: ['', [Validators.required, Validators.minLength(6)]],
-          confirmPassword: ['', [Validators.required, this.authService.passwordMatchValidator('password')]],
+          ...createCredentialsFormGroup(this.authService).controls,
           nameCompanion: ['', Validators.required],
           gender: ['', Validators.required],
           age: [18, Validators.required],

@@ -24,23 +24,14 @@ export const SIGN_UP_FIELDS = [
   }
 ];
 
-export const MEMBER_FIELDS = [
+export const CREDENTIALS_FIELDS = [
   {
-    key: 'username',
-    type: 'username-select',
-    label: 'Username'
+    key: 'user-name',
   },
   {
-    key: 'emailandpassword',
-    type: 'emailandpassword-select',
-    label: 'email'
-  },
-  {
-    key: 'infoGeneral',
-    type: 'infoGeneral-select',
-    label: 'infoGeneral'
+    key: 'email-and-password',
   }
-];
+]
 
 export const ESCORT_FIELDS = [
   {
@@ -49,26 +40,5 @@ export const ESCORT_FIELDS = [
   },
   {
 
-  }
-]
-
-export const INDEPENDENT_ESCORT_FIELDS = [
-  {
-    key: 'username',
-    type: 'username-select',
-    label: 'Username'
-  },
-  {
-    key: 'emailandpassword',
-    type: 'email-and-password-select',
-    label: 'Email'
-  },
-  {
-    key: 'infoGeneral',
-    type: 'info-general-select',
-  },
-  {
-    key: 'infoAttributes',
-    type: 'info-attributes-select',
   }
 ]
