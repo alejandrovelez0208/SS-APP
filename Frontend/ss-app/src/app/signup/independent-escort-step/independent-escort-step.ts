@@ -121,4 +121,9 @@ export class IndependentEscortStep implements OnInit {
   displayFn(nation: any): string {
     return nation && nation.names ? nation.names.common : '';
   }
+
+  get validationOrientNation(): boolean {
+    return this.independentEscortform.get('orientation')?.valid === true &&
+      this.independentEscortform.get('nationality')?.valid === true;
+  }
 }

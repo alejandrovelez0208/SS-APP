@@ -12,7 +12,7 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="field">
-        <mat-label>Sexo</mat-label>
+        <mat-label>Gender</mat-label>
         <mat-icon matPrefix> {{ validateSex }}</mat-icon>
         <mat-select formControlName="gender">
             @for (opcion of genders; track $index) {
@@ -21,6 +21,10 @@
             </mat-option>
             }
         </mat-select>
+        @if (independentEscortform.get('gender')?.hasError('required') && independentEscortform.get('gender')?.touched)
+        {
+        <mat-error>Gender is required</mat-error>
+        }
     </mat-form-field>
 
     <div class="slider-group">
@@ -46,7 +50,8 @@
 
     <div class="btn-row">
         <a class="back-btn" (click)="back()">BACK</a>
-        <button mat-flat-button class="nextstep-btn" type="button" (click)="continue()">NEXT STEP</button>
+        <button mat-flat-button class="nextstep-btn" type="button" (click)="continue()"
+            [disabled]="independentEscortform.get('gender')?.invalid">NEXT STEP</button>
     </div>
     }
 
@@ -94,7 +99,8 @@
 
     <div class="btn-row">
         <a class="back-btn" (click)="back()">BACK</a>
-        <button mat-flat-button class="nextstep-btn" type="button" (click)="continue()">NEXT STEP</button>
+        <button mat-flat-button class="nextstep-btn" type="button" (click)="continue()"
+            [disabled]="!validationOrientNation">NEXT STEP</button>
     </div>
     }
 </div>
