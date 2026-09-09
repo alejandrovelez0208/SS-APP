@@ -55,7 +55,7 @@ export class Signup {
           weight: [60],
           orientation: ['Heterosexual', Validators.required],
           nationality: ['', Validators.required],
-          interCodePhone: [''],
+          interCodePhone: ['', [Validators.required]],
           phone: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10)]],
           aplicaciones: this.fb.group({
             telegram: [false],
@@ -79,7 +79,7 @@ export class Signup {
   }
 
   get independentEscortForm(): FormGroup {
-    return this.signupForm.get('independentEscort') as FormGroup;
+    return this.signupForm.get('escort.independentEscort') as FormGroup;
   }
 
   /*   get agencyForm(): FormGroup {
