@@ -6,6 +6,7 @@ import { GENDER } from '../../shared/enums/gender';
 import { CredentialsStep } from '../credentials-step/credentials-step';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, startWith } from 'rxjs';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-independent-escort-step',
@@ -16,8 +17,8 @@ import { map, Observable, startWith } from 'rxjs';
 export class IndependentEscortStep implements OnInit {
   private http = inject(HttpClient);
   nationalities: any[] = [];
-  nationalityControl = new FormControl<string | any>('');
   filteredNationalities!: Observable<any[]>;
+  internacionalCodePhone: any[] = [];
 
   @Input() independentEscortform!: FormGroup;
 
@@ -37,17 +38,36 @@ export class IndependentEscortStep implements OnInit {
   ageValue = signal(18);
 
   ngOnInit(): void {
+    this.loadNationalities();
+    this.loadInternationalCodePhone();
+
+    this.heightValue.set(this.independentEscortform.get('height')?.value ?? 1.6);
+    this.weightValue.set(this.independentEscortform.get('weight')?.value ?? 60);
+    this.ageValue.set(this.independentEscortform.get('age')?.value ?? 18);
+  }
+
+  loadNationalities() {
     this.http.get<any>('/data/nationalities.json').subscribe({
       next: (data) => {
         this.nationalities = data?.data?.objects ?? [];
         this.setupFilter();
       },
-      error: (err) => console.error('Error al cargar nacionalidades', err)
+      error: (err) => console.error('Error loading nationalities', err)
     });
+  }
 
-    this.heightValue.set(this.independentEscortform.get('height')?.value ?? 1.6);
-    this.weightValue.set(this.independentEscortform.get('weight')?.value ?? 60);
-    this.ageValue.set(this.independentEscortform.get('age')?.value ?? 18);
+  loadInternationalCodePhone() {
+    this.http.get<any>('/data/internationalCodePhone.json').subscribe({
+      next: (data) => {
+        this.internacionalCodePhone = Array.isArray(data) ? data : [data];
+
+        // Value 0, the only country currently available.
+        const defaultCountry = this.internacionalCodePhone[0];
+        this.independentEscortform.get('interCodePhone')?.setValue(defaultCountry.name);
+
+      },
+      error: (err) => console.error('Error loading InternationalCodes', err)
+    });
   }
 
   continue(): void {
@@ -102,7 +122,8 @@ export class IndependentEscortStep implements OnInit {
   }
 
   private setupFilter(): void {
-    this.filteredNationalities = this.nationalityControl.valueChanges.pipe(
+    const nationalityCtrl = this.independentEscortform.get('nationality');
+    this.filteredNationalities = nationalityCtrl!.valueChanges.pipe(
       startWith(''),
       map(value => {
         const name = typeof value === 'string' ? value : value?.names?.common;
@@ -122,8 +143,14 @@ export class IndependentEscortStep implements OnInit {
     return nation && nation.names ? nation.names.common : '';
   }
 
-  get validationOrientNation(): boolean {
+  get areGenderandNameCompanionInvalid(): boolean {
+    return this.independentEscortform.get('nameCompanion')?.valid === true &&
+      this.independentEscortform.get('gender')?.valid === true;
+  }
+
+  get areOrientationAndNationalityInvalid(): boolean {
     return this.independentEscortform.get('orientation')?.valid === true &&
       this.independentEscortform.get('nationality')?.valid === true;
   }
+
 }

@@ -9,6 +9,9 @@
         <mat-label>Name of the companion</mat-label>
         <input matInput formControlName="nameCompanion">
         <mat-icon matPrefix>person</mat-icon>
+        @if (independentEscortform.get('nameCompanion')?.hasError('required')){
+        <mat-error>Name is required</mat-error>
+        }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="field">
@@ -21,8 +24,7 @@
             </mat-option>
             }
         </mat-select>
-        @if (independentEscortform.get('gender')?.hasError('required') && independentEscortform.get('gender')?.touched)
-        {
+        @if (independentEscortform.get('gender')?.hasError('required') && independentEscortform.get('gender')?.touched){
         <mat-error>Gender is required</mat-error>
         }
     </mat-form-field>
@@ -51,7 +53,8 @@
     <div class="btn-row">
         <a class="back-btn" (click)="back()">BACK</a>
         <button mat-flat-button class="nextstep-btn" type="button" (click)="continue()"
-            [disabled]="independentEscortform.get('gender')?.invalid">NEXT STEP</button>
+            [disabled]="!areGenderandNameCompanionInvalid">
+            NEXT STEP</button>
     </div>
     }
 
@@ -86,8 +89,7 @@
     <mat-form-field appearance="outline" class="field nationality-field">
         <mat-label>Nationality</mat-label>
         <mat-icon matPrefix>public</mat-icon>
-        <input type="text" matInput [formControl]="nationalityControl" [matAutocomplete]="auto"
-            placeholder="Busca tu nacionalidad...">
+        <input matInput [matAutocomplete]="auto" formControlName="nationality">
         <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" panelClass="nationality-autocomplete-panel">
             @for (nation of filteredNationalities | async; track nation.codes.alpha_2) {
             <mat-option [value]="nation">
@@ -95,12 +97,49 @@
             </mat-option>
             }
         </mat-autocomplete>
+        @if (independentEscortform.get('nationality')?.hasError('required')){
+        <mat-error>Nationality is required</mat-error>
+        }
     </mat-form-field>
 
     <div class="btn-row">
         <a class="back-btn" (click)="back()">BACK</a>
         <button mat-flat-button class="nextstep-btn" type="button" (click)="continue()"
-            [disabled]="!validationOrientNation">NEXT STEP</button>
+            [disabled]="!areOrientationAndNationalityInvalid">NEXT STEP</button>
     </div>
+    }
+
+    @if (currentStep === 4) {
+    <mat-form-field appearance="outline" class="field">
+        <mat-label>International dialing code</mat-label>
+        <mat-icon matPrefix>public</mat-icon>
+        <input matInput [matAutocomplete]="autoPhone" formControlName="interCodePhone">
+        <mat-autocomplete #autoPhone="matAutocomplete">
+            @for (country of internacionalCodePhone; track country.name) {
+            <mat-option [value]="country.name">
+                {{ country.name }} + ({{ country.calling_code}})
+            </mat-option>
+            }
+        </mat-autocomplete>
+        @if (independentEscortform.get('nationality')?.hasError('required')){
+        <mat-error>Nationality is required</mat-error>
+        }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+        <mat-label>Phone</mat-label>
+        <input matInput formControlName="phone">
+        <mat-icon matPrefix>phone</mat-icon>
+
+        @if(independentEscortform.get('phone')?.hasError('required')){
+        <mat-error>Phone is required</mat-error>
+        }
+
+        @if(independentEscortform.get('phone')?.hasError('minlength') ||
+        independentEscortform.get('phone')?.hasError('maxlength')){
+        <mat-error>Phone must be 10 characters</mat-error>
+        }
+    </mat-form-field>
+
     }
 </div>
