@@ -8,6 +8,7 @@ import { MemberStep } from './member-step/member-step';
 import { EscortStep } from './escort-step/escort-step';
 import { GENDER } from '../shared/enums/gender';
 import { createCredentialsFormGroup } from './credentials-step/credentials-form.factory';
+import { identity } from 'rxjs';
 
 @Component({
   selector: 'app-signup',
@@ -27,7 +28,6 @@ export class Signup {
   hidePassword = true;
   hideConfirmPassword = true;
 
-  genderOption = new FormControl([]);
   genders = Object.values(GENDER);
 
   preferenceOption = new FormControl([]);
@@ -41,7 +41,11 @@ export class Signup {
     this.signupForm = this.fb.group({
       profileType: [null],
 
-      member: createCredentialsFormGroup(this.authService),
+      member: this.fb.group({
+        ...createCredentialsFormGroup(this.authService).controls,
+        identity: ['', [Validators.required]],
+        preferences: ['', [Validators.required]]
+      }),
 
       escort: this.fb.group({
         accountType: ['', [Validators.required]],
@@ -64,7 +68,6 @@ export class Signup {
         }),
 
         agency: this.fb.group({
-          // campos de agency-step cuando los definas
         }),
       }),
     });

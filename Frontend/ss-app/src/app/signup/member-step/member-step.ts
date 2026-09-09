@@ -13,7 +13,6 @@ import { CredentialsStep } from '../credentials-step/credentials-step';
 })
 export class MemberStep {
   @Input() memberform!: FormGroup;
-  @Input() escortform!: FormGroup;
   
   @Output() backToProfileType = new EventEmitter<void>();
 
@@ -23,7 +22,6 @@ export class MemberStep {
   hideConfirmPassword = true;
   selectedFile = signal<File | null>(null);
   previewUrl = signal<string | ArrayBuffer | null>(null);
-  genderOption = new FormControl([]);
   genders = Object.values(GENDER);
   preferenceOption = new FormControl([]);
   preferences = Object.values(Preference);

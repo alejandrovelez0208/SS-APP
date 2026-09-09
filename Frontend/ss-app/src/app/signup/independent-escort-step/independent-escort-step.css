@@ -16,6 +16,7 @@
 
 .field {
     width: 100%;
+    padding: 10px;
 
     .mat-mdc-input-element {
         color: #fff;
@@ -203,6 +204,7 @@ a {
 /* General Container */
 .toggle-group {
     width: 100%;
+    margin-bottom: 20px;
     box-sizing: border-box;
 }
 
@@ -249,12 +251,6 @@ a {
 
 :host ::ng-deep .custom-toggle-group .mat-button-toggle-ripple {
     border-radius: 8px !important;
-}
-
-
-/* Nationality field */
-.nationality-field {
-    margin-top: 40px;
 }
 
 ::ng-deep .nationality-autocomplete-panel {

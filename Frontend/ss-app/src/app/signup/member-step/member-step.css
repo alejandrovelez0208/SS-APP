@@ -12,6 +12,7 @@
 
 .field {
   width: 100%;
+  padding: 5px;
 
   /* en vez de 170% */
   .mat-mdc-input-element {
