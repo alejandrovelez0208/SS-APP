@@ -19,6 +19,7 @@ export class IndependentEscortStep implements OnInit {
   nationalities: any[] = [];
   filteredNationalities!: Observable<any[]>;
   internacionalCodePhone: any[] = [];
+  baseCity: any[] = [];
 
   @Input() independentEscortform!: FormGroup;
 
@@ -43,6 +44,7 @@ export class IndependentEscortStep implements OnInit {
   ngOnInit(): void {
     this.loadNationalities();
     this.loadInternationalCodePhone();
+    this.loadBaseCity();
 
     this.heightValue.set(this.independentEscortform.get('height')?.value ?? 1.6);
     this.weightValue.set(this.independentEscortform.get('weight')?.value ?? 60);
@@ -64,12 +66,24 @@ export class IndependentEscortStep implements OnInit {
       next: (data) => {
         this.internacionalCodePhone = Array.isArray(data) ? data : [data];
 
-        // Value 0, the only country currently available.
         const defaultCountry = this.internacionalCodePhone[0];
         this.independentEscortform.get('interCodePhone')?.setValue(defaultCountry.name);
 
       },
       error: (err) => console.error('Error loading InternationalCodes', err)
+    });
+  }
+
+  loadBaseCity() {
+    this.http.get<any>('/data/citiesColombia.json').subscribe({
+      next: (data) => {
+        this.baseCity = Array.isArray(data) ? data : [data];
+
+        const defaultCountry = this.baseCity[0];
+        this.independentEscortform.get('baseCity')?.setValue(defaultCountry.name);
+
+      },
+      error: (err) => console.error('Error loading Cities of Colombia', err)
     });
   }
 

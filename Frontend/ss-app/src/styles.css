@@ -162,3 +162,8 @@ input:-webkit-autofill:active {
   -webkit-text-fill-color: #fff !important;
   caret-color: #fff;
 }
+
+mat-hint {
+    color: #81c784; 
+    font-size: 12px;
+}
