@@ -59,6 +59,7 @@ export class Signup {
           weight: [60],
           orientation: ['Heterosexual', Validators.required],
           nationality: ['', Validators.required],
+          baseCity: ['', Validators.required],
           interCodePhone: ['', [Validators.required]],
           phone: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10)]],
           aplicaciones: this.fb.group({
