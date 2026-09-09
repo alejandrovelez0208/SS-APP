@@ -1,4 +1,4 @@
-<div class="member-step">
+<div class="member-step" [formGroup]="memberform">
     @if (currentStep === 0 || currentStep === 1) {
     <app-credentials-step [form]="memberform" [stepIndex]="currentStep" (next)="continue()" (back)="back()" />
     }
@@ -27,24 +27,32 @@
 
     <mat-form-field appearance="outline" class="field">
         <mat-label>How do you identify?</mat-label>
-        <mat-select [formControl]="genderOption">
+        <mat-select formControlName="identity">
             @for (opcion of genders; track $index) {
             <mat-option [value]="opcion">
                 {{ opcion }}
             </mat-option>
             }
         </mat-select>
+
+        @if(memberform.get('identity')?.hasError('required')){
+        <mat-error>This field is required</mat-error>
+        }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="field">
         <mat-label>What are you looking for?</mat-label>
-        <mat-select [formControl]="preferenceOption">
+        <mat-select formControlName="preferences">
             @for (opcion of preferences; track $index) {
             <mat-option [value]="opcion">
                 {{opcion}}
             </mat-option>
             }
         </mat-select>
+        
+        @if(memberform.get('preferences')?.hasError('required')){
+        <mat-error>Preferences is required</mat-error>
+        }
     </mat-form-field>
     <div class="btn-row">
         <a class="back-btn" (click)="back()">BACK</a>

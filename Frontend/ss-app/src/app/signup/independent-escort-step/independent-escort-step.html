@@ -86,7 +86,7 @@
         </mat-button-toggle-group>
     </div>
 
-    <mat-form-field appearance="outline" class="field nationality-field">
+    <mat-form-field appearance="outline" class="field">
         <mat-label>Nationality</mat-label>
         <mat-icon matPrefix>public</mat-icon>
         <input matInput [matAutocomplete]="auto" formControlName="nationality">
@@ -112,8 +112,8 @@
     @if (currentStep === 4) {
     <mat-form-field appearance="outline" class="field">
         <mat-label>International dialing code</mat-label>
-        <mat-icon matPrefix>public</mat-icon>
         <input matInput [matAutocomplete]="autoPhone" formControlName="interCodePhone">
+        <mat-icon matPrefix>public</mat-icon>
         <mat-autocomplete #autoPhone="matAutocomplete">
             @for (country of internacionalCodePhone; track country.name) {
             <mat-option [value]="country.name">
@@ -121,7 +121,7 @@
             </mat-option>
             }
         </mat-autocomplete>
-        @if (independentEscortform.get('nationality')?.hasError('required')){
+        @if (independentEscortform.get('interCodePhone')?.hasError('required')){
         <mat-error>Nationality is required</mat-error>
         }
     </mat-form-field>
@@ -141,5 +141,16 @@
         }
     </mat-form-field>
 
+    <div formGroupName="aplicaciones" class="applications-field">
+        <mat-label class="step-title">Available applications</mat-label>
+        <div class="checkbox-options">
+            <mat-checkbox class="application-checkbox" formControlName="telegram">
+                Telegram
+            </mat-checkbox>
+            <mat-checkbox class="application-checkbox" formControlName="whatsapp">
+                WhatsApp
+            </mat-checkbox>
+        </div>
+    </div>
     }
 </div>

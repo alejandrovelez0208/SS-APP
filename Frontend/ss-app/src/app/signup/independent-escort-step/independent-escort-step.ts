@@ -37,6 +37,9 @@ export class IndependentEscortStep implements OnInit {
   weightValue = signal(60);
   ageValue = signal(18);
 
+  telegramSelected = false;
+  whatsappSelected = false;
+
   ngOnInit(): void {
     this.loadNationalities();
     this.loadInternationalCodePhone();

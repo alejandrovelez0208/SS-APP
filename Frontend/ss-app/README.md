@@ -1,4 +1,6 @@
 
+**08-09*2026**: Adjustments are being made to the CSS.
+**08-09*2026**: Applications fields is created.
 **08-09*2026**: New fields is created.
 **08-09*2026**: Validation are being implemented.
 **08-09*2026**: Nationality logic is added.
