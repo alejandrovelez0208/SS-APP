@@ -53,8 +53,14 @@ export class Signup {
           hairColor: [''],
           height: [1.6],
           weight: [60],
-          orientation: ['', Validators.required],
-          nationality: ['', Validators.required]
+          orientation: ['Heterosexual', Validators.required],
+          nationality: ['', Validators.required],
+          interCodePhone: [''],
+          phone: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10)]],
+          aplicaciones: this.fb.group({
+            telegram: [false],
+            whatsapp: [false]
+          })
         }),
 
         agency: this.fb.group({

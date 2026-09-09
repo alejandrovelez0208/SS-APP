@@ -1,3 +1,8 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
 .independent-escort-step {
     position: relative;
     z-index: 2;
@@ -5,8 +10,7 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-    max-width: 400px;
-    /* ajusta según tu diseño */
+    max-width: 460px;
     margin: 0 auto;
 }
 
@@ -163,13 +167,11 @@ a {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    /* en vez de center */
 }
 
 .slider-container-wide,
 .slider-container {
     width: 100%;
-    /* ocupa todo el ancho del contenedor padre, sin centrar */
 }
 
 .slider-container-wide mat-slider,
@@ -198,23 +200,30 @@ a {
 }
 
 /* General Container */
+/* General Container */
 .toggle-group {
     width: 100%;
+    box-sizing: border-box;
 }
 
 .custom-toggle-group {
+    width: 100% !important;
     background: transparent !important;
     border: none !important;
-    display: flex;
-    gap: 10px;
+    display: flex !important;
+    overflow: visible !important;
+    gap: 10px !important;
 }
 
 :host ::ng-deep .custom-toggle-group .mat-button-toggle {
+    flex: 1 1 auto !important;
+    /* Se adapta al tamaño del texto sin desbordar */
+    min-width: max-content !important;
+    /* Garantiza que la caja cubra toda la palabra */
     background-color: transparent !important;
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
     border-radius: 8px !important;
     color: #ffffff !important;
-    overflow: hidden;
 }
 
 :host ::ng-deep .custom-toggle-group .mat-button-toggle-checked {
@@ -222,10 +231,26 @@ a {
     border-color: #B11226 !important;
 }
 
-:host ::ng-deep .custom-toggle-group .mat-button-toggle-국의-element,
-:host ::ng-deep .mat-button-toggle-ripple {
+:host ::ng-deep .custom-toggle-group .mat-button-toggle .mat-button-toggle-button {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+:host ::ng-deep .custom-toggle-group .mat-button-toggle .mat-button-toggle-label-content {
+    padding: 0 14px !important;
+    /* Espaciado interno cómodo a los lados */
+    font-size: 13px !important;
+    line-height: 42px !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+}
+
+:host ::ng-deep .custom-toggle-group .mat-button-toggle-ripple {
     border-radius: 8px !important;
 }
+
 
 /* Nationality field */
 .nationality-field {
@@ -249,3 +274,4 @@ a {
 ::ng-deep .nationality-autocomplete-panel .mat-mdc-option.mat-mdc-option-active {
     background: rgba(255, 255, 255, 0.12) !important;
 }
+
