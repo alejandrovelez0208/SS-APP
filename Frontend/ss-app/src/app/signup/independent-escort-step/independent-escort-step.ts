@@ -41,6 +41,10 @@ export class IndependentEscortStep implements OnInit {
   telegramSelected = false;
   whatsappSelected = false;
 
+  ownLocation = false;
+  hotels = false;
+  customersAddress = false;
+
   ngOnInit(): void {
     this.loadNationalities();
     this.loadInternationalCodePhone();
@@ -170,4 +174,9 @@ export class IndependentEscortStep implements OnInit {
       this.independentEscortform.get('nationality')?.valid === true;
   }
 
+  get areCityPhoneInValid(): boolean {
+    return this.independentEscortform.get('baseCity')?.valid === true &&
+      this.independentEscortform.get('interCodePhone')?.valid === true &&
+      this.independentEscortform.get('phone')?.valid === true;
+  }
 }

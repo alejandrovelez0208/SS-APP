@@ -8,19 +8,72 @@
     z-index: 2;
     display: flex;
     flex-direction: column;
-    align-items: center;
+
     width: 100%;
     max-width: 460px;
     margin: 0 auto;
+    padding: 0;
+
+    box-sizing: border-box;
 }
 
-.field {
-    width: 100%;
-    padding: 10px;
+.field,
+.field-city {
+    box-sizing: border-box;
+    align-self: center;
 
     .mat-mdc-input-element {
         color: #fff;
     }
+}
+
+.field-city {
+    width: 60%;
+    margin: 0;
+    padding: 10px 0;
+    box-sizing: border-box;
+
+    .mat-mdc-input-element {
+        color: #fff;
+    }
+}
+
+.field-phone {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    margin: 35px 0 0;
+    box-sizing: border-box;
+    align-self: center;
+
+    .mat-mdc-input-element {
+        color: #fff;
+    }
+}
+
+.field-internationalCode {
+    flex: 0 0 100px;
+    margin: 0;
+
+    .mat-mdc-input-element {
+        color: #fff;
+    }
+}
+
+.field-phoneNumber {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.careModality-field {
+    align-self: center;
+    width: 100%;
+    padding: 10px 0;
+    box-sizing: border-box;
+}
+
+.checkbox-options {
+    width: 100%;
 }
 
 .btn-row {
@@ -28,6 +81,7 @@
     justify-content: center;
     align-items: center;
     gap: 16px;
+    width: 100%;
 }
 
 .nextstep-btn {
@@ -201,7 +255,6 @@ a {
 }
 
 /* General Container */
-/* General Container */
 .toggle-group {
     width: 100%;
     margin-bottom: 20px;
@@ -219,9 +272,7 @@ a {
 
 :host ::ng-deep .custom-toggle-group .mat-button-toggle {
     flex: 1 1 auto !important;
-    /* Se adapta al tamaño del texto sin desbordar */
     min-width: max-content !important;
-    /* Garantiza que la caja cubra toda la palabra */
     background-color: transparent !important;
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
     border-radius: 8px !important;
@@ -242,7 +293,6 @@ a {
 
 :host ::ng-deep .custom-toggle-group .mat-button-toggle .mat-button-toggle-label-content {
     padding: 0 14px !important;
-    /* Espaciado interno cómodo a los lados */
     font-size: 13px !important;
     line-height: 42px !important;
     text-align: center !important;
@@ -272,21 +322,19 @@ a {
 }
 
 .applications-field {
+    margin: 30px 0;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-}
-
-.checkbox-options {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
+    gap: 0;
+    box-sizing: border-box;
 }
 
 .application-checkbox {
     min-width: 158px;
     height: 44px;
-    padding: 0 14px 0 10px;
+    padding: 10px;
+    margin-bottom: 5px;
 
     display: flex;
     align-items: center;
