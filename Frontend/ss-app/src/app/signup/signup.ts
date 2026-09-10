@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, signal, ViewChild } from '@angular/core';
 import { SharedModule } from '../shared/shared-module';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { SIGN_UP_FIELDS } from './fields/sign-up.fields';
 import { AuthService } from '../services/auth/auth-service';
 import { Preference } from '../shared/enums/preference';
@@ -10,6 +10,15 @@ import { GENDER } from '../shared/enums/gender';
 import { createCredentialsFormGroup } from './credentials-step/credentials-form.factory';
 import { identity } from 'rxjs';
 
+//Move
+export function atLeastOneCheckedValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    if (!(control instanceof FormGroup)) return null;
+    const controls = control.controls;
+    const isAtLeastOneTrue = Object.keys(controls).some(key => controls[key].value === true);
+    return isAtLeastOneTrue ? null : { noneChecked: true };
+  };
+}
 @Component({
   selector: 'app-signup',
   imports: [SharedModule, MemberStep, EscortStep],
@@ -57,7 +66,7 @@ export class Signup {
           hairColor: [''],
           height: [1.6],
           weight: [60],
-          orientation: ['Heterosexual', Validators.required],
+          orientation: [{ value: 'heterosexual', disabled: false }],
           nationality: ['', Validators.required],
           baseCity: ['', Validators.required],
           interCodePhone: ['', [Validators.required]],
@@ -65,7 +74,13 @@ export class Signup {
           aplicaciones: this.fb.group({
             telegram: [false],
             whatsapp: [false]
-          })
+          }),
+          careModality: this.fb.group({
+            ownLocation: [true],
+            hotels: [false],
+            customersAddress: [false]
+          }, { validators: [atLeastOneCheckedValidator()] }),
+          website: ['']
         }),
 
         agency: this.fb.group({
@@ -129,5 +144,15 @@ export class Signup {
     const reader = new FileReader();
     reader.onload = () => this.previewUrl.set(reader.result);
     reader.readAsDataURL(file);
+  }
+
+  atLeastOneCheckedValidator() {
+    this.independentEscortForm.get('careModality')?.valueChanges.subscribe(value => {
+      const { ownLocation, hotels, customersAddress } = value;
+
+      if (!ownLocation && !hotels && !customersAddress) {
+        this.independentEscortForm.get('careModality.ownLocation')?.setValue(true, { emitEvent: false });
+      }
+    });
   }
 }

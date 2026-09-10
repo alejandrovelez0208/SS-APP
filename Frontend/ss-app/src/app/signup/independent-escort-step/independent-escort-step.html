@@ -110,7 +110,7 @@
     }
 
     @if (currentStep === 4) {
-    <mat-form-field appearance="outline" class="field">
+    <mat-form-field appearance="outline" class="field-city">
         <mat-label>Base City</mat-label>
         <input matInput [matAutocomplete]="autoCity" formControlName="baseCity">
         <mat-icon matPrefix>location_city</mat-icon>
@@ -127,37 +127,62 @@
         <mat-hint>We currently operate exclusively in Medellín.</mat-hint>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="field">
-        <mat-label>International dialing code</mat-label>
-        <input matInput [matAutocomplete]="autoPhone" formControlName="interCodePhone">
-        <mat-icon matPrefix>public</mat-icon>
-        <mat-autocomplete #autoPhone="matAutocomplete">
-            @for (country of internacionalCodePhone; track country.name) {
-            <mat-option [value]="country.name">
-                {{ country.name }} + ({{ country.calling_code}})
-            </mat-option>
+    <div class="field-phone">
+        <mat-form-field appearance="outline" class="field-internationalCode">
+            <mat-label>Code</mat-label>
+            <input matInput [matAutocomplete]="autoPhone" formControlName="interCodePhone">
+            <mat-icon matPrefix>public</mat-icon>
+            <mat-autocomplete #autoPhone="matAutocomplete">
+                @for (country of internacionalCodePhone; track country.name) {
+                <mat-option [value]="country.calling_code">
+                    {{ country.name }} ({{ country.calling_code}})
+                </mat-option>
+                }
+            </mat-autocomplete>
+            @if (independentEscortform.get('interCodePhone')?.hasError('required')){
+            <mat-error>Code is required</mat-error>
             }
-        </mat-autocomplete>
-        @if (independentEscortform.get('interCodePhone')?.hasError('required')){
-        <mat-error>Nationality is required</mat-error>
-        }
-    </mat-form-field>
+        </mat-form-field>
 
-    <mat-form-field appearance="outline" class="field">
-        <mat-label>Phone</mat-label>
-        <input matInput formControlName="phone">
-        <mat-icon matPrefix>phone</mat-icon>
+        <mat-form-field appearance="outline" class="field-phoneNumber">
+            <mat-label>Phone</mat-label>
+            <input matInput formControlName="phone">
+            <mat-icon matPrefix>phone</mat-icon>
 
-        @if(independentEscortform.get('phone')?.hasError('required')){
-        <mat-error>Phone is required</mat-error>
-        }
+            @if(independentEscortform.get('phone')?.hasError('required')){
+            <mat-error>Phone is required</mat-error>
+            }
 
-        @if(independentEscortform.get('phone')?.hasError('minlength') ||
-        independentEscortform.get('phone')?.hasError('maxlength')){
-        <mat-error>Phone must be 10 characters</mat-error>
-        }
-    </mat-form-field>
+            @if(independentEscortform.get('phone')?.hasError('minlength') ||
+            independentEscortform.get('phone')?.hasError('maxlength')){
+            <mat-error>Phone must be 10 characters</mat-error>
+            }
+        </mat-form-field>
+    </div>
 
+    <div formGroupName="careModality" class="careModality-field">
+        <mat-label class="step-title">I serve in...</mat-label>
+        <div class="checkbox-options">
+            <mat-checkbox class="application-checkbox" formControlName="ownLocation">
+                I see clients at my own location.
+            </mat-checkbox>
+            <mat-checkbox class="application-checkbox" formControlName="hotels">
+                Hotels
+            </mat-checkbox>
+            <mat-checkbox class="application-checkbox" formControlName="customersAddress">
+                Customer's address
+            </mat-checkbox>
+        </div>
+
+        <div class="btn-row">
+            <a class="back-btn" (click)="back()">BACK</a>
+            <button mat-flat-button class="nextstep-btn" type="button" (click)="continue()"
+                [disabled]="!areCityPhoneInValid">NEXT STEP</button>
+        </div>
+    </div>
+    }
+
+    @if (currentStep === 5) {
     <div formGroupName="aplicaciones" class="applications-field">
         <mat-label class="step-title">Available applications</mat-label>
         <div class="checkbox-options">
@@ -168,6 +193,18 @@
                 WhatsApp
             </mat-checkbox>
         </div>
+    </div>
+
+    <mat-form-field appearance="outline" class="field">
+        <mat-label>Website / Url</mat-label>
+        <input matInput formControlName="website">
+        <mat-icon matPrefix>link</mat-icon>
+    </mat-form-field>
+
+    <div class="btn-row">
+        <a class="back-btn" (click)="back()">BACK</a>
+        <button mat-flat-button class="nextstep-btn" type="button" (click)="continue()" [disabled]="!true">NEXT
+            STEP</button>
     </div>
     }
 </div>
