@@ -9,6 +9,7 @@ import { EscortStep } from './escort-step/escort-step';
 import { GENDER } from '../shared/enums/gender';
 import { createCredentialsFormGroup } from './credentials-step/credentials-form.factory';
 import { identity } from 'rxjs';
+import { disabled } from '@angular/forms/signals';
 
 //Move
 export function atLeastOneCheckedValidator(): ValidatorFn {
@@ -79,13 +80,31 @@ export class Signup {
             ownLocation: [true],
             hotels: [false],
             customersAddress: [false]
-          }, { validators: [atLeastOneCheckedValidator()] }),
+          }),
+          availableAllDay: [false],
+          scheduleFrom: ['09:00'],
+          scheduleTo: ['06:00'],
           website: ['']
         }),
 
         agency: this.fb.group({
         }),
       }),
+    });
+  }
+
+  ngOnInit(): void {
+    this.initCareModalityListener();
+  }
+
+  private initCareModalityListener(): void {
+    this.independentEscortForm.get('careModality')?.valueChanges.subscribe(value => {
+      if (!value) return;
+      const { ownLocation, hotels, customersAddress } = value;
+
+      if (!ownLocation && !hotels && !customersAddress) {
+        this.independentEscortForm.get('careModality.ownLocation')?.setValue(true, { emitEvent: false });
+      }
     });
   }
 
@@ -100,10 +119,6 @@ export class Signup {
   get independentEscortForm(): FormGroup {
     return this.signupForm.get('escort.independentEscort') as FormGroup;
   }
-
-  /*   get agencyForm(): FormGroup {
-      return this.signupForm.get('agency') as FormGroup;
-    } */
 
   selectType(type: string): void {
     this.hide.set(false);
@@ -144,15 +159,5 @@ export class Signup {
     const reader = new FileReader();
     reader.onload = () => this.previewUrl.set(reader.result);
     reader.readAsDataURL(file);
-  }
-
-  atLeastOneCheckedValidator() {
-    this.independentEscortForm.get('careModality')?.valueChanges.subscribe(value => {
-      const { ownLocation, hotels, customersAddress } = value;
-
-      if (!ownLocation && !hotels && !customersAddress) {
-        this.independentEscortForm.get('careModality.ownLocation')?.setValue(true, { emitEvent: false });
-      }
-    });
   }
 }
