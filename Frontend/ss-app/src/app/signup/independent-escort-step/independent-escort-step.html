@@ -4,7 +4,17 @@
         (back)="back()" />
     }
 
+    @if(currentStep !== 0 && currentStep !== 1){
+    <div class="title">
+        <mat-label class="main-title">Complete your profile</mat-label>
+        <div class="divider">
+            <div class="line"></div>
+        </div>
+    </div>
+    }
+
     @if (currentStep === 2) {
+
     <mat-form-field appearance="outline" class="field">
         <mat-label>Name of the companion</mat-label>
         <input matInput formControlName="nameCompanion">
@@ -102,14 +112,6 @@
         }
     </mat-form-field>
 
-    <div class="btn-row">
-        <a class="back-btn" (click)="back()">BACK</a>
-        <button mat-flat-button class="nextstep-btn" type="button" (click)="continue()"
-            [disabled]="!areOrientationAndNationalityInvalid">NEXT STEP</button>
-    </div>
-    }
-
-    @if (currentStep === 4) {
     <mat-form-field appearance="outline" class="field-city">
         <mat-label>Base City</mat-label>
         <input matInput [matAutocomplete]="autoCity" formControlName="baseCity">
@@ -127,13 +129,21 @@
         <mat-hint>We currently operate exclusively in Medellín.</mat-hint>
     </mat-form-field>
 
+    <div class="btn-row">
+        <a class="back-btn" (click)="back()">BACK</a>
+        <button mat-flat-button class="nextstep-btn" type="button" (click)="continue()"
+            [disabled]="!areOrientationAndNationalityInvalid">NEXT STEP</button>
+    </div>
+    }
+
+    @if (currentStep === 4) {
     <div class="field-phone">
         <mat-form-field appearance="outline" class="field-internationalCode">
             <mat-label>Code</mat-label>
-            <input matInput [matAutocomplete]="autoPhone" formControlName="interCodePhone">
+            <input matInput [matAutocomplete]="code" formControlName="interCodePhone">
             <mat-icon matPrefix>public</mat-icon>
-            <mat-autocomplete #autoPhone="matAutocomplete">
-                @for (country of internacionalCodePhone; track country.name) {
+            <mat-autocomplete #code="matAutocomplete">
+                @for (country of internacionalCodePhone; track country.calling_code) {
                 <mat-option [value]="country.calling_code">
                     {{ country.name }} ({{ country.calling_code}})
                 </mat-option>
@@ -173,12 +183,40 @@
                 Customer's address
             </mat-checkbox>
         </div>
+    </div>
 
-        <div class="btn-row">
-            <a class="back-btn" (click)="back()">BACK</a>
-            <button mat-flat-button class="nextstep-btn" type="button" (click)="continue()"
-                [disabled]="!areCityPhoneInValid">NEXT STEP</button>
+    <div class="availability-card">
+        <div class="availability-row row-toggle">
+            <span class="label-main">Available 24/7</span>
+            <mat-slide-toggle formControlName="availableAllDay" hideIcon></mat-slide-toggle>
         </div>
+
+        @if (!isAvailable247) {
+        <div class="availability-divider"></div>
+
+        <div class="availability-row row-hours">
+            <span class="label-sub">Default hours (applies to all days)</span>
+
+            <div class="hours-row">
+                <mat-form-field appearance="outline" class="field-time">
+                    <mat-label>From</mat-label>
+                    <input matInput type="time" formControlName="scheduleFrom">
+                </mat-form-field>
+
+                <span class="hours-separator">-</span>
+
+                <mat-form-field appearance="outline" class="field-time">
+                    <mat-label>To</mat-label>
+                    <input matInput type="time" formControlName="scheduleTo">
+                </mat-form-field>
+            </div>
+        </div>
+        }
+    </div>
+    <div class="btn-row">
+        <a class="back-btn" (click)="back()">BACK</a>
+        <button mat-flat-button class="nextstep-btn" type="button" (click)="continue()"
+            [disabled]="!areGenderandNameCompanionInvalid">NEXT STEP</button>
     </div>
     }
 
@@ -203,7 +241,8 @@
 
     <div class="btn-row">
         <a class="back-btn" (click)="back()">BACK</a>
-        <button mat-flat-button class="nextstep-btn" type="button" (click)="continue()" [disabled]="!true">NEXT
+        <button mat-flat-button class="nextstep-btn" type="button" (click)="continue()"
+            [disabled]="!areGenderandNameCompanionInvalid">NEXT
             STEP</button>
     </div>
     }

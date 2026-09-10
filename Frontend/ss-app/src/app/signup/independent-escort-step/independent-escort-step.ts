@@ -71,8 +71,10 @@ export class IndependentEscortStep implements OnInit {
         this.internacionalCodePhone = Array.isArray(data) ? data : [data];
 
         const defaultCountry = this.internacionalCodePhone[0];
-        this.independentEscortform.get('interCodePhone')?.setValue(defaultCountry.name);
+        this.independentEscortform.get('interCodePhone')?.setValue(defaultCountry.calling_code);
 
+        // Temporaly Disabled
+        this.independentEscortform.get('interCodePhone')?.disable();
       },
       error: (err) => console.error('Error loading InternationalCodes', err)
     });
@@ -171,12 +173,16 @@ export class IndependentEscortStep implements OnInit {
 
   get areOrientationAndNationalityInvalid(): boolean {
     return this.independentEscortform.get('orientation')?.valid === true &&
-      this.independentEscortform.get('nationality')?.valid === true;
+      this.independentEscortform.get('nationality')?.valid === true &&
+      this.independentEscortform.get('baseCity')?.valid === true;
   }
 
-  get areCityPhoneInValid(): boolean {
-    return this.independentEscortform.get('baseCity')?.valid === true &&
-      this.independentEscortform.get('interCodePhone')?.valid === true &&
+  get areCodePhoneInValid(): boolean {
+    return this.independentEscortform.get('interCodePhone')?.valid === true &&
       this.independentEscortform.get('phone')?.valid === true;
+  }
+
+  get isAvailable247(): boolean {
+    return this.independentEscortform.get('availableAllDay')?.value === true;
   }
 }
