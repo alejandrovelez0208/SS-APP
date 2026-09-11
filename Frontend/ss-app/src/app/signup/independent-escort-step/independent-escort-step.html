@@ -170,18 +170,14 @@
         </mat-form-field>
     </div>
 
-    <div formGroupName="careModality" class="careModality-field">
+    <div formGroupName="serviceModality" class="serviceModality-field">
         <mat-label class="step-title">I serve in...</mat-label>
         <div class="checkbox-options">
-            <mat-checkbox class="application-checkbox" formControlName="ownLocation">
-                I see clients at my own location.
+            @for (modality of serviceModality; track modality.id) {
+            <mat-checkbox [formControlName]="getControlServiceModalityName(modality.id)" class="application-checkbox">
+                {{ modality.displayName }}
             </mat-checkbox>
-            <mat-checkbox class="application-checkbox" formControlName="hotels">
-                Hotels
-            </mat-checkbox>
-            <mat-checkbox class="application-checkbox" formControlName="customersAddress">
-                Customer's address
-            </mat-checkbox>
+            }
         </div>
     </div>
 
@@ -221,15 +217,15 @@
     }
 
     @if (currentStep === 5) {
-    <div formGroupName="aplicaciones" class="applications-field">
+    <div formGroupName="applications" class="applications-field">
         <mat-label class="step-title">Available applications</mat-label>
         <div class="checkbox-options">
-            <mat-checkbox class="application-checkbox" formControlName="telegram">
-                Telegram
+            @for (channel of communicationChannels; track channel.id) {
+            <mat-checkbox [formControlName]="getControlCommunicationChannelName(channel.id)"
+                class="application-checkbox">
+                {{ channel.displayName }}
             </mat-checkbox>
-            <mat-checkbox class="application-checkbox" formControlName="whatsapp">
-                WhatsApp
-            </mat-checkbox>
+            }
         </div>
     </div>
 
@@ -238,6 +234,16 @@
         <input matInput formControlName="website">
         <mat-icon matPrefix>link</mat-icon>
     </mat-form-field>
+
+    <!--    PAUSADO HASTA CAMBIAR LOS IDENTIFICADORES
+     <div formGroupName="serviceType" class="serviceType">
+        <mat-label class="step-title">Service Type</mat-label>
+        <div class="checkbox-options">
+            <mat-checkbox class="application-checkbox" formControlName="telegram">
+                
+            </mat-checkbox>
+        </div>
+    </div> -->
 
     <div class="btn-row">
         <a class="back-btn" (click)="back()">BACK</a>
