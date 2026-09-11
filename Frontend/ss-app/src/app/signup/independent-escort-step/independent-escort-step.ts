@@ -7,6 +7,8 @@ import { CredentialsStep } from '../credentials-step/credentials-step';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, startWith } from 'rxjs';
 import { MatCheckbox } from '@angular/material/checkbox';
+import { ChannelOption, COMMUNICATION_CHANNELS, CommunicationChannel } from '../../shared/enums/communicationChannels';
+import { ModalityOption, SERVICE_MODALITIES, ServiceModality } from '../../shared/enums/serviceModality';
 
 @Component({
   selector: 'app-independent-escort-step',
@@ -20,6 +22,8 @@ export class IndependentEscortStep implements OnInit {
   filteredNationalities!: Observable<any[]>;
   internacionalCodePhone: any[] = [];
   baseCity: any[] = [];
+  communicationChannels: ChannelOption[] = COMMUNICATION_CHANNELS;
+  serviceModality: ModalityOption[] = SERVICE_MODALITIES;
 
   @Input() independentEscortform!: FormGroup;
 
@@ -184,5 +188,13 @@ export class IndependentEscortStep implements OnInit {
 
   get isAvailable247(): boolean {
     return this.independentEscortform.get('availableAllDay')?.value === true;
+  }
+
+  getControlCommunicationChannelName(id: CommunicationChannel): string {
+    return id;
+  }
+
+  getControlServiceModalityName(id: ServiceModality): string {
+    return id;
   }
 }

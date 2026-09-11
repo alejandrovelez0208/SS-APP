@@ -10,6 +10,8 @@ import { GENDER } from '../shared/enums/gender';
 import { createCredentialsFormGroup } from './credentials-step/credentials-form.factory';
 import { identity } from 'rxjs';
 import { disabled } from '@angular/forms/signals';
+import { CommunicationChannel } from '../shared/enums/communicationChannels';
+import { ServiceModality } from '../shared/enums/serviceModality';
 
 //Move
 export function atLeastOneCheckedValidator(): ValidatorFn {
@@ -72,14 +74,14 @@ export class Signup {
           baseCity: ['', Validators.required],
           interCodePhone: ['', [Validators.required]],
           phone: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10)]],
-          aplicaciones: this.fb.group({
-            telegram: [false],
-            whatsapp: [false]
+          applications: this.fb.group({
+            [CommunicationChannel.WHATSAPP]: [false],
+            [CommunicationChannel.TELEGRAM]: [false]
           }),
-          careModality: this.fb.group({
-            ownLocation: [true],
-            hotels: [false],
-            customersAddress: [false]
+          serviceModality: this.fb.group({
+            [ServiceModality.OWN_LOCATION]: [true],
+            [ServiceModality.HOTELS]: [false],
+            [ServiceModality.CUSTOMER_ADDRESS]: [false]
           }),
           availableAllDay: [false],
           scheduleFrom: ['09:00'],
@@ -98,12 +100,12 @@ export class Signup {
   }
 
   private initCareModalityListener(): void {
-    this.independentEscortForm.get('careModality')?.valueChanges.subscribe(value => {
+    this.independentEscortForm.get('serviceModality')?.valueChanges.subscribe(value => {
       if (!value) return;
-      const { ownLocation, hotels, customersAddress } = value;
+      const { own_location, hotels, customer_address } = value;
 
-      if (!ownLocation && !hotels && !customersAddress) {
-        this.independentEscortForm.get('careModality.ownLocation')?.setValue(true, { emitEvent: false });
+      if (!own_location && !hotels && !customer_address) {
+        this.independentEscortForm.get('serviceModality.own_location')?.setValue(true, { emitEvent: false });
       }
     });
   }

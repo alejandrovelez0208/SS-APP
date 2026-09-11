@@ -1,4 +1,5 @@
 
+**10-09*2026**: The HTML and TypeScript code for the dropdown items is refactored.
 **10-09*2026**: New fields are being implemented.
 **09-09*2026**: New fields are added.
 **08-09*2026**: Changes are being made to the fields.
