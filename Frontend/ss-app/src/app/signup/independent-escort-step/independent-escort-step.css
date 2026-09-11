@@ -345,7 +345,7 @@ a {
     display: flex;
     align-items: center;
 
-    background: #111a26;
+    background: var(--mdc-switch-selected-track-color);
     border: 1px solid #435063;
     border-radius: 6px;
 }
@@ -441,7 +441,7 @@ a {
 }
 
 .availability-card {
-    background: #0d1117;
+    background: var(--mdc-switch-selected-track-color);
     border: 1px solid #30363d;
     border-radius: 12px;
     padding: 20px;
@@ -507,7 +507,6 @@ a {
     flex: 0 0 auto;
 }
 
-/* Outline field — fondo del input más claro que el card */
 :host ::ng-deep .field-time .mdc-text-field--outlined {
     --mdc-outlined-text-field-container-shape: 8px;
     background-color: #161b22;
