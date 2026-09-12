@@ -11,4 +11,8 @@ public class CatalogsFilterRequest {
 
 	private Long type;
 	private Long fathertype;
+
+	public boolean hasFilters() {
+		return type != null || fathertype != null;
+	}
 }

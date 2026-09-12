@@ -14,7 +14,7 @@ public class CatalogsResponse implements Serializable {
 	private static final long serialVersionUID = -7209270914556022972L;
 
 	private Long id;
-	private Long type_id;
+	private Long typeId;
 	private Long code;
 	private String description;
 	private Long fatherType;
