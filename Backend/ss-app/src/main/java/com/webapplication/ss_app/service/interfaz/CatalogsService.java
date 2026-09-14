@@ -1,4 +1,4 @@
-package com.webapplication.ss_app.service;
+package com.webapplication.ss_app.service.interfaz;
 
 import java.util.List;
 

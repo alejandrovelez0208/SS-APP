@@ -8,13 +8,13 @@ import org.springframework.stereotype.Repository;
 
 import com.webapplication.ss_app.dtos.request.CatalogsFilterRequest;
 import com.webapplication.ss_app.dtos.response.CatalogsResponse;
-import com.webapplication.ss_app.service.CatalogsService;
+import com.webapplication.ss_app.repositories.interfaz.CatalogsRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class CatalogsRepository implements CatalogsService {
+public class CatalogsService implements CatalogsRepository {
 
 	private final NamedParameterJdbcTemplate jdbcTemplate;
 

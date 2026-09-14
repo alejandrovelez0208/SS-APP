@@ -49,7 +49,6 @@ export class Signup {
   previewUrl = signal<string | ArrayBuffer | null>(null);
 
   constructor(private fb: FormBuilder, private authService: AuthService, private cdr: ChangeDetectorRef) {
-
     this.signupForm = this.fb.group({
       profileType: [null],
 

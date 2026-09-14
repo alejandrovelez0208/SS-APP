@@ -9,6 +9,8 @@ import { map, Observable, startWith } from 'rxjs';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { ChannelOption, COMMUNICATION_CHANNELS, CommunicationChannel } from '../../shared/enums/communicationChannels';
 import { ModalityOption, SERVICE_MODALITIES, ServiceModality } from '../../shared/enums/serviceModality';
+import { CatalogFilter } from '../../shared/CatalogFilter';
+import { CatalogsService } from '../../services/catalogs/catalogs-service';
 
 @Component({
   selector: 'app-independent-escort-step',
@@ -48,6 +50,10 @@ export class IndependentEscortStep implements OnInit {
   ownLocation = false;
   hotels = false;
   customersAddress = false;
+
+  serviceClassification: any[] = []
+
+  constructor(private catalogsService: CatalogsService) { }
 
   ngOnInit(): void {
     this.loadNationalities();
@@ -100,6 +106,8 @@ export class IndependentEscortStep implements OnInit {
   continue(): void {
     this.hide.set(true);
     this.currentStep++;
+
+    this.loadCatalogTitles();
   }
 
   back(): void {
@@ -196,5 +204,41 @@ export class IndependentEscortStep implements OnInit {
 
   getControlServiceModalityName(id: ServiceModality): string {
     return id;
+  }
+
+  loadCatalogTitles() {
+    if (this.currentStep === 1) {
+      console.log("PASSED");
+      const serviceClassificationCode = 10;
+
+      const filters: CatalogFilter = {
+        type: serviceClassificationCode,
+        fathertype: null
+      };
+
+      this.catalogsService.getServiceClassification(filters).subscribe(data => {
+        this.serviceClassification = data;
+        console.log(this.serviceClassification);
+        this.assignTitles();
+      });
+    }
+  }
+
+  /* SOLUCIONAR ESTA PARTE */
+  assignTitles() {
+    for (const serviceTitles of this.serviceClassification) {
+      switch (serviceTitles) {
+        case 1:
+          console.log("Channel Communication");
+          break;
+        case 2:
+          console.log("No encontrado");
+          break;
+        default:
+          console.log("Estado desconocido");
+      }
+    }
+
+
   }
 }
