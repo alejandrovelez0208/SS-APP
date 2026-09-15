@@ -11,6 +11,7 @@ import { ChannelOption, COMMUNICATION_CHANNELS, CommunicationChannel } from '../
 import { ModalityOption, SERVICE_MODALITIES, ServiceModality } from '../../shared/enums/serviceModality';
 import { CatalogFilter } from '../../shared/CatalogFilter';
 import { CatalogsService } from '../../services/catalogs/catalogs-service';
+import { Constantes } from '../../shared/enums/Constantes';
 
 @Component({
   selector: 'app-independent-escort-step',
@@ -20,6 +21,8 @@ import { CatalogsService } from '../../services/catalogs/catalogs-service';
 })
 export class IndependentEscortStep implements OnInit {
   private http = inject(HttpClient);
+  readonly title = Constantes;
+
   nationalities: any[] = [];
   filteredNationalities!: Observable<any[]>;
   internacionalCodePhone: any[] = [];
@@ -28,7 +31,6 @@ export class IndependentEscortStep implements OnInit {
   serviceModality: ModalityOption[] = SERVICE_MODALITIES;
 
   @Input() independentEscortform!: FormGroup;
-
   @Output() backToProfileType = new EventEmitter<void>();
 
   currentStep = 0;
@@ -208,7 +210,6 @@ export class IndependentEscortStep implements OnInit {
 
   loadCatalogTitles() {
     if (this.currentStep === 1) {
-      console.log("PASSED");
       const serviceClassificationCode = 10;
 
       const filters: CatalogFilter = {
@@ -218,27 +219,12 @@ export class IndependentEscortStep implements OnInit {
 
       this.catalogsService.getServiceClassification(filters).subscribe(data => {
         this.serviceClassification = data;
-        console.log(this.serviceClassification);
-        this.assignTitles();
+        this.catalogsService.assignTitles(this.serviceClassification);
       });
     }
   }
 
-  /* SOLUCIONAR ESTA PARTE */
-  assignTitles() {
-    for (const serviceTitles of this.serviceClassification) {
-      switch (serviceTitles) {
-        case 1:
-          console.log("Channel Communication");
-          break;
-        case 2:
-          console.log("No encontrado");
-          break;
-        default:
-          console.log("Estado desconocido");
-      }
-    }
-
-
+  getTitle(code: number): string {
+    return this.catalogsService.classificationMap.get(code) ?? 'Title not found';
   }
 }
