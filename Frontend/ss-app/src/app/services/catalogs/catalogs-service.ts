@@ -11,10 +11,17 @@ import { Observable } from 'rxjs';
 export class CatalogsService {
   private apiUrl = environment.apiUrl + 'catalogs/';
 
+  classificationMap = new Map<number, string>();
+
   constructor(private http: HttpClient, private router: Router) { }
 
   getServiceClassification(filters: CatalogFilter): Observable<any[]> {
     return this.http.post<any[]>(this.apiUrl + 'search', filters);
   }
 
+  assignTitles(serviceClassification: any[]) {
+    for (const item of serviceClassification) {
+      this.classificationMap.set(item.code, item.description);
+    }
+  }
 }

@@ -171,7 +171,7 @@
     </div>
 
     <div formGroupName="serviceModality" class="serviceModality-field">
-        <mat-label class="step-title">I serve in...</mat-label>
+        <mat-label class="step-title">{{getTitle(title.I_ATTEND_TO)}}</mat-label>
         <div class="checkbox-options">
             @for (modality of serviceModality; track modality.id) {
             <mat-checkbox [formControlName]="getControlServiceModalityName(modality.id)" class="application-checkbox">
@@ -218,7 +218,7 @@
 
     @if (currentStep === 5) {
     <div formGroupName="applications" class="applications-field">
-        <mat-label class="step-title">Available applications</mat-label>
+        <mat-label class="step-title">{{ getTitle(title.CHANNELS_COMMUNICATION) }}</mat-label>
         <div class="checkbox-options">
             @for (channel of communicationChannels; track channel.id) {
             <mat-checkbox [formControlName]="getControlCommunicationChannelName(channel.id)"
