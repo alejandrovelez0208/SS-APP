@@ -1,4 +1,5 @@
 
+**15-09*2026**: independent-scrot component is refactored
 **10-09*2026**: The HTML and TypeScript code for the dropdown items is refactored.
 **10-09*2026**: New fields are being implemented.
 **09-09*2026**: New fields are added.

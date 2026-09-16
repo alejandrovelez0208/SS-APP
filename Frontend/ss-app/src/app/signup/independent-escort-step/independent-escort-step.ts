@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, inject, Input, OnInit, Output, signal } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { SharedModule } from '../../shared/shared-module';
 import { HAIR_COLOR } from '../../shared/enums/hairColor';
@@ -7,11 +7,12 @@ import { CredentialsStep } from '../credentials-step/credentials-step';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, startWith } from 'rxjs';
 import { MatCheckbox } from '@angular/material/checkbox';
-import { ChannelOption, COMMUNICATION_CHANNELS, CommunicationChannel } from '../../shared/enums/communicationChannels';
-import { ModalityOption, SERVICE_MODALITIES, ServiceModality } from '../../shared/enums/serviceModality';
 import { CatalogFilter } from '../../shared/CatalogFilter';
 import { CatalogsService } from '../../services/catalogs/catalogs-service';
-import { Constantes } from '../../shared/enums/Constantes';
+import { Constants } from '../../shared/enums/constants/Constants';
+import { FieldOptions } from '../../shared/enums/constants/fieldOptions';
+import { DataService } from '../../services/data/data-service';
+import { City, InternationalCodePhone, Nationality } from '../../shared/models/escort.model';
 
 @Component({
   selector: 'app-independent-escort-step',
@@ -20,96 +21,50 @@ import { Constantes } from '../../shared/enums/Constantes';
   styleUrl: './independent-escort-step.css',
 })
 export class IndependentEscortStep implements OnInit {
-  private http = inject(HttpClient);
-  readonly title = Constantes;
-
-  nationalities: any[] = [];
-  filteredNationalities!: Observable<any[]>;
-  internacionalCodePhone: any[] = [];
-  baseCity: any[] = [];
-  communicationChannels: ChannelOption[] = COMMUNICATION_CHANNELS;
-  serviceModality: ModalityOption[] = SERVICE_MODALITIES;
 
   @Input() independentEscortform!: FormGroup;
   @Output() backToProfileType = new EventEmitter<void>();
 
-  currentStep = 0;
+  private readonly dataService = inject(DataService);
+  private readonly catalogsService = inject(CatalogsService);
+  private readonly cdr = inject(ChangeDetectorRef);
+  readonly title = FieldOptions;
 
   hide = signal(true);
   hidePassword = true;
   hideConfirmPassword = true;
-
-  genders = Object.values(GENDER);
-  hairColor = Object.values(HAIR_COLOR);
-
   heightValue = signal(1.6);
   weightValue = signal(60);
   ageValue = signal(18);
-
   telegramSelected = false;
   whatsappSelected = false;
-
   ownLocation = false;
   hotels = false;
   customersAddress = false;
 
+  genders = Object.values(GENDER);
+  hairColor = Object.values(HAIR_COLOR);
+
+  nationalities: Nationality[] = [];
+  filteredNationalities!: Observable<Nationality[]>;
+  internacionalCodePhone: InternationalCodePhone[] = [];
+  baseCity: City[] = [];
+  channelsCommunication: any[] = [];
+  serviceModality: any[] = [];
   serviceClassification: any[] = []
 
-  constructor(private catalogsService: CatalogsService) { }
+  currentStep = 0;
 
   ngOnInit(): void {
-    this.loadNationalities();
-    this.loadInternationalCodePhone();
-    this.loadBaseCity();
-
-    this.heightValue.set(this.independentEscortform.get('height')?.value ?? 1.6);
-    this.weightValue.set(this.independentEscortform.get('weight')?.value ?? 60);
-    this.ageValue.set(this.independentEscortform.get('age')?.value ?? 18);
-  }
-
-  loadNationalities() {
-    this.http.get<any>('/data/nationalities.json').subscribe({
-      next: (data) => {
-        this.nationalities = data?.data?.objects ?? [];
-        this.setupFilter();
-      },
-      error: (err) => console.error('Error loading nationalities', err)
-    });
-  }
-
-  loadInternationalCodePhone() {
-    this.http.get<any>('/data/internationalCodePhone.json').subscribe({
-      next: (data) => {
-        this.internacionalCodePhone = Array.isArray(data) ? data : [data];
-
-        const defaultCountry = this.internacionalCodePhone[0];
-        this.independentEscortform.get('interCodePhone')?.setValue(defaultCountry.calling_code);
-
-        // Temporaly Disabled
-        this.independentEscortform.get('interCodePhone')?.disable();
-      },
-      error: (err) => console.error('Error loading InternationalCodes', err)
-    });
-  }
-
-  loadBaseCity() {
-    this.http.get<any>('/data/citiesColombia.json').subscribe({
-      next: (data) => {
-        this.baseCity = Array.isArray(data) ? data : [data];
-
-        const defaultCountry = this.baseCity[0];
-        this.independentEscortform.get('baseCity')?.setValue(defaultCountry.name);
-
-      },
-      error: (err) => console.error('Error loading Cities of Colombia', err)
-    });
+    this.loadInitialData();
+    this.initFormValues();
   }
 
   continue(): void {
     this.hide.set(true);
     this.currentStep++;
 
-    this.loadCatalogTitles();
+    this.loadFields();
   }
 
   back(): void {
@@ -119,25 +74,6 @@ export class IndependentEscortStep implements OnInit {
       return;
     }
     this.currentStep--;
-  }
-
-  get validationCredentials(): boolean {
-    return this.independentEscortform.get('email')?.valid === true &&
-      this.independentEscortform.get('password')?.valid === true &&
-      this.independentEscortform.get('confirmPassword')?.valid === true;
-  }
-
-  get validateSex(): String {
-    const valorGender = this.independentEscortform.get('gender')?.value;
-
-    if (valorGender === 'Man') {
-      return "male";
-    } else if (valorGender === 'Woman') {
-      return "female";
-    } else if (valorGender === 'Trans') {
-      return "transgender";
-    }
-    return "";
   }
 
   onHeightChange(value: number): void {
@@ -158,6 +94,68 @@ export class IndependentEscortStep implements OnInit {
     return value + ' kg';
   }
 
+  loadFields(): void {
+    if (this.currentStep === 4) {
+      this.loadServiceModalities();
+    } else if (this.currentStep === 5) {
+      this.loadCommunicationChannels();
+    }
+  }
+
+  getControlModalityNameByFormula(id: number): string {
+    return this.catalogsService.modalititesMap.get(id) ?? 'Modalities not Found';
+  }
+
+  getControlChannelNameByFormula(id: number): string {
+    return this.catalogsService.modalititesMap.get(id) ?? 'Channels not found';
+  }
+
+  displayFn(nation: any): string {
+    return nation && nation.names ? nation.names.common : '';
+  }
+
+  private loadInitialData(): void {
+    // Load Nationalities
+    this.dataService.getNationalities().subscribe({
+      next: (data) => {
+        this.nationalities = data;
+        this.setupFilter();
+      },
+      error: (err) => console.error('Error loading nationalities', err)
+    });
+
+    // Load Phone Code
+    this.dataService.getInternationalCodes().subscribe({
+      next: (data) => {
+        this.internacionalCodePhone = data;
+        const defaultCountry = this.internacionalCodePhone[0];
+        if (defaultCountry) {
+          this.independentEscortform.get('interCodePhone')?.setValue(defaultCountry.calling_code);
+          this.independentEscortform.get('interCodePhone')?.disable();
+        }
+      },
+      error: (err) => console.error('Error loading InternationalCodes', err)
+    });
+
+    // Load city
+    this.dataService.getCitiesColombia().subscribe({
+      next: (data) => {
+        this.baseCity = data;
+        const defaultCity = this.baseCity[0];
+        if (defaultCity) {
+          this.independentEscortform.get('baseCity')?.setValue(defaultCity.name);
+        }
+      },
+      error: (err) => console.error('Error loading Cities of Colombia', err)
+    });
+  }
+
+  private initFormValues(): void {
+    this.heightValue.set(this.independentEscortform.get('height')?.value ?? 1.6);
+    this.weightValue.set(this.independentEscortform.get('weight')?.value ?? 60);
+    this.ageValue.set(this.independentEscortform.get('age')?.value ?? 18);
+  }
+
   private setupFilter(): void {
     const nationalityCtrl = this.independentEscortform.get('nationality');
     this.filteredNationalities = nationalityCtrl!.valueChanges.pipe(
@@ -176,8 +174,49 @@ export class IndependentEscortStep implements OnInit {
     );
   }
 
-  displayFn(nation: any): string {
-    return nation && nation.names ? nation.names.common : '';
+  private loadServiceModalities(): void {
+    const serviceModalityFilter: CatalogFilter = {
+      type: FieldOptions.I_ATTEND_TO,
+      fathertype: null
+    };
+
+    this.catalogsService.getPTipos(serviceModalityFilter).subscribe(data => {
+      this.serviceModality = data;
+      this.catalogsService.assignModalityFormula(this.serviceModality);
+      this.cdr.detectChanges();
+    });
+  }
+
+  private loadCommunicationChannels(): void {
+    const channelsFilter: CatalogFilter = {
+      type: FieldOptions.CHANNELS_COMMUNICATION,
+      fathertype: null
+    };
+
+    this.catalogsService.getPTipos(channelsFilter).subscribe(data => {
+      this.channelsCommunication = data;
+      this.catalogsService.assignChannelsFormular(this.channelsCommunication);
+      this.cdr.detectChanges();
+    });
+  }
+
+  get validationCredentials(): boolean {
+    return this.independentEscortform.get('email')?.valid === true &&
+      this.independentEscortform.get('password')?.valid === true &&
+      this.independentEscortform.get('confirmPassword')?.valid === true;
+  }
+
+  get genderIconName(): String {
+    const valorGender = this.independentEscortform.get('gender')?.value;
+
+    if (valorGender === GENDER[0]) {
+      return "male";
+    } else if (valorGender === GENDER[1]) {
+      return "female";
+    } else if (valorGender === GENDER[2]) {
+      return "transgender";
+    }
+    return "";
   }
 
   get areGenderandNameCompanionInvalid(): boolean {
@@ -191,40 +230,12 @@ export class IndependentEscortStep implements OnInit {
       this.independentEscortform.get('baseCity')?.valid === true;
   }
 
-  get areCodePhoneInValid(): boolean {
+  get areCodePhoneInvalid(): boolean {
     return this.independentEscortform.get('interCodePhone')?.valid === true &&
       this.independentEscortform.get('phone')?.valid === true;
   }
 
   get isAvailable247(): boolean {
     return this.independentEscortform.get('availableAllDay')?.value === true;
-  }
-
-  getControlCommunicationChannelName(id: CommunicationChannel): string {
-    return id;
-  }
-
-  getControlServiceModalityName(id: ServiceModality): string {
-    return id;
-  }
-
-  loadCatalogTitles() {
-    if (this.currentStep === 1) {
-      const serviceClassificationCode = 10;
-
-      const filters: CatalogFilter = {
-        type: serviceClassificationCode,
-        fathertype: null
-      };
-
-      this.catalogsService.getServiceClassification(filters).subscribe(data => {
-        this.serviceClassification = data;
-        this.catalogsService.assignTitles(this.serviceClassification);
-      });
-    }
-  }
-
-  getTitle(code: number): string {
-    return this.catalogsService.classificationMap.get(code) ?? 'Title not found';
   }
 }

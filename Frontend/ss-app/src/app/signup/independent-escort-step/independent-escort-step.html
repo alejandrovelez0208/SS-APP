@@ -26,7 +26,7 @@
 
     <mat-form-field appearance="outline" class="field">
         <mat-label>Gender</mat-label>
-        <mat-icon matPrefix> {{ validateSex }}</mat-icon>
+        <mat-icon matPrefix> {{ genderIconName }}</mat-icon>
         <mat-select formControlName="gender">
             @for (opcion of genders; track $index) {
             <mat-option [value]="opcion">
@@ -101,7 +101,7 @@
         <mat-icon matPrefix>public</mat-icon>
         <input matInput [matAutocomplete]="auto" formControlName="nationality">
         <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" panelClass="nationality-autocomplete-panel">
-            @for (nation of filteredNationalities | async; track nation.codes.alpha_2) {
+            @for (nation of filteredNationalities | async; track nation.code) {
             <mat-option [value]="nation">
                 {{ nation.names.common }}
             </mat-option>
@@ -171,11 +171,12 @@
     </div>
 
     <div formGroupName="serviceModality" class="serviceModality-field">
-        <mat-label class="step-title">{{getTitle(title.I_ATTEND_TO)}}</mat-label>
+        <mat-label class="step-title">I attend to</mat-label>
         <div class="checkbox-options">
-            @for (modality of serviceModality; track modality.id) {
-            <mat-checkbox [formControlName]="getControlServiceModalityName(modality.id)" class="application-checkbox">
-                {{ modality.displayName }}
+            @for (modality of serviceModality; track modality.code) {
+            <mat-checkbox [formControlName]="getControlModalityNameByFormula(modality.code)"
+                class="application-checkbox">
+                {{ modality.description }}
             </mat-checkbox>
             }
         </div>
@@ -218,12 +219,11 @@
 
     @if (currentStep === 5) {
     <div formGroupName="applications" class="applications-field">
-        <mat-label class="step-title">{{ getTitle(title.CHANNELS_COMMUNICATION) }}</mat-label>
+        <mat-label class="step-title">Channels Communication</mat-label>
         <div class="checkbox-options">
-            @for (channel of communicationChannels; track channel.id) {
-            <mat-checkbox [formControlName]="getControlCommunicationChannelName(channel.id)"
-                class="application-checkbox">
-                {{ channel.displayName }}
+            @for (channel of channelsCommunication; track channel.code) {
+            <mat-checkbox [formControlName]="getControlChannelNameByFormula(channel.code)" class="application-checkbox">
+                {{ channel.description }}
             </mat-checkbox>
             }
         </div>
