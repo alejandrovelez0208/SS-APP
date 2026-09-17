@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { City, InternationalCodePhone, Nationality } from '../../shared/models/escort.model';
+import { City, InternationalCodePhone } from '../../shared/models/escort.model';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +9,7 @@ import { City, InternationalCodePhone, Nationality } from '../../shared/models/e
 export class DataService {
   private http = inject(HttpClient);
 
-  getNationalities(): Observable<Nationality[]> {
+  getNationalities(): Observable<any[]> {
     return this.http.get<any>('/data/nationalities.json').pipe(
       map(data => data?.data?.objects ?? [])
     );

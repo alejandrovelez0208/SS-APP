@@ -101,9 +101,9 @@
         <mat-icon matPrefix>public</mat-icon>
         <input matInput [matAutocomplete]="auto" formControlName="nationality">
         <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" panelClass="nationality-autocomplete-panel">
-            @for (nation of filteredNationalities | async; track nation.code) {
-            <mat-option [value]="nation">
-                {{ nation.names.common }}
+            @for (contry of filteredNationalities | async; track contry.codes.alpha_2) {
+            <mat-option [value]="contry">
+                {{ contry.names.common }}
             </mat-option>
             }
         </mat-autocomplete>
@@ -173,7 +173,7 @@
     <div formGroupName="serviceModality" class="serviceModality-field">
         <mat-label class="step-title">I attend to</mat-label>
         <div class="checkbox-options">
-            @for (modality of serviceModality; track modality.code) {
+            @for (modality of serviceModality; track modality.id) {
             <mat-checkbox [formControlName]="getControlModalityNameByFormula(modality.code)"
                 class="application-checkbox">
                 {{ modality.description }}
@@ -222,7 +222,8 @@
         <mat-label class="step-title">Channels Communication</mat-label>
         <div class="checkbox-options">
             @for (channel of channelsCommunication; track channel.code) {
-            <mat-checkbox [formControlName]="getControlChannelNameByFormula(channel.code)" class="application-checkbox">
+            <mat-checkbox [formControlName]="getControlChannelNameByFormula(channel.code)"
+                class="application-checkbox-row">
                 {{ channel.description }}
             </mat-checkbox>
             }
@@ -235,15 +236,25 @@
         <mat-icon matPrefix>link</mat-icon>
     </mat-form-field>
 
-    <!--    PAUSADO HASTA CAMBIAR LOS IDENTIFICADORES
-     <div formGroupName="serviceType" class="serviceType">
-        <mat-label class="step-title">Service Type</mat-label>
-        <div class="checkbox-options">
-            <mat-checkbox class="application-checkbox" formControlName="telegram">
-                
-            </mat-checkbox>
-        </div>
-    </div> -->
+    <!-- ARREGLAR LOS NOMBRES DE LOS SUBTIPOSa -->
+    <mat-accordion class="services-accordion" multi formGroupName="serviceType">
+        @for (group of catalogsService.groupedServices; track group[0]) {
+        <mat-expansion-panel class="services-panel" [expanded]="$first">
+            <mat-expansion-panel-header>
+                <mat-panel-title>{{ group[0] }}</mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div class="checkbox-options">
+                @for (type of group[1]; track type.code) {
+                <mat-checkbox [formControlName]="getControlTypeOfServicesNameByFormula(type.code)"
+                    class="application-checkbox-row">
+                    {{ type.description }}
+                </mat-checkbox>
+                }
+            </div>
+        </mat-expansion-panel>
+        }
+    </mat-accordion>
 
     <div class="btn-row">
         <a class="back-btn" (click)="back()">BACK</a>

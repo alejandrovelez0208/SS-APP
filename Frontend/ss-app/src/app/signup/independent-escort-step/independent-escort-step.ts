@@ -12,7 +12,7 @@ import { CatalogsService } from '../../services/catalogs/catalogs-service';
 import { Constants } from '../../shared/enums/constants/Constants';
 import { FieldOptions } from '../../shared/enums/constants/fieldOptions';
 import { DataService } from '../../services/data/data-service';
-import { City, InternationalCodePhone, Nationality } from '../../shared/models/escort.model';
+import { City, InternationalCodePhone } from '../../shared/models/escort.model';
 
 @Component({
   selector: 'app-independent-escort-step',
@@ -26,7 +26,7 @@ export class IndependentEscortStep implements OnInit {
   @Output() backToProfileType = new EventEmitter<void>();
 
   private readonly dataService = inject(DataService);
-  private readonly catalogsService = inject(CatalogsService);
+  readonly catalogsService = inject(CatalogsService);
   private readonly cdr = inject(ChangeDetectorRef);
   readonly title = FieldOptions;
 
@@ -45,13 +45,14 @@ export class IndependentEscortStep implements OnInit {
   genders = Object.values(GENDER);
   hairColor = Object.values(HAIR_COLOR);
 
-  nationalities: Nationality[] = [];
-  filteredNationalities!: Observable<Nationality[]>;
+  nationalities: any[] = [];
+  filteredNationalities!: Observable<any[]>;
   internacionalCodePhone: InternationalCodePhone[] = [];
   baseCity: City[] = [];
   channelsCommunication: any[] = [];
   serviceModality: any[] = [];
   serviceClassification: any[] = []
+  typeOfServices: any[] = []
 
   currentStep = 0;
 
@@ -107,13 +108,16 @@ export class IndependentEscortStep implements OnInit {
   }
 
   getControlChannelNameByFormula(id: number): string {
-    return this.catalogsService.modalititesMap.get(id) ?? 'Channels not found';
+    return this.catalogsService.channelsMap.get(id) ?? 'Channels not found';
   }
 
-  displayFn(nation: any): string {
-    return nation && nation.names ? nation.names.common : '';
+  getControlTypeOfServicesNameByFormula(id: number): string {
+    return this.catalogsService.typeOfServicesMap.get(id) ?? 'Type of services not found';
   }
 
+  displayFn = (nationality: any): string => {
+    return nationality?.names?.common ?? '';
+  };
   private loadInitialData(): void {
     // Load Nationalities
     this.dataService.getNationalities().subscribe({
@@ -162,9 +166,19 @@ export class IndependentEscortStep implements OnInit {
       startWith(''),
       map(value => {
         const name = typeof value === 'string' ? value : value?.names?.common;
-        return name ? this._filter(name) : this.nationalities.slice();
+        const filtered = name ? this._filter(name) : this.nationalities.slice();
+        return name ? filtered : this._withPinnedFirst(filtered);
       })
     );
+  }
+
+  private _withPinnedFirst(list: any[]): any[] {
+    const pinnedNames = ['Colombia', 'Venezuela'];
+    const pinned = pinnedNames
+      .map(n => list.find(c => c.names.common === n))
+      .filter(c => !!c);
+    const rest = list.filter(c => !pinnedNames.includes(c.names.common));
+    return [...pinned, ...rest];
   }
 
   private _filter(name: string): any[] {
@@ -183,6 +197,15 @@ export class IndependentEscortStep implements OnInit {
     this.catalogsService.getPTipos(serviceModalityFilter).subscribe(data => {
       this.serviceModality = data;
       this.catalogsService.assignModalityFormula(this.serviceModality);
+
+      const appGroup = this.independentEscortform.get('serviceModality') as FormGroup;
+      if (appGroup) {
+        this.catalogsService.modalititesMap.forEach((formulaName) => {
+          if (!appGroup.contains(formulaName)) {
+            appGroup.addControl(formulaName, new FormControl(false));
+          }
+        });
+      }
       this.cdr.detectChanges();
     });
   }
@@ -196,6 +219,35 @@ export class IndependentEscortStep implements OnInit {
     this.catalogsService.getPTipos(channelsFilter).subscribe(data => {
       this.channelsCommunication = data;
       this.catalogsService.assignChannelsFormular(this.channelsCommunication);
+
+      const appGroup = this.independentEscortform.get('applications') as FormGroup;
+      if (appGroup) {
+        this.catalogsService.channelsMap.forEach((formulaName) => {
+          if (!appGroup.contains(formulaName)) {
+            appGroup.addControl(formulaName, new FormControl(false));
+          }
+        });
+      }
+      this.cdr.detectChanges();
+    });
+
+    const typeOfServices: CatalogFilter = {
+      type: FieldOptions.TYPES_OF_SERVICES,
+      fathertype: null
+    }
+
+    this.catalogsService.getPTipos(typeOfServices).subscribe(data => {
+      this.typeOfServices = data;
+      this.catalogsService.assingTypeOfServicesFormula(this.typeOfServices);
+
+      const appGroup = this.independentEscortform.get('serviceType') as FormGroup;
+      if (appGroup) {
+        this.catalogsService.typeOfServicesMap.forEach((formulaName) => {
+          if (!appGroup.contains(formulaName)) {
+            appGroup.addControl(formulaName, new FormControl(false));
+          }
+        });
+      }
       this.cdr.detectChanges();
     });
   }
