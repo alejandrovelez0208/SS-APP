@@ -343,18 +343,26 @@ a {
     margin-bottom: 5px;
 
     display: flex;
-    align-items: center;
 
     background: var(--mdc-switch-selected-track-color);
     border: 1px solid #435063;
     border-radius: 6px;
 }
 
+.application-checkbox-row {
+    background: var(--mdc-switch-selected-track-color);
+    border: 1px solid #435063;
+    border-radius: 6px;
+    margin: 5px;
+    padding-right: 10px;
+}
+
 .application-checkbox ::ng-deep .mdc-form-field {
     width: 100%;
 }
 
-.application-checkbox ::ng-deep .mdc-label {
+.application-checkbox application-checkbox-row,
+::ng-deep .mdc-label {
     color: #b8c0cb;
     font-weight: 600;
 }
@@ -363,7 +371,15 @@ a {
     border-color: #39f58c;
 }
 
+.application-checkbox-row:has(.mdc-checkbox__native-control:checked) {
+    border-color: #39f58c;
+}
+
 .application-checkbox:has(.mdc-checkbox__native-control:checked) ::ng-deep .mdc-label {
+    color: #39f58c;
+}
+
+.application-checkbox-row:has(.mdc-checkbox__native-control:checked) ::ng-deep .mdc-label {
     color: #39f58c;
 }
 
@@ -554,4 +570,54 @@ a {
     --mdc-switch-unselected-handle-color: #c9d1d9;
     --mdc-switch-disabled-selected-track-color: #30363d;
     --mdc-switch-disabled-unselected-track-color: #30363d;
+}
+
+.services-accordion {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: transparent;
+}
+
+.services-panel {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.services-panel:hover {
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+}
+
+:host ::ng-deep .services-panel .mat-expansion-panel-header {
+    height: 48px;
+    padding: 0 16px;
+    background: transparent !important;
+}
+
+:host ::ng-deep .services-panel .mat-expansion-panel-header-title {
+    color: #ffffff !important;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+:host ::ng-deep .services-panel .mat-expansion-indicator::after {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+:host ::ng-deep .services-panel .mat-expansion-panel-body {
+    padding: 0 16px 16px;
+    background: transparent;
+}
+
+:host ::ng-deep .services-panel.mat-expanded {
+    background: rgba(255, 255, 255, 0.05) !important;
+}
+
+:host ::ng-deep .services-panel.mat-expanded .mat-expansion-panel-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }

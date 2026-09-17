@@ -12,6 +12,7 @@ import { identity } from 'rxjs';
 import { disabled } from '@angular/forms/signals';
 import { CommunicationChannel } from '../shared/enums/communicationChannels';
 import { ServiceModality } from '../shared/enums/serviceModality';
+import { CatalogsService } from '../services/catalogs/catalogs-service';
 
 //Move
 export function atLeastOneCheckedValidator(): ValidatorFn {
@@ -48,7 +49,7 @@ export class Signup {
   selectedFile = signal<File | null>(null);
   previewUrl = signal<string | ArrayBuffer | null>(null);
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private cdr: ChangeDetectorRef) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private cdr: ChangeDetectorRef, private catalogService: CatalogsService) {
     this.signupForm = this.fb.group({
       profileType: [null],
 
@@ -73,15 +74,9 @@ export class Signup {
           baseCity: ['', Validators.required],
           interCodePhone: ['', [Validators.required]],
           phone: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10)]],
-          applications: this.fb.group({
-            [CommunicationChannel.WHATSAPP]: [false],
-            [CommunicationChannel.TELEGRAM]: [false]
-          }),
-          serviceModality: this.fb.group({
-            [ServiceModality.OWN_LOCATION]: [true],
-            [ServiceModality.HOTELS]: [false],
-            [ServiceModality.CUSTOMER_ADDRESS]: [false]
-          }),
+          applications: this.fb.group({}),
+          serviceModality: this.fb.group({}),
+          serviceType: this.fb.group({}),
           availableAllDay: [false],
           scheduleFrom: ['09:00'],
           scheduleTo: ['06:00'],
@@ -108,6 +103,7 @@ export class Signup {
       }
     });
   }
+
 
   get memberForm(): FormGroup {
     return this.signupForm.get('member') as FormGroup;
