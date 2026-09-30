@@ -13,7 +13,12 @@ export interface City {
     id?: number | string;
 }
 export interface ServiceItem {
-  id: number;
-  code: number;
-  description: string;
+    id: number;
+    code: number;
+    description: string;
+}
+
+export interface CatalogItem {
+    code: number;
+    description: string;
 }

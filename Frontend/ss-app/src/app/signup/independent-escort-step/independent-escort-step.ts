@@ -104,15 +104,15 @@ export class IndependentEscortStep implements OnInit {
   }
 
   getControlModalityNameByFormula(id: number): string {
-    return this.catalogsService.modalititesMap.get(id) ?? 'Modalities not Found';
+    return this.catalogsService.getFormulaMap('modality').get(id) ?? 'Modalities not found';
   }
 
   getControlChannelNameByFormula(id: number): string {
-    return this.catalogsService.channelsMap.get(id) ?? 'Channels not found';
+    return this.catalogsService.getFormulaMap('channels').get(id) ?? 'Channels not found';
   }
 
   getControlTypeOfServicesNameByFormula(id: number): string {
-    return this.catalogsService.typeOfServicesMap.get(id) ?? 'Type of services not found';
+    return this.catalogsService.getFormulaMap('typeOfServices').get(id) ?? 'Type of services not found';
   }
 
   displayFn = (nationality: any): string => {
@@ -200,7 +200,7 @@ export class IndependentEscortStep implements OnInit {
 
       const appGroup = this.independentEscortform.get('serviceModality') as FormGroup;
       if (appGroup) {
-        this.catalogsService.modalititesMap.forEach((formulaName) => {
+        this.catalogsService.getFormulaMap('modality').forEach((formulaName) => {
           if (!appGroup.contains(formulaName)) {
             appGroup.addControl(formulaName, new FormControl(false));
           }
@@ -218,11 +218,11 @@ export class IndependentEscortStep implements OnInit {
 
     this.catalogsService.getPTipos(channelsFilter).subscribe(data => {
       this.channelsCommunication = data;
-      this.catalogsService.assignChannelsFormular(this.channelsCommunication);
+      this.catalogsService.assignChannelsFormula(this.channelsCommunication);
 
       const appGroup = this.independentEscortform.get('applications') as FormGroup;
       if (appGroup) {
-        this.catalogsService.channelsMap.forEach((formulaName) => {
+        this.catalogsService.getFormulaMap('channels').forEach((formulaName) => {
           if (!appGroup.contains(formulaName)) {
             appGroup.addControl(formulaName, new FormControl(false));
           }
@@ -238,11 +238,11 @@ export class IndependentEscortStep implements OnInit {
 
     this.catalogsService.getPTipos(typeOfServices).subscribe(data => {
       this.typeOfServices = data;
-      this.catalogsService.assingTypeOfServicesFormula(this.typeOfServices);
+      this.catalogsService.assignTypeOfServicesFormula(this.typeOfServices);
 
       const appGroup = this.independentEscortform.get('serviceType') as FormGroup;
       if (appGroup) {
-        this.catalogsService.typeOfServicesMap.forEach((formulaName) => {
+        this.catalogsService.getFormulaMap('typeOfServices').forEach((formulaName) => {
           if (!appGroup.contains(formulaName)) {
             appGroup.addControl(formulaName, new FormControl(false));
           }
