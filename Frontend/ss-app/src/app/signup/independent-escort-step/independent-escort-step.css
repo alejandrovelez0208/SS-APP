@@ -73,6 +73,9 @@
 
 .checkbox-options {
     width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
 .btn-row {
@@ -341,9 +344,8 @@ a {
     height: 44px;
     padding: 10px;
     margin-bottom: 5px;
-
-    display: flex;
-
+    display: inline-flex;
+    align-items: center;
     background: var(--mdc-switch-selected-track-color);
     border: 1px solid #435063;
     border-radius: 6px;
@@ -457,7 +459,6 @@ a {
 }
 
 .availability-card {
-    background: var(--mdc-switch-selected-track-color);
     border: 1px solid #30363d;
     border-radius: 12px;
     padding: 20px;
@@ -581,7 +582,7 @@ a {
 }
 
 .services-panel {
-    background: rgba(255, 255, 255, 0.03) !important;
+    background: transparent !important;
     border: 1px solid rgba(255, 255, 255, 0.15) !important;
     border-radius: 8px !important;
     box-shadow: none !important;
@@ -590,7 +591,7 @@ a {
 
 .services-panel:hover {
     border-color: rgba(255, 255, 255, 0.3) !important;
-    background: rgba(255, 255, 255, 0.05) !important;
+    background: transparent !important;
 }
 
 :host ::ng-deep .services-panel .mat-expansion-panel-header {
@@ -615,9 +616,13 @@ a {
 }
 
 :host ::ng-deep .services-panel.mat-expanded {
-    background: rgba(255, 255, 255, 0.05) !important;
+    background: transparent !important;
 }
 
 :host ::ng-deep .services-panel.mat-expanded .mat-expansion-panel-header {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.departures-field {
+    margin-bottom: 10px;
 }

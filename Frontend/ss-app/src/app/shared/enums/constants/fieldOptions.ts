@@ -4,7 +4,7 @@ export enum FieldOptions {
     SERVICES = 3,
     TYPES_OF_SERVICES = 300,
     I_ATTEND_TO = 200,
-    DEPARTURES = 6,
+    DEPARTURES = 400,
     ORAL_SEX = 7
 }
 

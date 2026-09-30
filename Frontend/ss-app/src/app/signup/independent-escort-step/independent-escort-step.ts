@@ -41,6 +41,7 @@ export class IndependentEscortStep implements OnInit {
   ownLocation = false;
   hotels = false;
   customersAddress = false;
+  rateValue = signal(50000);
 
   genders = Object.values(GENDER);
   hairColor = Object.values(HAIR_COLOR);
@@ -53,6 +54,7 @@ export class IndependentEscortStep implements OnInit {
   serviceModality: any[] = [];
   serviceClassification: any[] = []
   typeOfServices: any[] = []
+  departures: any[] = []
 
   currentStep = 0;
 
@@ -100,6 +102,8 @@ export class IndependentEscortStep implements OnInit {
       this.loadServiceModalities();
     } else if (this.currentStep === 5) {
       this.loadCommunicationChannels();
+    } else if (this.currentStep === 6) {
+      this.loadDepartures();
     }
   }
 
@@ -115,9 +119,26 @@ export class IndependentEscortStep implements OnInit {
     return this.catalogsService.getFormulaMap('typeOfServices').get(id) ?? 'Type of services not found';
   }
 
+  getControlDepartureNamesByFormula(id: number): string {
+    return this.catalogsService.getFormulaMap('departures').get(id) ?? 'Departures not found';
+  }
+
   displayFn = (nationality: any): string => {
     return nationality?.names?.common ?? '';
   };
+
+  onRateChange(value: number): void {
+    this.rateValue.set(value);
+  }
+
+  formatRate(value: number): string {
+    if (!value) return '$50.000 COP';
+    return new Intl.NumberFormat('es-CO', {
+      style: 'currency',
+      currency: 'COP',
+      maximumFractionDigits: 0,
+    }).format(value);
+  }
   private loadInitialData(): void {
     // Load Nationalities
     this.dataService.getNationalities().subscribe({
@@ -158,6 +179,7 @@ export class IndependentEscortStep implements OnInit {
     this.heightValue.set(this.independentEscortform.get('height')?.value ?? 1.6);
     this.weightValue.set(this.independentEscortform.get('weight')?.value ?? 60);
     this.ageValue.set(this.independentEscortform.get('age')?.value ?? 18);
+    this.rateValue.set(this.independentEscortform.get('basicRate')?.value ?? 50000);
   }
 
   private setupFilter(): void {
@@ -252,6 +274,28 @@ export class IndependentEscortStep implements OnInit {
     });
   }
 
+  private loadDepartures(): void {
+    const departuresFilter: CatalogFilter = {
+      type: FieldOptions.DEPARTURES,
+      fathertype: null
+    };
+
+    this.catalogsService.getPTipos(departuresFilter).subscribe(data => {
+      this.departures = data;
+      this.catalogsService.assingDeparturesFormula(this.departures);
+
+      const appGroup = this.independentEscortform.get('departures') as FormGroup;
+      if (appGroup) {
+        this.catalogsService.getFormulaMap('departures').forEach((formulaName) => {
+          if (!appGroup.contains(formulaName)) {
+            appGroup.addControl(formulaName, new FormControl(false));
+          }
+        });
+      }
+      this.cdr.detectChanges();
+    });
+  }
+
   get validationCredentials(): boolean {
     return this.independentEscortform.get('email')?.valid === true &&
       this.independentEscortform.get('password')?.valid === true &&
@@ -290,4 +334,5 @@ export class IndependentEscortStep implements OnInit {
   get isAvailable247(): boolean {
     return this.independentEscortform.get('availableAllDay')?.value === true;
   }
+
 }
