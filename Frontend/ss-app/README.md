@@ -1,5 +1,5 @@
 
-
+**29-09*2026**: Basic rate and departures is being implemented.
 **29-09*2026**: Code is being refactored.
 **16-09*2026**: SubTypes name is being implemented.
 **15-09*2026**: independent-scrot component is refactored

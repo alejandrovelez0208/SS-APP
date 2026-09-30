@@ -77,10 +77,12 @@ export class Signup {
           applications: this.fb.group({}),
           serviceModality: this.fb.group({}),
           serviceType: this.fb.group({}),
+          departures: this.fb.group({}),
           availableAllDay: [false],
           scheduleFrom: ['09:00'],
           scheduleTo: ['06:00'],
-          website: ['']
+          website: [''],
+          basicRate: [50000, [Validators.required]],
         }),
 
         agency: this.fb.group({

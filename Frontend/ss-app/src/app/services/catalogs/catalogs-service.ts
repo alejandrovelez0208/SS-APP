@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { CatalogItem, ServiceItem } from '../../shared/models/escort.model';
 import { OTHERS_CATEGORY_LABEL, SERVICE_CATEGORY_RANGES } from '../../shared/enums/constants/fieldOptions';
 
-export type CatalogType = 'modality' | 'channels' | 'typeOfServices';
+export type CatalogType = 'modality' | 'channels' | 'typeOfServices' | 'departures';
 
 @Injectable({
   providedIn: 'root',
@@ -57,6 +57,11 @@ export class CatalogsService {
     this.catalogLists.set('typeOfServices', items);
     this.formulaMaps.set('typeOfServices', this.buildFormulaMap(items));
     this.rebuildGroupedServices();
+  }
+
+  assingDeparturesFormula(items: CatalogItem[]): void{
+    this.catalogLists.set('departures', items);
+    this.formulaMaps.set('departures', this.buildFormulaMap(items));
   }
 
   getFormulaMap(type: CatalogType): Map<number, string> {

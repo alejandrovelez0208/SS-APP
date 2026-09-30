@@ -262,4 +262,34 @@
             STEP</button>
     </div>
     }
+
+    @if (currentStep === 6) {
+    <div formGroupName="departures" class="departures-field">
+        <mat-label class="step-title">Departures</mat-label>
+        <div class="checkbox-options">
+            @for (departure of departures; track departure.code) {
+            <mat-checkbox [formControlName]="getControlDepartureNamesByFormula(departure.code)"
+                class="application-checkbox-row">
+                {{ departure.description }}
+            </mat-checkbox>
+            }
+        </div>
+    </div>
+
+    <div class="slider-group">
+        <mat-label class="step-title">Basic Rate (COP): {{ formatRate(rateValue()) }}</mat-label>
+        <div class="slider-container-wide">
+            <mat-slider min="50000" max="1000000" step="5000">
+                <input matSliderThumb formControlName="basicRate" (valueChange)="onRateChange($event)">
+            </mat-slider>
+        </div>
+    </div>
+
+    <div class="btn-row">
+        <a class="back-btn" (click)="back()">BACK</a>
+        <button mat-flat-button class="nextstep-btn" type="button" (click)="continue()"
+            [disabled]="!areGenderandNameCompanionInvalid">NEXT
+            STEP</button>
+    </div>
+    }
 </div>
