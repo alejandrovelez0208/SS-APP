@@ -292,4 +292,45 @@
             STEP</button>
     </div>
     }
+
+    @if (currentStep === 7) {
+    <div class="avatar-upload">
+        <mat-label class="avatar-upload__label">Profile Pictures ({{ photos().length }}/{{ maxPhotos }})</mat-label>
+
+        <div class="avatar-upload__body">
+            <input #fileInput type="file" hidden accept="image/*" (change)="onFileSelected($event)">
+
+            <button mat-stroked-button type="button" class="avatar-upload__btn" (click)="fileInput.click()"
+                [disabled]="!canAddMorePhotos">
+                <mat-icon matPrefix>photo_camera</mat-icon>
+                {{ canAddMorePhotos ? 'Agregar foto' : 'Máximo alcanzado' }}
+            </button>
+        </div>
+
+        @if (photosRemainingToMin > 0) {
+        <span class="avatar-upload__hint">
+            Upload at leas {{ photosRemainingToMin }} more photo {{ photosRemainingToMin > 1 ? 's' : '' }} to continue
+        </span>
+        }
+
+        @if (photos().length > 0) {
+        <div class="photo-gallery">
+            @for (photo of photos(); track $index) {
+            <div class="photo-gallery__item">
+                <img [src]="photo.url" alt="Foto {{ $index + 1 }}">
+                <button mat-icon-button type="button" class="photo-gallery__remove" (click)="removePhoto($index)">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+            }
+        </div>
+        }
+    </div>
+
+    <div class="btn-row">
+        <a class="back-btn" (click)="back()">BACK</a>
+        <button mat-flat-button class="nextstep-btn" type="button" (click)="continue()"
+            [disabled]="!hasRequiredPhotos">COMPLETE REGISTRATION</button>
+    </div>
+    }
 </div>

@@ -14,6 +14,11 @@ import { FieldOptions } from '../../shared/enums/constants/fieldOptions';
 import { DataService } from '../../services/data/data-service';
 import { City, InternationalCodePhone } from '../../shared/models/escort.model';
 
+interface PhotoPreview {
+  file: File;
+  url: string | ArrayBuffer | null;
+}
+
 @Component({
   selector: 'app-independent-escort-step',
   imports: [SharedModule, CredentialsStep],
@@ -57,6 +62,10 @@ export class IndependentEscortStep implements OnInit {
   departures: any[] = []
 
   currentStep = 0;
+
+  photos = signal<PhotoPreview[]>([]);
+  readonly minPhotos = 3;
+  readonly maxPhotos = 10;
 
   ngOnInit(): void {
     this.loadInitialData();
@@ -335,4 +344,42 @@ export class IndependentEscortStep implements OnInit {
     return this.independentEscortform.get('availableAllDay')?.value === true;
   }
 
+  get canAddMorePhotos(): boolean {
+    return this.photos().length < this.maxPhotos;
+  }
+
+  get hasRequiredPhotos(): boolean {
+    return this.photos().length >= this.minPhotos;
+  }
+
+  get photosRemainingToMin(): number {
+    return Math.max(0, this.minPhotos - this.photos().length);
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (!file) return;
+
+    if (!this.canAddMorePhotos) {
+      input.value = '';
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.photos.update(current => [
+        ...current,
+        { file, url: reader.result }
+      ]);
+    };
+    reader.readAsDataURL(file);
+
+    input.value = '';
+  }
+
+  removePhoto(index: number): void {
+    this.photos.update(current => current.filter((_, i) => i !== index));
+  }
 }
