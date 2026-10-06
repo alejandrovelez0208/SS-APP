@@ -31,11 +31,7 @@ export class EscortStep {
   get independentEscortForm(): FormGroup {
     return this.escortform.get('independentEscort') as FormGroup;
   }
-
-  /*   get agencyForm(): FormGroup {
-      return this.escortform.get('agency') as FormGroup;
-    } */
-
+  
   back(): void {
     if (this.currentStep === 0) {
       console.log(this.currentStep);

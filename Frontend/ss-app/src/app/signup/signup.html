@@ -21,7 +21,7 @@
             <div class="options">
                 @for(option of fields[currentStep].options; track option.value) {
                 <mat-card class="profile-card" [class]="option.class" [class.selected]="selectedType === option.value"
-                    (click)="selectType(option.value)">
+                    (click)="selectType($any(option).value)">
 
                     <div class="card-content">
                         <div>
