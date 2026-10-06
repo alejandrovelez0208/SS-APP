@@ -1,20 +1,16 @@
-import { ChangeDetectorRef, Component, signal, ViewChild } from '@angular/core';
-import { SharedModule } from '../shared/shared-module';
+import { ChangeDetectorRef, Component, signal } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { SharedModule } from '../shared/shared-module';
 import { SIGN_UP_FIELDS } from './fields/sign-up.fields';
 import { AuthService } from '../services/auth/auth-service';
-import { Preference } from '../shared/enums/preference';
+import { CatalogsService } from '../services/catalogs/catalogs-service';
 import { MemberStep } from './member-step/member-step';
 import { EscortStep } from './escort-step/escort-step';
 import { GENDER } from '../shared/enums/gender';
+import { Preference } from '../shared/enums/preference';
 import { createCredentialsFormGroup } from './credentials-step/credentials-form.factory';
-import { identity } from 'rxjs';
-import { disabled } from '@angular/forms/signals';
-import { CommunicationChannel } from '../shared/enums/communicationChannels';
-import { ServiceModality } from '../shared/enums/serviceModality';
-import { CatalogsService } from '../services/catalogs/catalogs-service';
 
-//Move
+// TODO: Considerar mover a un archivo de validadores personalizados (validators/custom.validators.ts)
 export function atLeastOneCheckedValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     if (!(control instanceof FormGroup)) return null;
@@ -23,6 +19,7 @@ export function atLeastOneCheckedValidator(): ValidatorFn {
     return isAtLeastOneTrue ? null : { noneChecked: true };
   };
 }
+
 @Component({
   selector: 'app-signup',
   imports: [SharedModule, MemberStep, EscortStep],
@@ -30,26 +27,29 @@ export function atLeastOneCheckedValidator(): ValidatorFn {
   styleUrl: './signup.css',
 })
 export class Signup {
-  fields = SIGN_UP_FIELDS;
+  readonly fields = SIGN_UP_FIELDS;
+  readonly genders = Object.values(GENDER);
+  readonly preferences = Object.values(Preference);
+
+  signupForm: FormGroup;
   currentStep = 0;
-
-  signupForm!: FormGroup;
-
   selectedType: 'escort' | 'member' | null = null;
 
   hide = signal(true);
   hidePassword = true;
   hideConfirmPassword = true;
 
-  genders = Object.values(GENDER);
-
   preferenceOption = new FormControl([]);
-  preferences = Object.values(Preference);
 
   selectedFile = signal<File | null>(null);
   previewUrl = signal<string | ArrayBuffer | null>(null);
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private cdr: ChangeDetectorRef, private catalogService: CatalogsService) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef,
+    private catalogService: CatalogsService
+  ) {
     this.signupForm = this.fb.group({
       profileType: [null],
 
@@ -85,8 +85,7 @@ export class Signup {
           basicRate: [50000, [Validators.required]],
         }),
 
-        agency: this.fb.group({
-        }),
+        agency: this.fb.group({}),
       }),
     });
   }
@@ -95,18 +94,7 @@ export class Signup {
     this.initCareModalityListener();
   }
 
-  private initCareModalityListener(): void {
-    this.independentEscortForm.get('serviceModality')?.valueChanges.subscribe(value => {
-      if (!value) return;
-      const { own_location, hotels, customer_address } = value;
-
-      if (!own_location && !hotels && !customer_address) {
-        this.independentEscortForm.get('serviceModality.own_location')?.setValue(true, { emitEvent: false });
-      }
-    });
-  }
-
-
+  // Getters para los subformgroups
   get memberForm(): FormGroup {
     return this.signupForm.get('member') as FormGroup;
   }
@@ -119,35 +107,27 @@ export class Signup {
     return this.signupForm.get('escort.independentEscort') as FormGroup;
   }
 
-  selectType(type: string): void {
+  selectType(type: 'escort' | 'member'): void {
     this.hide.set(false);
-    this.selectedType = type as 'escort' | 'member';
+    this.selectedType = type;
   }
 
   continue(): void {
-    if (!this.selectedType) {
-      return;
-    }
+    if (!this.selectedType) return;
+
     this.hide.set(true);
     this.currentStep++;
     this.cdr.detectChanges();
   }
 
   back(): void {
-    if (this.currentStep === 0) {
-      return;
-    }
+    if (this.currentStep === 0) return;
+
     this.currentStep--;
     this.cdr.detectChanges();
   }
 
-  get validationCredentials(): boolean {
-    return this.signupForm.get('email')?.valid === true &&
-      this.signupForm.get('password')?.valid === true &&
-      this.signupForm.get('confirmPassword')?.valid === true;
-  }
-
-  onFileSelected(event: Event) {
+  onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
 
@@ -158,5 +138,17 @@ export class Signup {
     const reader = new FileReader();
     reader.onload = () => this.previewUrl.set(reader.result);
     reader.readAsDataURL(file);
+  }
+
+  private initCareModalityListener(): void {
+    this.independentEscortForm.get('serviceModality')?.valueChanges.subscribe(value => {
+      if (!value) return;
+
+      const { own_location, hotels, customer_address } = value;
+
+      if (!own_location && !hotels && !customer_address) {
+        this.independentEscortForm.get('serviceModality.own_location')?.setValue(true, { emitEvent: false });
+      }
+    });
   }
 }

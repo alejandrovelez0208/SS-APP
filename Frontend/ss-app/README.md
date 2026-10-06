@@ -1,4 +1,5 @@
 
+**05-10*2026**: Sign Up is being refactored.
 **29-09*2026**: Basic rate and departures is being implemented.
 **29-09*2026**: Code is being refactored.
 **16-09*2026**: SubTypes name is being implemented.
