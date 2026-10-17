@@ -1,18 +1,15 @@
-import { ChangeDetectorRef, Component, EventEmitter, inject, Input, OnInit, Output, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { SharedModule } from '../../shared/shared-module';
-import { HAIR_COLOR } from '../../shared/enums/hairColor';
-import { GENDER } from '../../shared/enums/gender';
-import { CredentialsStep } from '../credentials-step/credentials-step';
-import { HttpClient } from '@angular/common/http';
-import { map, Observable, startWith } from 'rxjs';
-import { MatCheckbox } from '@angular/material/checkbox';
-import { CatalogFilter } from '../../shared/CatalogFilter';
-import { CatalogsService } from '../../services/catalogs/catalogs-service';
-import { Constants } from '../../shared/enums/constants/Constants';
-import { FieldOptions } from '../../shared/enums/constants/fieldOptions';
 import { DataService } from '../../services/data/data-service';
+import { CatalogsService } from '../../services/catalogs/catalogs-service';
+import { FieldOptions } from '../../shared/enums/constants/fieldOptions';
+import { GENDER } from '../../shared/enums/gender';
+import { HAIR_COLOR } from '../../shared/enums/hairColor';
+import { map, Observable, startWith } from 'rxjs';
 import { City, InternationalCodePhone } from '../../shared/models/escort.model';
+import { SharedModule } from '../../shared/shared-module';
+import { CatalogFilter } from '../../shared/CatalogFilter';
+import { CredentialsStep } from '../credentials-step/credentials-step';
 
 interface PhotoPreview {
   file: File;
@@ -20,14 +17,14 @@ interface PhotoPreview {
 }
 
 @Component({
-  selector: 'app-independent-escort-step',
+  selector: 'app-escort-profile-step',
   imports: [SharedModule, CredentialsStep],
-  templateUrl: './independent-escort-step.html',
-  styleUrl: './independent-escort-step.css',
+  templateUrl: './escort-profile-step.html',
+  styleUrl: './escort-profile-step.css',
 })
-export class IndependentEscortStep implements OnInit {
+export class EscortProfileStep {
 
-  @Input() independentEscortform!: FormGroup;
+  @Input() escortProfileform!: FormGroup
   @Output() backToProfileType = new EventEmitter<void>();
 
   private readonly dataService = inject(DataService);
@@ -88,6 +85,20 @@ export class IndependentEscortStep implements OnInit {
     this.currentStep--;
   }
 
+  loadFields(): void {
+    if (this.currentStep === 4) {
+      this.loadServiceModalities();
+    } else if (this.currentStep === 5) {
+      this.loadCommunicationChannels();
+    } else if (this.currentStep === 6) {
+      this.loadDepartures();
+    }
+  }
+
+  displayFn = (nationality: any): string => {
+    return nationality?.names?.common ?? '';
+  };
+
   onHeightChange(value: number): void {
     this.heightValue.set(value);
   }
@@ -106,14 +117,44 @@ export class IndependentEscortStep implements OnInit {
     return value + ' kg';
   }
 
-  loadFields(): void {
-    if (this.currentStep === 4) {
-      this.loadServiceModalities();
-    } else if (this.currentStep === 5) {
-      this.loadCommunicationChannels();
-    } else if (this.currentStep === 6) {
-      this.loadDepartures();
+  onRateChange(value: number): void {
+    this.rateValue.set(value);
+  }
+
+  formatRate(value: number): string {
+    if (!value) return '$50.000 COP';
+    return new Intl.NumberFormat('es-CO', {
+      style: 'currency',
+      currency: 'COP',
+      maximumFractionDigits: 0,
+    }).format(value);
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (!file) return;
+
+    if (!this.canAddMorePhotos) {
+      input.value = '';
+      return;
     }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.photos.update(current => [
+        ...current,
+        { file, url: reader.result }
+      ]);
+    };
+    reader.readAsDataURL(file);
+
+    input.value = '';
+  }
+
+  removePhoto(index: number): void {
+    this.photos.update(current => current.filter((_, i) => i !== index));
   }
 
   getControlModalityNameByFormula(id: number): string {
@@ -132,22 +173,6 @@ export class IndependentEscortStep implements OnInit {
     return this.catalogsService.getFormulaMap('departures').get(id) ?? 'Departures not found';
   }
 
-  displayFn = (nationality: any): string => {
-    return nationality?.names?.common ?? '';
-  };
-
-  onRateChange(value: number): void {
-    this.rateValue.set(value);
-  }
-
-  formatRate(value: number): string {
-    if (!value) return '$50.000 COP';
-    return new Intl.NumberFormat('es-CO', {
-      style: 'currency',
-      currency: 'COP',
-      maximumFractionDigits: 0,
-    }).format(value);
-  }
   private loadInitialData(): void {
     // Load Nationalities
     this.dataService.getNationalities().subscribe({
@@ -164,8 +189,8 @@ export class IndependentEscortStep implements OnInit {
         this.internacionalCodePhone = data;
         const defaultCountry = this.internacionalCodePhone[0];
         if (defaultCountry) {
-          this.independentEscortform.get('interCodePhone')?.setValue(defaultCountry.calling_code);
-          this.independentEscortform.get('interCodePhone')?.disable();
+          this.escortProfileform.get('interCodePhone')?.setValue(defaultCountry.calling_code);
+          this.escortProfileform.get('interCodePhone')?.disable();
         }
       },
       error: (err) => console.error('Error loading InternationalCodes', err)
@@ -177,7 +202,7 @@ export class IndependentEscortStep implements OnInit {
         this.baseCity = data;
         const defaultCity = this.baseCity[0];
         if (defaultCity) {
-          this.independentEscortform.get('baseCity')?.setValue(defaultCity.name);
+          this.escortProfileform.get('baseCity')?.setValue(defaultCity.name);
         }
       },
       error: (err) => console.error('Error loading Cities of Colombia', err)
@@ -185,14 +210,14 @@ export class IndependentEscortStep implements OnInit {
   }
 
   private initFormValues(): void {
-    this.heightValue.set(this.independentEscortform.get('height')?.value ?? 1.6);
-    this.weightValue.set(this.independentEscortform.get('weight')?.value ?? 60);
-    this.ageValue.set(this.independentEscortform.get('age')?.value ?? 18);
-    this.rateValue.set(this.independentEscortform.get('basicRate')?.value ?? 50000);
+    this.heightValue.set(this.escortProfileform.get('height')?.value ?? 1.6);
+    this.weightValue.set(this.escortProfileform.get('weight')?.value ?? 60);
+    this.ageValue.set(this.escortProfileform.get('age')?.value ?? 18);
+    this.rateValue.set(this.escortProfileform.get('basicRate')?.value ?? 50000);
   }
 
   private setupFilter(): void {
-    const nationalityCtrl = this.independentEscortform.get('nationality');
+    const nationalityCtrl = this.escortProfileform.get('nationality');
     this.filteredNationalities = nationalityCtrl!.valueChanges.pipe(
       startWith(''),
       map(value => {
@@ -229,7 +254,7 @@ export class IndependentEscortStep implements OnInit {
       this.serviceModality = data;
       this.catalogsService.assignModalityFormula(this.serviceModality);
 
-      const appGroup = this.independentEscortform.get('serviceModality') as FormGroup;
+      const appGroup = this.escortProfileform.get('serviceModality') as FormGroup;
       if (appGroup) {
         this.catalogsService.getFormulaMap('modality').forEach((formulaName) => {
           if (!appGroup.contains(formulaName)) {
@@ -251,7 +276,7 @@ export class IndependentEscortStep implements OnInit {
       this.channelsCommunication = data;
       this.catalogsService.assignChannelsFormula(this.channelsCommunication);
 
-      const appGroup = this.independentEscortform.get('applications') as FormGroup;
+      const appGroup = this.escortProfileform.get('applications') as FormGroup;
       if (appGroup) {
         this.catalogsService.getFormulaMap('channels').forEach((formulaName) => {
           if (!appGroup.contains(formulaName)) {
@@ -271,7 +296,7 @@ export class IndependentEscortStep implements OnInit {
       this.typeOfServices = data;
       this.catalogsService.assignTypeOfServicesFormula(this.typeOfServices);
 
-      const appGroup = this.independentEscortform.get('serviceType') as FormGroup;
+      const appGroup = this.escortProfileform.get('serviceType') as FormGroup;
       if (appGroup) {
         this.catalogsService.getFormulaMap('typeOfServices').forEach((formulaName) => {
           if (!appGroup.contains(formulaName)) {
@@ -293,7 +318,7 @@ export class IndependentEscortStep implements OnInit {
       this.departures = data;
       this.catalogsService.assingDeparturesFormula(this.departures);
 
-      const appGroup = this.independentEscortform.get('departures') as FormGroup;
+      const appGroup = this.escortProfileform.get('departures') as FormGroup;
       if (appGroup) {
         this.catalogsService.getFormulaMap('departures').forEach((formulaName) => {
           if (!appGroup.contains(formulaName)) {
@@ -305,14 +330,8 @@ export class IndependentEscortStep implements OnInit {
     });
   }
 
-  get validationCredentials(): boolean {
-    return this.independentEscortform.get('email')?.valid === true &&
-      this.independentEscortform.get('password')?.valid === true &&
-      this.independentEscortform.get('confirmPassword')?.valid === true;
-  }
-
   get genderIconName(): String {
-    const valorGender = this.independentEscortform.get('gender')?.value;
+    const valorGender = this.escortProfileform.get('gender')?.value;
 
     if (valorGender === GENDER[0]) {
       return "male";
@@ -325,23 +344,23 @@ export class IndependentEscortStep implements OnInit {
   }
 
   get areGenderandNameCompanionInvalid(): boolean {
-    return this.independentEscortform.get('nameCompanion')?.valid === true &&
-      this.independentEscortform.get('gender')?.valid === true;
+    return this.escortProfileform.get('nameCompanion')?.valid === true &&
+      this.escortProfileform.get('gender')?.valid === true;
   }
 
   get areOrientationAndNationalityInvalid(): boolean {
-    return this.independentEscortform.get('orientation')?.valid === true &&
-      this.independentEscortform.get('nationality')?.valid === true &&
-      this.independentEscortform.get('baseCity')?.valid === true;
+    return this.escortProfileform.get('orientation')?.valid === true &&
+      this.escortProfileform.get('nationality')?.valid === true &&
+      this.escortProfileform.get('baseCity')?.valid === true;
   }
 
   get areCodePhoneInvalid(): boolean {
-    return this.independentEscortform.get('interCodePhone')?.valid === true &&
-      this.independentEscortform.get('phone')?.valid === true;
+    return this.escortProfileform.get('interCodePhone')?.valid === true &&
+      this.escortProfileform.get('phone')?.valid === true;
   }
 
   get isAvailable247(): boolean {
-    return this.independentEscortform.get('availableAllDay')?.value === true;
+    return this.escortProfileform.get('availableAllDay')?.value === true;
   }
 
   get canAddMorePhotos(): boolean {
@@ -354,32 +373,5 @@ export class IndependentEscortStep implements OnInit {
 
   get photosRemainingToMin(): number {
     return Math.max(0, this.minPhotos - this.photos().length);
-  }
-
-  onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
-
-    if (!file) return;
-
-    if (!this.canAddMorePhotos) {
-      input.value = '';
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.photos.update(current => [
-        ...current,
-        { file, url: reader.result }
-      ]);
-    };
-    reader.readAsDataURL(file);
-
-    input.value = '';
-  }
-
-  removePhoto(index: number): void {
-    this.photos.update(current => current.filter((_, i) => i !== index));
   }
 }

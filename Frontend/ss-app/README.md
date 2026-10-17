@@ -1,4 +1,5 @@
 
+**05-17*2026**: Escort field is being refactored.
 **05-10*2026**: Step 7 adding photos is being implemented.
 **05-10*2026**: Sign Up is being refactored.
 **29-09*2026**: Basic rate and departures is being implemented.

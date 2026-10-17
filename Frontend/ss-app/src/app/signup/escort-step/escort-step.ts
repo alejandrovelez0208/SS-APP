@@ -1,25 +1,20 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SharedModule } from '../../shared/shared-module';
-import { ESCORT_FIELDS } from '../fields/sign-up.fields';
-import { IndependentEscortStep } from '../independent-escort-step/independent-escort-step';
-import { AuthService } from '../../services/auth/auth-service';
+import { EscortProfileStep } from '../escort-profile-step/escort-profile-step';
 
 @Component({
   selector: 'app-escort-step',
-  imports: [SharedModule, IndependentEscortStep],
+  imports: [SharedModule, EscortProfileStep],
   templateUrl: './escort-step.html',
   styleUrl: './escort-step.css',
 })
 export class EscortStep {
   @Input() escortform!: FormGroup;
-
   @Output() backToProfileType = new EventEmitter<void>();
 
   signupForm!: FormGroup;
-
   showContent: Boolean = false;
-
   currentStep = 0;
 
   constructor(private cdr: ChangeDetectorRef) { }
@@ -28,10 +23,10 @@ export class EscortStep {
     this.showContent = true;
   }
 
-  get independentEscortForm(): FormGroup {
-    return this.escortform.get('independentEscort') as FormGroup;
+  get escortProfileForm(): FormGroup {
+    return this.escortform.get('escortProfile') as FormGroup;
   }
-  
+
   back(): void {
     if (this.currentStep === 0) {
       console.log(this.currentStep);
