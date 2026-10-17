@@ -1,7 +1,6 @@
-<div class="independent-escort-step" [formGroup]="independentEscortform">
+<div class="escort-profile-step" [formGroup]="escortProfileform">
     @if (currentStep === 0 || currentStep === 1) {
-    <app-credentials-step [form]="independentEscortform" [stepIndex]="currentStep" (next)="continue()"
-        (back)="back()" />
+    <app-credentials-step [form]="escortProfileform" [stepIndex]="currentStep" (next)="continue()" (back)="back()" />
     }
 
     @if(currentStep !== 0 && currentStep !== 1){
@@ -14,12 +13,11 @@
     }
 
     @if (currentStep === 2) {
-
     <mat-form-field appearance="outline" class="field">
         <mat-label>Name of the companion</mat-label>
         <input matInput formControlName="nameCompanion">
         <mat-icon matPrefix>person</mat-icon>
-        @if (independentEscortform.get('nameCompanion')?.hasError('required')){
+        @if (escortProfileform.get('nameCompanion')?.hasError('required')){
         <mat-error>Name is required</mat-error>
         }
     </mat-form-field>
@@ -34,13 +32,13 @@
             </mat-option>
             }
         </mat-select>
-        @if (independentEscortform.get('gender')?.hasError('required') && independentEscortform.get('gender')?.touched){
+        @if (escortProfileform.get('gender')?.hasError('required') && escortProfileform.get('gender')?.touched){
         <mat-error>Gender is required</mat-error>
         }
     </mat-form-field>
 
     <div class="slider-group">
-        <label class="step-title">Age: {{ independentEscortform.get('age')?.value }}</label>
+        <label class="step-title">Age: {{ escortProfileform.get('age')?.value }}</label>
         <div class="slider-container-wide">
             <mat-slider min="18" max="99" step="1">
                 <input matSliderThumb formControlName="age">
@@ -79,7 +77,7 @@
     </div>
 
     <div class="slider-group">
-        <mat-label class="step-title">Weight: {{ formatWeight(independentEscortform.get('weight')?.value) }}</mat-label>
+        <mat-label class="step-title">Weight: {{ formatWeight(escortProfileform.get('weight')?.value) }}</mat-label>
         <div class="slider-container-wide">
             <mat-slider min="40" max="150" step="1">
                 <input matSliderThumb formControlName="weight">
@@ -107,7 +105,7 @@
             </mat-option>
             }
         </mat-autocomplete>
-        @if (independentEscortform.get('nationality')?.hasError('required')){
+        @if (escortProfileform.get('nationality')?.hasError('required')){
         <mat-error>Nationality is required</mat-error>
         }
     </mat-form-field>
@@ -123,7 +121,7 @@
             </mat-option>
             }
         </mat-autocomplete>
-        @if (independentEscortform.get('baseCity')?.hasError('required')){
+        @if (escortProfileform.get('baseCity')?.hasError('required')){
         <mat-error>Base city is required</mat-error>
         }
         <mat-hint>We currently operate exclusively in Medellín.</mat-hint>
@@ -149,7 +147,7 @@
                 </mat-option>
                 }
             </mat-autocomplete>
-            @if (independentEscortform.get('interCodePhone')?.hasError('required')){
+            @if (escortProfileform.get('interCodePhone')?.hasError('required')){
             <mat-error>Code is required</mat-error>
             }
         </mat-form-field>
@@ -159,12 +157,12 @@
             <input matInput formControlName="phone">
             <mat-icon matPrefix>phone</mat-icon>
 
-            @if(independentEscortform.get('phone')?.hasError('required')){
+            @if(escortProfileform.get('phone')?.hasError('required')){
             <mat-error>Phone is required</mat-error>
             }
 
-            @if(independentEscortform.get('phone')?.hasError('minlength') ||
-            independentEscortform.get('phone')?.hasError('maxlength')){
+            @if(escortProfileform.get('phone')?.hasError('minlength') ||
+            escortProfileform.get('phone')?.hasError('maxlength')){
             <mat-error>Phone must be 10 characters</mat-error>
             }
         </mat-form-field>

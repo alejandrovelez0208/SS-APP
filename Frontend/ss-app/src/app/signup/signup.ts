@@ -61,7 +61,7 @@ export class Signup {
 
       escort: this.fb.group({
         accountType: ['', [Validators.required]],
-        independentEscort: this.fb.group({
+        escortProfile: this.fb.group({
           ...createCredentialsFormGroup(this.authService).controls,
           nameCompanion: ['', Validators.required],
           gender: ['', Validators.required],
@@ -103,8 +103,8 @@ export class Signup {
     return this.signupForm.get('escort') as FormGroup;
   }
 
-  get independentEscortForm(): FormGroup {
-    return this.signupForm.get('escort.independentEscort') as FormGroup;
+  get escortProfileForm(): FormGroup {
+    return this.signupForm.get('escort.escortProfile') as FormGroup;
   }
 
   selectType(type: 'escort' | 'member'): void {
@@ -141,13 +141,13 @@ export class Signup {
   }
 
   private initCareModalityListener(): void {
-    this.independentEscortForm.get('serviceModality')?.valueChanges.subscribe(value => {
+    this.escortProfileForm.get('serviceModality')?.valueChanges.subscribe(value => {
       if (!value) return;
 
       const { own_location, hotels, customer_address } = value;
 
       if (!own_location && !hotels && !customer_address) {
-        this.independentEscortForm.get('serviceModality.own_location')?.setValue(true, { emitEvent: false });
+        this.escortProfileForm.get('serviceModality.own_location')?.setValue(true, { emitEvent: false });
       }
     });
   }

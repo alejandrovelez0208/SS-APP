@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { IndependentEscortStep } from './independent-escort-step';
+import { EscortProfileStep } from './escort-profile-step';
 
-describe('IndependentEscortStep', () => {
-  let component: IndependentEscortStep;
-  let fixture: ComponentFixture<IndependentEscortStep>;
+describe('EscortProfileStep', () => {
+  let component: EscortProfileStep;
+  let fixture: ComponentFixture<EscortProfileStep>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [IndependentEscortStep],
+      imports: [EscortProfileStep],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(IndependentEscortStep);
+    fixture = TestBed.createComponent(EscortProfileStep);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
