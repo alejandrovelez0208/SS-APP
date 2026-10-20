@@ -1,0 +1,106 @@
+:host {
+    --bg: #111111;
+    --surface: #141011;
+    --border: rgba(255, 255, 255, 0.08);
+    --primary: #7A0019;
+    --primary-light: #B11226;
+    --gold: #E0C27F;
+    --text: #FFFFFF;
+    --gray: #B5B5B5;
+}
+
+/* Layout */
+.sidebar-container {
+    height: 100vh;
+    background: var(--bg);
+}
+
+.sidebar-content {
+    background: var(--bg);
+    color: var(--text);
+    padding: 24px;
+}
+
+/* Sidebar */
+.agency-sidebar {
+    width: 260px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    border-radius: 0;
+    color: var(--gray);
+}
+
+/* Header */
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 72px;
+    padding: 0 24px;
+    border-bottom: 1px solid var(--border);
+}
+
+.logo-icon {
+    color: var(--gold);
+}
+
+.hub-title {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--text);
+}
+
+/* Menu */
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 16px 12px;
+}
+
+.sidebar-menu a[mat-list-item] {
+    position: relative;
+    height: 48px;
+    border-radius: 10px;
+    color: var(--gray);
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.sidebar-menu .menu-text {
+    color: inherit;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.sidebar-menu mat-icon {
+    color: inherit;
+    margin-right: 12px;
+}
+
+/* Hover */
+.sidebar-menu a[mat-list-item]:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text);
+}
+
+/* Active */
+.sidebar-menu a[mat-list-item].active-link {
+    background: linear-gradient(90deg, rgba(122, 0, 25, 0.55), rgba(122, 0, 25, 0.1));
+    color: var(--text);
+}
+
+.sidebar-menu a[mat-list-item].active-link mat-icon {
+    color: var(--gold);
+}
+
+.sidebar-menu a[mat-list-item].active-link::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    bottom: 10px;
+    width: 3px;
+    border-radius: 0 3px 3px 0;
+    background: var(--primary-light);
+}
