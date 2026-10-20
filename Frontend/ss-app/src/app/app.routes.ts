@@ -2,10 +2,12 @@ import { Routes } from '@angular/router';
 import { Landing } from './landing/landing';
 import { Login } from './login/login';
 import { Signup } from './signup/signup';
+import { AgencyDashboard } from './features/agency-dashboard/agency-dashboard/agency-dashboard';
 
 export const routes: Routes = [
     { path: '', component: Landing },
     { path: 'signup', component: Signup },
     { path: 'login', component: Login },
+    { path: 'agency', component: AgencyDashboard },
     { path: '**', redirectTo: '' }
 ];

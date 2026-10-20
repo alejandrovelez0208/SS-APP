@@ -145,11 +145,7 @@ body::after {
 }
 
 /* Icon letter default */
-.mat-mdc-form-field-icon-prefix .mat-icon {
-  font-family: 'Material Icons' !important;
-}
-
-.mat-mdc-form-field-icon-suffix .mat-icon {
+.mat-icon {
   font-family: 'Material Icons' !important;
 }
 
@@ -164,8 +160,6 @@ input:-webkit-autofill:active {
 }
 
 mat-hint {
-    color: #81c784; 
-    font-size: 12px;
+  color: #81c784;
+  font-size: 12px;
 }
-
-

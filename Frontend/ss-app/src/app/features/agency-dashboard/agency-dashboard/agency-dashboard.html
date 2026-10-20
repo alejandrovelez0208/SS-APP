@@ -1,0 +1,36 @@
+<mat-sidenav-container class="sidebar-container">
+    <mat-sidenav mode="side" opened class="agency-sidebar">
+
+        <div class="sidebar-header">
+            <mat-icon class="logo-icon">business</mat-icon>
+            <span class="hub-title">AGENCY HUB</span>
+        </div>
+        
+        <mat-nav-list class="sidebar-menu">
+            <a mat-list-item routerLink="/agency/dashboard" routerLinkActive="active-link">
+                <mat-icon matListItemIcon>dashboard</mat-icon>
+                <span matListItemTitle class="menu-text">Dashboard</span>
+            </a>
+
+            <a mat-list-item routerLink="/agency/profiles" routerLinkActive="active-link">
+                <mat-icon matListItemIcon>group</mat-icon>
+                <span matListItemTitle class="menu-text">My Profiles</span>
+            </a>
+
+            <a mat-list-item routerLink="/agency/subscription" routerLinkActive="active-link">
+                <mat-icon matListItemIcon>credit_card</mat-icon>
+                <span matListItemTitle class="menu-text">Subscription</span>
+            </a>
+
+            <a mat-list-item routerLink="/agency/settings" routerLinkActive="active-link">
+                <mat-icon matListItemIcon>settings</mat-icon>
+                <span matListItemTitle class="menu-text">Settings</span>
+            </a>
+        </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content class="sidebar-content">
+        <router-outlet></router-outlet>
+    </mat-sidenav-content>
+    
+</mat-sidenav-container>
