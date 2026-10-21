@@ -7,27 +7,63 @@
   overflow: hidden;
 }
 
-/* PulseScreen logo */
+/* Logo */
+
 .logo {
   position: absolute;
-  left: 32px;
-  top: 18px;
-  z-index: 2;
+  top: 35px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 24px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-  flex-shrink: 0;
 }
 
-/* Logo image */
-.logo img {
-  width: auto;
-  height: 50px;
-  margin-right: -15px;
+.logo-text {
+  font-family: 'Cormorant Garamond', serif !important;
+  background: #7A0019;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 1.70rem;
+  font-weight: bold;
+  letter-spacing: 4px;
 }
+
+.logo img {
+  height: 40px;
+  margin-right: -5px;
+  object-fit: contain;
+}
+
+.logo-title {
+  position: relative;
+  display: inline-block;
+}
+
+.divider {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.line {
+  width: 80px;
+  height: 1px;
+  background: #7A0019;
+}
+
+.diamond {
+  width: 10px;
+  height: 10px;
+  margin: 0 14px;
+  border: 2px solid #7A0019;
+  transform: rotate(45deg);
+}
+
 
 .bg {
   position: absolute;
@@ -36,47 +72,6 @@
   background-position: center;
   filter: brightness(0.95);
   z-index: 1;
-}
-
-.logo-text {
-  font-family: 'Cormorant Garamond', serif !important;
-  background: #7A0019;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-size: 2rem;
-  font-weight: bold;
-  letter-spacing: 4px;
-}
-
-/* Divider with lines and diamond */
-.divider {
-  position: absolute;
-  top: 80%;
-  left: 57%;
-  transform: translateX(-50%);
-  width: 240px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Side lines of the divider */
-.line {
-  width: 90px;
-  height: 1px;
-  background: #7A0019;
-  flex: none;
-}
-
-/* Decorative diamond */
-.diamond {
-  width: 10px;
-  height: 10px;
-  margin: 0 14px;
-  border: 2px solid #7A0019;
-  transform: rotate(45deg);
-  background: #111111;
 }
 
 /* The card */

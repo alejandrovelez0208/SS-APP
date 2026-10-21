@@ -21,7 +21,6 @@
 /* Top toolbar - Black background, flex layout */
 .topbar {
   position: relative;
-  z-index: 2;
   padding: 18px 32px;
   background: black;
   display: flex;
@@ -46,18 +45,15 @@
 .logo {
   display: flex;
   align-items: center;
-  font-size: 24px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  flex-shrink: 0;
-  gap: 0px;
+  font-size: 40px;
+  margin: 10px 0px 15px 0px;
 }
 
 /* Logo image */
 .logo img {
-  width: auto;
-  height: 50px;
-  margin-right: -10px;
+  height: 40px;
+  margin-right: -5px;
+  object-fit: contain;
 }
 
 /* Logo text container */
@@ -72,7 +68,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  font-size: 2rem;
+  font-size: 1.45rem;
   font-weight: bold;
   letter-spacing: 4px;
 }
@@ -80,22 +76,19 @@
 /* Divider with lines and diamond */
 .divider {
   position: absolute;
-  top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  width: 240px;
+  width: 220px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 0px;
 }
 
 /* Side lines of the divider */
 .line {
-  width: 90px;
+  width: 65px;
   height: 1px;
   background: #7A0019;
-  flex: none;
 }
 
 /* Decorative diamond */
