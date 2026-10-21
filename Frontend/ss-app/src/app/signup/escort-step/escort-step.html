@@ -19,12 +19,4 @@
     @if(showContent){
     <app-escort-profile-step [escortProfileform]="escortProfileForm" (backToProfileType)="back()" />
     }
-
-    <!--  REFACTORIZAR 
-    @if(escortform.get('accountType')?.value === 'escort' && showContent){
-    <app-independent-escort-step [independentEscortform]="independentEscortForm" (backToProfileType)="back()" />
-    }
-    @if(escortform.get('accountType')?.value === 'agency' && showContent){
-    <app-agency-escort-step [agencyEscortform]="agencyEscortForm" (backToProfileType)="back()" />
-    }-->
 </div>

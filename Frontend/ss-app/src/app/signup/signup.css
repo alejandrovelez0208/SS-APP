@@ -22,7 +22,6 @@
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  font-size: 24px;
 }
 
 .logo-text {
@@ -31,30 +30,34 @@
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-size: 2rem;
+  font-size: 1.70rem;
   font-weight: bold;
   letter-spacing: 4px;
-  line-height: 1.2;
 }
 
 .logo img {
-  width: auto;
-  height: 50px;
-  margin-right: -10px;
+  height: 40px;
+  margin-right: -5px;
+  object-fit: contain;
 }
 
 .logo-title {
   position: relative;
+  display: inline-block;
 }
 
 .divider {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 220px;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
 .line {
-  width: 90px;
+  width: 80px;
   height: 1px;
   background: #7A0019;
 }
