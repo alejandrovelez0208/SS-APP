@@ -35,4 +35,5 @@ public class CloudflareR2Config {
 						S3Configuration.builder().pathStyleAccessEnabled(true).chunkedEncodingEnabled(false).build())
 				.httpClientBuilder(UrlConnectionHttpClient.builder()).build();
 	}
+	
 }
