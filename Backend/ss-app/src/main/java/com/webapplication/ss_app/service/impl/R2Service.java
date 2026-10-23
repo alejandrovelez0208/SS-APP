@@ -26,21 +26,17 @@ public class R2Service {
 		this.s3Client = s3Client;
 	}
 
-	// 1. Guardar imagen
 	public String uploadFile(MultipartFile file) throws IOException {
 		String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
 
 		PutObjectRequest putObjectRequest = PutObjectRequest.builder().bucket(bucketName).key(fileName)
 				.contentType(file.getContentType()).build();
 
-		// Usamos fromBytes en lugar de fromInputStream para evitar el error de
-		// mark/reset
 		s3Client.putObject(putObjectRequest, RequestBody.fromBytes(file.getBytes()));
 
 		return fileName;
 	}
 
-	// 2. Consultar / Obtener imagen
 	public ResponseBytes<GetObjectResponse> getFile(String fileName) {
 		GetObjectRequest getObjectRequest = GetObjectRequest.builder().bucket(bucketName).key(fileName).build();
 
