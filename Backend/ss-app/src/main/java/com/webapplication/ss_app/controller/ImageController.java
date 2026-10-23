@@ -27,12 +27,6 @@ public class ImageController {
 		this.r2Service = r2Service;
 	}
 
-//	REVISAR ERROR EN EL ENDPOINT DE CONSULTA DE IMAGENES, 
-	
-	// ----------------------------------------------------
-	// ENDPOINT 1: Guardar Imagen (POST)
-	// ----------------------------------------------------
-	// Prueba con Postman / cURL enviando un form-data con clave "file"
 	@PostMapping("/upload")
 	public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
 		try {
@@ -43,11 +37,6 @@ public class ImageController {
 		}
 	}
 
-	// ----------------------------------------------------
-	// ENDPOINT 2: Consultar/Ver Imagen (GET)
-	// ----------------------------------------------------
-	// Puedes abrir directamente esta URL en tu navegador:
-	// http://localhost:8080/api/images/TU_NOMBRE_DE_ARCHIVO
 	@GetMapping("/{fileName}")
 	public ResponseEntity<ByteArrayResource> getImage(@PathVariable String fileName) {
 		try {
@@ -55,7 +44,6 @@ public class ImageController {
 			byte[] data = objectBytes.asByteArray();
 			ByteArrayResource resource = new ByteArrayResource(data);
 
-			// Obtener el Content-Type original (ej. image/png, image/jpeg)
 			String contentType = objectBytes.response().contentType();
 
 			return ResponseEntity.ok().contentLength(data.length)
