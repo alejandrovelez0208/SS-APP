@@ -1,4 +1,6 @@
 
+
+**26-10-2026**: Entity class are being created.
 **23-10-2026**: Entities and enums are implemented
 **20-10-2026**: API Service CloudflareR2 is being implemented in java
 **12-09-2026**: Proyect package structure is improved.
