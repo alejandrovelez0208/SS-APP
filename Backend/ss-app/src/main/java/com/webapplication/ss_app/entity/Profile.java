@@ -84,7 +84,7 @@ public class Profile {
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false, length = 20)
-	private ProfileStatus status = ProfileStatus.ACTIVE;
+	private ProfileStatus status = ProfileStatus.DRAFT;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "verification_status", nullable = false, length = 20)

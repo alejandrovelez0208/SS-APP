@@ -2,6 +2,8 @@ package com.webapplication.ss_app.dtos.request;
 
 import java.io.Serializable;
 
+import com.webapplication.ss_app.dtos.enums.AccountType;
+
 import lombok.Data;
 
 @Data
@@ -11,5 +13,7 @@ public class UserRequest implements Serializable {
 
 	private String email;
 	private String password;
+	private AccountType accountType;
+	private String userName;
 
 }

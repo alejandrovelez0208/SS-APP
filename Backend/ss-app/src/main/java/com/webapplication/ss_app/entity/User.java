@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,8 +31,9 @@ public class User {
 	@Column(nullable = false)
 	private String password;
 
-	private boolean enabled = true;
+	private boolean isEnabled = true;
 
+	@Column(nullable = false, updatable = false)
 	private Instant createdAt;
 
 	private Instant lastLoginAt;
@@ -42,13 +44,18 @@ public class User {
 	@Column(unique = true)
 	private String verificationToken;
 
-	@Column
 	private String passwordResetToken;
 
-	@Column
+	private Instant verificationTokenExpiry;
+
 	private Instant passwordResetTokenExpiry;
 
 	@OneToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "account_id", nullable = false, unique = true)
 	private Account account;
+
+	@PrePersist
+	void onCreate() {
+		createdAt = Instant.now();
+	}
 }

@@ -25,4 +25,11 @@ public class GlobalExceptionHandler {
 		log.warn("EmailAlreadyExistsException: {}", ex.getMessage());
 		return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
 	}
+
+	@ExceptionHandler(EmailNotVerifiedException.class)
+	public ResponseEntity<Map<String, Object>> handleEmailNotVerified(EmailNotVerifiedException ex) {
+		log.warn("EmailNotVerifiedException: {}", ex.getMessage());
+		return buildResponse(HttpStatus.FORBIDDEN, ex.getMessage());
+	}
+
 }
