@@ -6,6 +6,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
@@ -15,11 +16,11 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
 	private Long id;
 
@@ -34,6 +35,18 @@ public class User {
 	private Instant createdAt;
 
 	private Instant lastLoginAt;
+
+	@Column(nullable = false)
+	private boolean emailVerified = false;
+
+	@Column(unique = true)
+	private String verificationToken;
+
+	@Column
+	private String passwordResetToken;
+
+	@Column
+	private Instant passwordResetTokenExpiry;
 
 	@OneToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "account_id", nullable = false, unique = true)

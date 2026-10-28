@@ -78,7 +78,6 @@ public class Profile {
 	@JoinTable(name = "profile_departures", joinColumns = @JoinColumn(name = "profile_id"), inverseJoinColumns = @JoinColumn(name = "catalog_id"))
 	private Set<Catalog> departures = new HashSet<>();
 
-	// CREAR DEPARTURE
 	@OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
 	@OrderBy("sortOrder ASC")
 	private List<ProfilePhoto> photos = new ArrayList<>();
