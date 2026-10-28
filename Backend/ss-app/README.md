@@ -1,4 +1,6 @@
 
+
+**27-10-2026**: Email services and repositories is implemented.
 **26-10-2026**: Interfaces and Services is being created
 **26-10-2026**: Entity class are being created.
 **23-10-2026**: Entities and enums are implemented

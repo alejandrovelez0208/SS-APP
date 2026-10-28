@@ -13,6 +13,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -26,7 +27,7 @@ import lombok.EqualsAndHashCode;
 public class Account {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
 	private Long id;
 
@@ -45,7 +46,7 @@ public class Account {
 	private List<Profile> profiles = new ArrayList<>();
 
 	private Instant createdAt;
-	
+
 	private Instant updatedAt;
 
 	public boolean canAddProfile() {
