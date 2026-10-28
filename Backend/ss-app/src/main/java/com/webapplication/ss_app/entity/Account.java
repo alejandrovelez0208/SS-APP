@@ -16,6 +16,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -36,11 +38,11 @@ public class Account {
 	private AccountType type;
 
 	@Column(nullable = false)
-	private String displayName;
+	private String userName;
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
-	private AccountStatus status;
+	private AccountStatus status = AccountStatus.ACTIVE;
 
 	@OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Profile> profiles = new ArrayList<>();
@@ -49,10 +51,11 @@ public class Account {
 
 	private Instant updatedAt;
 
-	public boolean canAddProfile() {
-		return switch (type) {
-		case INDEPENDENT -> profiles.isEmpty();
-		case AGENCY -> true;
-		};
+	@OneToOne(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+	private User owner;
+
+	@PrePersist
+	void onCreate() {
+		createdAt = Instant.now();
 	}
 }

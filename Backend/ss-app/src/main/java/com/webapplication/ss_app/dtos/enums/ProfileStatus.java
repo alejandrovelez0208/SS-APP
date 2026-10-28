@@ -2,7 +2,7 @@ package com.webapplication.ss_app.dtos.enums;
 
 public enum ProfileStatus {
 
-	ACTIVE("Active"), INACTIVE("Inactive"), PAUSED("Paused");
+	ACTIVE("Active"), INACTIVE("Inactive"), PAUSED("Paused"), DRAFT("Draft");
 
 	public final String displayName;
 
