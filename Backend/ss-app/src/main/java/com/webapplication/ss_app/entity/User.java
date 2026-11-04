@@ -2,8 +2,12 @@ package com.webapplication.ss_app.entity;
 
 import java.time.Instant;
 
+import com.webapplication.ss_app.dtos.enums.Role;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -53,6 +57,10 @@ public class User {
 	@OneToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "account_id", nullable = false, unique = true)
 	private Account account;
+
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private Role role = Role.USER;
 
 	@PrePersist
 	void onCreate() {

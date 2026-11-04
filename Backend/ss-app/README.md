@@ -1,5 +1,5 @@
 
-
+**04-11-2026**: Auth controller and services are being implemented.
 **27-10-2026**: Email services and repositories is implemented.
 **26-10-2026**: Interfaces and Services is being created
 **26-10-2026**: Entity class are being created.

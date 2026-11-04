@@ -9,4 +9,10 @@ import com.webapplication.ss_app.entity.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 
 	Optional<User> findByEmail(String email);
+
+	boolean existsByEmail(String email);
+
+	Optional<User> findByVerificationToken(String verificationToken);
+
+	Optional<User> findByPasswordResetToken(String passwordResetToken);
 }
