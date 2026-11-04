@@ -32,4 +32,34 @@ public class GlobalExceptionHandler {
 		return buildResponse(HttpStatus.FORBIDDEN, ex.getMessage());
 	}
 
+	@ExceptionHandler(ResourceNotFoundException.class)
+	public ResponseEntity<Map<String, Object>> handleResourceNotFound(ResourceNotFoundException ex) {
+		log.warn("ResourceNotFoundException: {}", ex.getMessage());
+		return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+	}
+
+	@ExceptionHandler(BadCredentialsException.class)
+	public ResponseEntity<Map<String, Object>> handleResourceNotFoundException(BadCredentialsException ex) {
+		log.warn("BadCredentialException: {}", ex.getMessage());
+		return buildResponse(HttpStatus.UNAUTHORIZED, ex.getMessage());
+	}
+
+	@ExceptionHandler(AccountDeactivatedException.class)
+	public ResponseEntity<Map<String, Object>> handleAccountDeactived(AccountDeactivatedException ex) {
+		log.warn("AccountDeactivatedException: {}", ex.getMessage());
+		return buildResponse(HttpStatus.FORBIDDEN, ex.getMessage());
+	}
+
+	@ExceptionHandler(InvalidTokenException.class)
+	public ResponseEntity<Map<String, Object>> handleInvalidToken(InvalidTokenException ex) {
+		log.warn("InvalidTokenException: {}", ex.getMessage());
+		return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+	}
+
+	@ExceptionHandler(InvalidCredentialsException.class)
+	public ResponseEntity<Map<String, Object>> handleInvalidCredentialsException(InvalidCredentialsException ex) {
+		log.warn("InvalidCredentialsException: {}", ex.getMessage());
+		return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+	}
+
 }
