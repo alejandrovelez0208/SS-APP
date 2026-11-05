@@ -5,6 +5,8 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 
+export const AUTH_TOKEN_KEY = 'authToken';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -43,7 +45,7 @@ export class AuthService {
           resolve();
         },
         error: () => {
-          this.handleAuthSuccess(null);
+          this.clearSession();
           resolve();
         }
       });
@@ -51,7 +53,7 @@ export class AuthService {
   }
 
   getToken(): string | null {
-    return localStorage.getItem('token');
+    return localStorage.getItem(AUTH_TOKEN_KEY);
   }
 
   isLoggedIn(): boolean {
@@ -64,9 +66,14 @@ export class AuthService {
 
   handleAuthSuccess(authData: any) {
     if (authData?.token) {
-      localStorage.setItem('authToken', authData.token);
+      localStorage.setItem(AUTH_TOKEN_KEY, authData.token);
     }
     this.setCurrentUser(authData);
+  }
+
+  private clearSession() {
+    localStorage.removeItem(AUTH_TOKEN_KEY);
+    this.currentUserSubject.next(null);
   }
   getCurrentUser() {
     return this.currentUserSubject.value;
@@ -78,8 +85,7 @@ export class AuthService {
   }
 
   redirectBasedOnRole() {
-    const targetUrl = this.isAdmin() ? '/admin' : '/home';
-    this.router.navigate([targetUrl]);
+    this.router.navigate(['/agency']);
   }
 
   signup(signupData: any) {
@@ -111,8 +117,7 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem('token');
-    this.currentUserSubject.next(null);
+    this.clearSession();
     this.router.navigate(['/']);
   }
 
