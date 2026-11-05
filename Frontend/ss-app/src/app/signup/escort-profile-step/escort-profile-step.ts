@@ -1,7 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { DataService } from '../../services/data/data-service';
-import { CatalogsService } from '../../services/catalogs/catalogs-service';
 import { FieldOptions } from '../../shared/enums/constants/fieldOptions';
 import { GENDER } from '../../shared/enums/gender';
 import { HAIR_COLOR } from '../../shared/enums/hairColor';
@@ -10,6 +8,8 @@ import { City, InternationalCodePhone } from '../../shared/models/escort.model';
 import { SharedModule } from '../../shared/shared-module';
 import { CatalogFilter } from '../../shared/CatalogFilter';
 import { CredentialsStep } from '../credentials-step/credentials-step';
+import { DataService } from '../../shared/services/data/data-service';
+import { CatalogsService } from '../../shared/services/catalogs/catalogs-service';
 
 interface PhotoPreview {
   file: File;

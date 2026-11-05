@@ -13,10 +13,10 @@
         </div>
     </div>
 
-    <mat-card class="auth-card" (ngSubmit)="submit()" appearance="outlined">
+    <mat-card class="auth-card" appearance="outlined">
         <h1>Sign In</h1>
 
-        <form [formGroup]="loginForm" class="form">
+        <form [formGroup]="loginForm" (ngSubmit)="submit()" class="form">
             <mat-form-field appearance="outline" class="field">
                 <mat-label>Email</mat-label>
                 <input matInput formControlName="email">

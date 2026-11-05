@@ -2,13 +2,13 @@ import { ChangeDetectorRef, Component, signal } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { SharedModule } from '../shared/shared-module';
 import { SIGN_UP_FIELDS } from './fields/sign-up.fields';
-import { AuthService } from '../services/auth/auth-service';
-import { CatalogsService } from '../services/catalogs/catalogs-service';
 import { MemberStep } from './member-step/member-step';
 import { EscortStep } from './escort-step/escort-step';
 import { GENDER } from '../shared/enums/gender';
 import { Preference } from '../shared/enums/preference';
 import { createCredentialsFormGroup } from './credentials-step/credentials-form.factory';
+import { AuthService } from '../shared/services/auth/auth-service';
+import { CatalogsService } from '../shared/services/catalogs/catalogs-service';
 
 // TODO: Considerar mover a un archivo de validadores personalizados (validators/custom.validators.ts)
 export function atLeastOneCheckedValidator(): ValidatorFn {

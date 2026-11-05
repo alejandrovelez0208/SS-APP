@@ -1,5 +1,5 @@
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { AuthService } from "../../services/auth/auth-service";
+import { AuthService } from "../../shared/services/auth/auth-service";
 
 export function createCredentialsFormGroup(authService: AuthService): FormGroup {
     return new FormGroup({
