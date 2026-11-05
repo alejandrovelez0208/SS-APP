@@ -9,5 +9,5 @@ export const routes: Routes = [
     { path: 'signup', component: Signup },
     { path: 'login', component: Login },
     { path: 'agency', component: AgencyDashboard },
-    { path: '**', redirectTo: '' }
+    { path: '**', redirectTo: '', pathMatch: 'full' }
 ];

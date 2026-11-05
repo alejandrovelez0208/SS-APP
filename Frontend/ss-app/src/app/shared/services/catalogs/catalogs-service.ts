@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { CatalogFilter } from '../../shared/CatalogFilter';
 import { Observable } from 'rxjs';
-import { CatalogItem, ServiceItem } from '../../shared/models/escort.model';
-import { OTHERS_CATEGORY_LABEL, SERVICE_CATEGORY_RANGES } from '../../shared/enums/constants/fieldOptions';
+import { CatalogItem } from '../../models/escort.model';
+import { CatalogFilter } from '../../CatalogFilter';
+import { OTHERS_CATEGORY_LABEL, SERVICE_CATEGORY_RANGES } from '../../enums/constants/fieldOptions';
+import { environment } from '../../../../environments/environment';
 
 export type CatalogType = 'modality' | 'channels' | 'typeOfServices' | 'departures';
 
@@ -59,7 +59,7 @@ export class CatalogsService {
     this.rebuildGroupedServices();
   }
 
-  assingDeparturesFormula(items: CatalogItem[]): void{
+  assingDeparturesFormula(items: CatalogItem[]): void {
     this.catalogLists.set('departures', items);
     this.formulaMaps.set('departures', this.buildFormulaMap(items));
   }
