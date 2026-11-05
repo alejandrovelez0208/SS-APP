@@ -16,7 +16,6 @@ import com.webapplication.ss_app.entity.User;
 import com.webapplication.ss_app.exception.AccountDeactivatedException;
 import com.webapplication.ss_app.exception.BadCredentialsException;
 import com.webapplication.ss_app.exception.EmailAlreadyExistsException;
-import com.webapplication.ss_app.exception.EmailNotVerifiedException;
 import com.webapplication.ss_app.exception.InvalidCredentialsException;
 import com.webapplication.ss_app.exception.InvalidTokenException;
 import com.webapplication.ss_app.repositories.interfaz.AccountRepository;
@@ -63,6 +62,8 @@ public class AuthServiceImpl implements AuthService {
 		account.setType(userRequest.getAccountType());
 		account.setUserName(userRequest.getUserName());
 		account.setOwner(user);
+		
+		user.setAccount(account);
 
 		accountRepository.save(account);
 
@@ -81,10 +82,11 @@ public class AuthServiceImpl implements AuthService {
 					"Your account has been deactivated. Please contanct support for assistance");
 		}
 
-		if (!user.isEmailVerified()) {
-			throw new EmailNotVerifiedException(
-					"This verify your email address before loggin in. Check your inbox for the verification link");
-		}
+		//TODO:This need to move
+//		if (!user.isEmailVerified()) {
+//			throw new EmailNotVerifiedException(
+//					"This verify your email address before loggin in. Check your inbox for the verification link");
+//		}
 
 		final String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
 

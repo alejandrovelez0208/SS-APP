@@ -27,7 +27,7 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
-	private Long id;
+	private Long idUsers;
 
 	@Column(nullable = false, unique = true)
 	private String email;
@@ -55,7 +55,7 @@ public class User {
 	private Instant passwordResetTokenExpiry;
 
 	@OneToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "account_id", nullable = false, unique = true)
+	@JoinColumn(name = "idAccount", nullable = false, unique = true)
 	private Account account;
 
 	@Enumerated(EnumType.STRING)

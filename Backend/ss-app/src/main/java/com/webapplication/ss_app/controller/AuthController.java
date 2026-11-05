@@ -29,7 +29,6 @@ public class AuthController {
 
 	private final AuthService authService;
 
-	/*REVISAR ERROR DB*/
 	@PostMapping("/signup")
 	public ResponseEntity<MessageResponse> register(@Valid @RequestBody UserRequest userRequest) {
 		return ResponseEntity.ok(authService.signup(userRequest));
