@@ -14,7 +14,6 @@ export interface ConfirmDialogData {
   selector: 'app-confirm-dialog',
   imports: [SharedModule],
   templateUrl: './confirm-dialog.html',
-  styleUrl: './confirm-dialog.css',
 })
 export class ConfirmDialog {
 

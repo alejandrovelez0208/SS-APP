@@ -7,7 +7,7 @@ import { EscortProfileStep } from '../escort-profile-step/escort-profile-step';
   selector: 'app-escort-step',
   imports: [SharedModule, EscortProfileStep],
   templateUrl: './escort-step.html',
-  styleUrl: './escort-step.css',
+  styleUrls: ['../../shared/styles/step-actions.css', './escort-step.css'],
 })
 export class EscortStep {
   @Input() escortform!: FormGroup;

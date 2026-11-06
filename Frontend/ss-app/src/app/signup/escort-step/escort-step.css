@@ -111,30 +111,3 @@
     color: #00e676 !important;
     font-weight: 500;
 }
-
-.btn-row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-}
-
-.nextstep-btn {
-    background: #B11226 !important;
-    margin-top: 20px;
-}
-
-.profile-card {
-  width: 345px;
-  height: 210px;
-  cursor: pointer;
-  border-radius: 6px;
-  background: black !important;
-  border: 2px solid rgba(255, 255, 255, 0.25) !important;
-  transition: 0.2s;
-}
-a {
-  margin-top: 30px;
-  color: red;
-  cursor: pointer;
-}

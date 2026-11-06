@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, signal } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { SharedModule } from '../shared/shared-module';
-import { SIGN_UP_FIELDS } from './fields/sign-up.fields';
+import { SIGN_UP_FIELDS } from '../shared/enums/constants/sign-up.fields';
 import { MemberStep } from './member-step/member-step';
 import { EscortStep } from './escort-step/escort-step';
 import { GENDER } from '../shared/enums/gender';
@@ -9,6 +9,8 @@ import { Preference } from '../shared/enums/preference';
 import { createCredentialsFormGroup } from './credentials-step/credentials-form.factory';
 import { AuthService } from '../shared/services/auth/auth-service';
 import { CatalogsService } from '../shared/services/catalogs/catalogs-service';
+import { ErrorHandlerService } from '../shared/services/error/error-handler-service';
+import { NotificationService } from '../shared/services/notification/notification-service';
 
 // TODO: Considerar mover a un archivo de validadores personalizados (validators/custom.validators.ts)
 export function atLeastOneCheckedValidator(): ValidatorFn {
@@ -24,7 +26,7 @@ export function atLeastOneCheckedValidator(): ValidatorFn {
   selector: 'app-signup',
   imports: [SharedModule, MemberStep, EscortStep],
   templateUrl: './signup.html',
-  styleUrl: './signup.css',
+  styleUrls: ['../shared/styles/brand.css', '../shared/styles/step-actions.css', './signup.css'],
 })
 export class Signup {
   readonly fields = SIGN_UP_FIELDS;
@@ -48,7 +50,9 @@ export class Signup {
     private fb: FormBuilder,
     private authService: AuthService,
     private cdr: ChangeDetectorRef,
-    private catalogService: CatalogsService
+    private catalogService: CatalogsService,
+    private notification: NotificationService,
+    private erroHandlerService: ErrorHandlerService
   ) {
     this.signupForm = this.fb.group({
       profileType: [null],

@@ -1,13 +1,18 @@
 import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { SharedModule } from '../../shared/shared-module';
-import { CREDENTIALS_FIELDS } from '../fields/sign-up.fields';
+import { CREDENTIALS_FIELDS } from '../../shared/enums/constants/sign-up.fields';
 
 @Component({
   selector: 'app-credentials-step',
   imports: [SharedModule],
   templateUrl: './credentials-step.html',
-  styleUrl: './credentials-step.css',
+  styleUrls: [
+    '../../shared/styles/form-field.css',
+    '../../shared/styles/step-actions.css',
+    '../../shared/styles/step-divider.css',
+    './credentials-step.css'
+  ],
 })
 export class CredentialsStep {
   @Input() form!: FormGroup;

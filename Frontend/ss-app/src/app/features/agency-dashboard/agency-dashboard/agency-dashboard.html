@@ -13,12 +13,15 @@
                 </div>
             </div>
         </div>
-
+        
         <span class="spacer"></span>
 
-        <button mat-flat-button class="signin-btn">Sign In</button>
+        <button mat-flat-button type="button" (click)="logout()" class="logout-btn">
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+        </button>
     </mat-toolbar>
-    
+
     <mat-sidenav-container class="sidebar-container">
         <mat-sidenav mode="side" opened class="agency-sidebar">
 

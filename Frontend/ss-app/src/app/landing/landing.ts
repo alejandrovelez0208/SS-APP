@@ -8,7 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   selector: 'app-landing',
   imports: [SharedModule],
   templateUrl: './landing.html',
-  styleUrl: './landing.css',
+  styleUrls: ['../shared/styles/brand.css', './landing.css'],
 })
 export class Landing {
   landingForm!: FormGroup;
