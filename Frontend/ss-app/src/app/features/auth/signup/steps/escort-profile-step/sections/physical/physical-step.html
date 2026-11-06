@@ -1,0 +1,63 @@
+<div class="physical-step" [formGroup]="form">
+  <div class="slider-group">
+    <span class="step-title">Height: {{ formatHeight(heightValue()) }}</span>
+    <div class="slider-container-wide">
+      <mat-slider min="1.0" max="2.2" step="0.1">
+        <input matSliderThumb formControlName="height" (valueChange)="onHeightChange($event)" />
+      </mat-slider>
+    </div>
+  </div>
+
+  <div class="slider-group">
+    <span class="step-title">Weight: {{ formatWeight(form.get('weight')?.value) }}</span>
+    <div class="slider-container-wide">
+      <mat-slider min="40" max="150" step="1">
+        <input matSliderThumb formControlName="weight" />
+      </mat-slider>
+    </div>
+  </div>
+
+  <div class="toggle-group">
+    <span class="step-title">Orientation</span>
+    <mat-button-toggle-group formControlName="orientation" class="custom-toggle-group">
+      <mat-button-toggle value="heterosexual">Heterosexual</mat-button-toggle>
+      <mat-button-toggle value="bisexual">Bisexual</mat-button-toggle>
+      <mat-button-toggle value="gay">Gay</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  <mat-form-field appearance="outline" class="field">
+    <mat-label>Nationality</mat-label>
+    <mat-icon matPrefix>public</mat-icon>
+    <input matInput [matAutocomplete]="auto" formControlName="nationality" />
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      [displayWith]="displayFn"
+      panelClass="nationality-autocomplete-panel"
+    >
+      @for (country of filteredNationalities | async; track country.codes.alpha_2) {
+        <mat-option [value]="country">{{ country.names.common }}</mat-option>
+      }
+    </mat-autocomplete>
+
+    @if (form.get('nationality')?.hasError('required')) {
+      <mat-error>Nationality is required</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="field-city">
+    <mat-label>Base City</mat-label>
+    <input matInput [matAutocomplete]="autoCity" formControlName="baseCity" />
+    <mat-icon matPrefix>location_city</mat-icon>
+    <mat-autocomplete #autoCity="matAutocomplete">
+      @for (city of baseCity; track city.id) {
+        <mat-option [value]="city.name">{{ city.name }}</mat-option>
+      }
+    </mat-autocomplete>
+
+    @if (form.get('baseCity')?.hasError('required')) {
+      <mat-error>Base city is required</mat-error>
+    }
+    <mat-hint>We currently operate exclusively in Medellín.</mat-hint>
+  </mat-form-field>
+</div>

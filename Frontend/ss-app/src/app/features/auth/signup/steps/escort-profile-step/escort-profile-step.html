@@ -1,0 +1,89 @@
+<div class="escort-profile-step" [formGroup]="escortProfileform">
+  @if (currentStep === 0 || currentStep === 1) {
+    <app-credentials-step
+      [form]="escortProfileform"
+      [stepIndex]="currentStep"
+      (next)="continue()"
+      (back)="back()"
+    />
+  }
+
+  @if (currentStep > 1) {
+    <div class="title">
+      <span class="main-title">Complete your profile</span>
+
+      <div class="divider">
+        <div class="line"></div>
+      </div>
+    </div>
+  }
+
+  @if (currentStep === 2) {
+    <app-basics-step [form]="escortProfileform" />
+    <app-step-actions
+      [nextDisabled]="!areGenderAndNameCompanionValid"
+      (back)="back()"
+      (next)="continue()"
+    />
+  }
+
+  @if (currentStep === 3) {
+    <app-physical-step
+      [form]="escortProfileform"
+      [filteredNationalities]="filteredNationalities"
+      [baseCity]="baseCity"
+    />
+    <app-step-actions
+      [nextDisabled]="!areOrientationAndNationalityValid"
+      (back)="back()"
+      (next)="continue()"
+    />
+  }
+
+  @if (currentStep === 4) {
+    <app-contact-step
+      [form]="escortProfileform"
+      [internationalCodes]="internacionalCodePhone"
+      [serviceModalities]="serviceModality"
+    />
+    <app-step-actions
+      [nextDisabled]="!areGenderAndNameCompanionValid"
+      (back)="back()"
+      (next)="continue()"
+    />
+  }
+
+  @if (currentStep === 5) {
+    <app-services-step [form]="escortProfileform" [channels]="channelsCommunication" />
+    <app-step-actions
+      [nextDisabled]="!areGenderAndNameCompanionValid"
+      (back)="back()"
+      (next)="continue()"
+    />
+  }
+
+  @if (currentStep === 6) {
+    <app-departures-step [form]="escortProfileform" [departures]="departures" />
+    <app-step-actions
+      [nextDisabled]="!areGenderAndNameCompanionValid"
+      (back)="back()"
+      (next)="continue()"
+    />
+  }
+
+  @if (currentStep === 7) {
+    <app-photos-step
+      [photos]="photos()"
+      [minPhotos]="minPhotos"
+      [maxPhotos]="maxPhotos"
+      (photoAdded)="addPhoto($event)"
+      (photoRemoved)="removePhoto($event)"
+    />
+    <app-step-actions
+      nextLabel="COMPLETE REGISTRATION"
+      [nextDisabled]="!hasRequiredPhotos"
+      (back)="back()"
+      (next)="continue()"
+    />
+  }
+</div>

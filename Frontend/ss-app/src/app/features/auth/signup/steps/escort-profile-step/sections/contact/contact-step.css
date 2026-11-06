@@ -1,0 +1,110 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
+.contact-step {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.field-phone {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    margin: 0;
+    box-sizing: border-box;
+    align-self: center;
+}
+
+.field-phone .mat-mdc-input-element {
+    color: #fff;
+}
+
+.field-internationalCode {
+    flex: 0 0 100px;
+    margin: 0;
+}
+
+.field-internationalCode .mat-mdc-input-element {
+    color: #fff;
+}
+
+.field-phoneNumber {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.serviceModality-field {
+    align-self: center;
+    width: 100%;
+    padding: 10px 0;
+    box-sizing: border-box;
+}
+
+.availability-card {
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 460px;
+    box-sizing: border-box;
+}
+
+.availability-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.row-toggle {
+    width: 100%;
+}
+
+.label-main {
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.availability-divider {
+    height: 1px;
+    background: #30363d;
+    margin: 18px 0;
+}
+
+.row-hours {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+}
+
+.label-sub {
+    color: #c9d1d9;
+    font-size: 13px;
+}
+
+.hours-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.field-time {
+    flex: 1;
+    min-width: 0;
+}
+
+.field-time .mat-mdc-input-element {
+    color: #ffffff;
+}
+
+.hours-separator {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 16px;
+    margin-top: 6px;
+    flex: 0 0 auto;
+}

@@ -1,0 +1,43 @@
+<div class="services-step" [formGroup]="form">
+  <div formGroupName="applications" class="applications-field">
+    <span class="step-title">Channels Communication</span>
+
+    <div class="checkbox-options">
+      @for (channel of channels; track channel.code) {
+        <mat-checkbox
+          [formControlName]="getControlChannelNameByFormula(channel.code)"
+          class="application-checkbox-row"
+        >
+          {{ channel.description }}
+        </mat-checkbox>
+      }
+    </div>
+  </div>
+
+  <mat-form-field appearance="outline" class="field">
+    <mat-label>Website / Url</mat-label>
+    <input matInput formControlName="website" />
+    <mat-icon matPrefix>link</mat-icon>
+  </mat-form-field>
+
+  <mat-accordion class="services-accordion" multi formGroupName="serviceType">
+    @for (group of catalogsService.groupedServices; track group[0]) {
+      <mat-expansion-panel class="services-panel" [expanded]="$first">
+        <mat-expansion-panel-header>
+          <mat-panel-title>{{ group[0] }}</mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="checkbox-options">
+          @for (type of group[1]; track type.code) {
+            <mat-checkbox
+              [formControlName]="getControlTypeOfServicesNameByFormula(type.code)"
+              class="application-checkbox-row"
+            >
+              {{ type.description }}
+            </mat-checkbox>
+          }
+        </div>
+      </mat-expansion-panel>
+    }
+  </mat-accordion>
+</div>

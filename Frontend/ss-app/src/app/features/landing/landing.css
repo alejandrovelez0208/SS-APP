@@ -1,0 +1,32 @@
+/* Main container - White background, full viewport height */
+.landing-container {
+  background: #FFFF;
+  color: #fff;
+  min-height: 100dvh;
+  width: 100vw;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Top toolbar - Black background, flex layout */
+.topbar {
+  position: relative;
+  padding: 18px 32px;
+  background: black;
+  display: flex;
+  align-items: center;
+
+  /* Spacer - Pushes sign-in button to the right */
+  .spacer {
+    flex: 1;
+  }
+
+  /* Sign-in button - Burgundy color */
+  .signin-btn {
+    background: var(--primary) !important;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 22px;
+    transition: .3s;
+  }
+}

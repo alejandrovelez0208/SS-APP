@@ -1,0 +1,79 @@
+<div class="contact-step" [formGroup]="form">
+  <div class="field-phone">
+    <mat-form-field appearance="outline" class="field-internationalCode">
+      <mat-label>Code</mat-label>
+      <input matInput [matAutocomplete]="code" formControlName="interCodePhone" />
+      <mat-icon matPrefix>public</mat-icon>
+      <mat-autocomplete #code="matAutocomplete">
+        @for (country of internationalCodes; track country.calling_code) {
+          <mat-option [value]="country.calling_code">
+            {{ country.name }} ({{ country.calling_code }})
+          </mat-option>
+        }
+      </mat-autocomplete>
+
+      @if (form.get('interCodePhone')?.hasError('required')) {
+        <mat-error>Code is required</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field-phoneNumber">
+      <mat-label>Phone</mat-label>
+      <input matInput formControlName="phone" />
+      <mat-icon matPrefix>phone</mat-icon>
+
+      @if (form.get('phone')?.hasError('required')) {
+        <mat-error>Phone is required</mat-error>
+      }
+      @if (
+        form.get('phone')?.hasError('minlength') || form.get('phone')?.hasError('maxlength')
+      ) {
+        <mat-error>Phone must be 10 characters</mat-error>
+      }
+    </mat-form-field>
+  </div>
+
+  <div formGroupName="serviceModality" class="serviceModality-field">
+    <span class="step-title">I attend to</span>
+
+    <div class="checkbox-options">
+      @for (modality of serviceModalities; track modality.id) {
+        <mat-checkbox
+          [formControlName]="getControlModalityNameByFormula(modality.code)"
+          class="application-checkbox"
+        >
+          {{ modality.description }}
+        </mat-checkbox>
+      }
+    </div>
+  </div>
+
+  <div class="availability-card">
+    <div class="availability-row row-toggle">
+      <span class="label-main">Available 24/7</span>
+      <mat-slide-toggle formControlName="availableAllDay" hideIcon />
+    </div>
+
+    @if (!isAvailable247) {
+      <div class="availability-divider"></div>
+
+      <div class="availability-row row-hours">
+        <span class="label-sub">Default hours (applies to all days)</span>
+
+        <div class="hours-row">
+          <mat-form-field appearance="outline" class="field-time">
+            <mat-label>From</mat-label>
+            <input matInput type="time" formControlName="scheduleFrom" />
+          </mat-form-field>
+
+          <span class="hours-separator">-</span>
+
+          <mat-form-field appearance="outline" class="field-time">
+            <mat-label>To</mat-label>
+            <input matInput type="time" formControlName="scheduleTo" />
+          </mat-form-field>
+        </div>
+      </div>
+    }
+  </div>
+</div>

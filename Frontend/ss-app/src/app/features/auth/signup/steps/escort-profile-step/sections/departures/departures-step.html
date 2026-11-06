@@ -1,0 +1,25 @@
+<div class="departures-step" [formGroup]="form">
+  <div formGroupName="departures" class="departures-field">
+    <span class="step-title">Departures</span>
+
+    <div class="checkbox-options">
+      @for (departure of departures; track departure.code) {
+        <mat-checkbox
+          [formControlName]="getControlDepartureNamesByFormula(departure.code)"
+          class="application-checkbox-row"
+        >
+          {{ departure.description }}
+        </mat-checkbox>
+      }
+    </div>
+  </div>
+
+  <div class="slider-group">
+    <span class="step-title">Basic Rate (COP): {{ formatRate(rateValue()) }}</span>
+    <div class="slider-container-wide">
+      <mat-slider min="50000" max="1000000" step="5000">
+        <input matSliderThumb formControlName="basicRate" (valueChange)="onRateChange($event)" />
+      </mat-slider>
+    </div>
+  </div>
+</div>

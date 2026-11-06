@@ -16,7 +16,10 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<any>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+  ) {}
 
   private fetchCurrentUser() {
     return this.http.get(this.apiUrl + '/current-user');
@@ -28,7 +31,7 @@ export class AuthService {
       const password = confirmControl.parent.get(passwordMatchValidator)?.value;
       const confirmPassword = confirmControl.value;
       return password === confirmPassword ? null : { passwordMismatch: true };
-    }
+    };
   }
 
   initializeAuth(): Promise<void> {
@@ -47,9 +50,9 @@ export class AuthService {
         error: () => {
           this.clearSession();
           resolve();
-        }
+        },
       });
-    })
+    });
   }
 
   getToken(): string | null {
@@ -93,7 +96,9 @@ export class AuthService {
   }
 
   login(loginData: any) {
-    return this.http.post(`${this.apiUrl}/login`, loginData).pipe(tap(response => this.handleAuthSuccess(response)));
+    return this.http
+      .post(`${this.apiUrl}/login`, loginData)
+      .pipe(tap((response) => this.handleAuthSuccess(response)));
   }
 
   verifyEmail(token: string) {
@@ -112,13 +117,8 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/reset-password/${token}`, { newPassword });
   }
 
-  changePassword(changePasswordData: any) {
-    return this.http.post(`${this.apiUrl}/change-password`, { changePasswordData });
-  }
-
   logout() {
     this.clearSession();
     this.router.navigate(['/']);
   }
-
 }

@@ -1,0 +1,16 @@
+.field {
+    width: 100%;
+}
+
+.field .mat-mdc-input-element {
+    color: #fff;
+}
+
+.step-title {
+    font-size: 18px;
+    font-weight: 500;
+    color: #fff;
+    margin-bottom: 8px;
+    display: block;
+    text-align: start;
+}
