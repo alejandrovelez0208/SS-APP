@@ -1,0 +1,142 @@
+<header class="page-header">
+  <div>
+    <h1>User Control</h1>
+    <p class="page-description">Manage account access and availability.</p>
+  </div>
+</header>
+
+<div class="toolbar">
+  <mat-form-field class="search-field" appearance="outline">
+    <mat-icon matPrefix>search</mat-icon>
+    <input
+      matInput
+      type="search"
+      aria-label="Search by email"
+      placeholder="Search by email"
+      [value]="search()"
+      (input)="updateSearch($event)"
+    />
+  </mat-form-field>
+
+  <mat-chip-listbox
+    class="filter-group"
+    aria-label="Filter by role"
+    hideSingleSelectionIndicator
+    [value]="role()"
+    (change)="updateRole($event.value)"
+  >
+    @for (option of roleOptions; track option) {
+      <mat-chip-option class="filter-chip" [class.selected]="role() === option" [value]="option">
+        {{ option === 'ALL' ? 'All roles' : option === 'ADMIN' ? 'Admin' : 'Users' }}
+      </mat-chip-option>
+    }
+  </mat-chip-listbox>
+</div>
+
+<mat-chip-listbox
+  class="filter-group status-filters"
+  aria-label="Filter by status"
+  hideSingleSelectionIndicator
+  [value]="status()"
+  (change)="updateStatus($event.value)"
+>
+  @for (option of statusOptions; track option) {
+    <mat-chip-option class="filter-chip" [class.selected]="status() === option" [value]="option">
+      {{ option === 'ALL' ? 'All statuses' : option === 'ACTIVE' ? 'Active' : 'Inactive' }}
+    </mat-chip-option>
+  }
+</mat-chip-listbox>
+
+@if (accounts().length > 0) {
+  <section class="data-panel" aria-label="User access list">
+    <table mat-table class="account-table" [dataSource]="visibleAccounts()">
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>Email</th>
+        <td mat-cell *matCellDef="let account">{{ account.email }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="role">
+        <th mat-header-cell *matHeaderCellDef>Role</th>
+        <td mat-cell *matCellDef="let account"><app-role-badge [role]="account.role" /></td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let account">
+          <app-account-status-chip [status]="account.status" />
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>Action</th>
+        <td mat-cell *matCellDef="let account">
+          <button
+            mat-stroked-button
+            class="action-button"
+            [class.activate]="account.status === 'INACTIVE'"
+            type="button"
+            [disabled]="!canChangeStatus(account)"
+            [title]="canChangeStatus(account) ? '' : 'Admin accounts cannot be deactivated.'"
+            (click)="changeStatus(account)"
+          >
+            {{ account.status === 'ACTIVE' ? 'Deactivate' : 'Activate' }}
+          </button>
+        </td>
+      </ng-container>
+
+      <thead>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      </thead>
+      <tbody>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </tbody>
+    </table>
+
+    <div class="account-cards">
+      @for (account of visibleAccounts(); track account.id) {
+        <article class="account-card">
+          <div class="account-card-title">
+            <strong>{{ account.email }}</strong>
+          </div>
+          <div class="account-card-meta">
+            <app-role-badge [role]="account.role" />
+            <app-account-status-chip [status]="account.status" />
+          </div>
+          <div class="account-card-actions">
+            <button
+              mat-stroked-button
+              class="action-button"
+              [class.activate]="account.status === 'INACTIVE'"
+              type="button"
+              [disabled]="!canChangeStatus(account)"
+              [title]="canChangeStatus(account) ? '' : 'Admin accounts cannot be deactivated.'"
+              (click)="changeStatus(account)"
+            >
+              {{ account.status === 'ACTIVE' ? 'Deactivate' : 'Activate' }}
+            </button>
+          </div>
+          @if (!canChangeStatus(account)) {
+            <small class="admin-help">Admin accounts can't be deactivated.</small>
+          }
+        </article>
+      }
+    </div>
+  </section>
+
+  <mat-paginator
+    class="account-paginator"
+    [length]="accounts().length"
+    [pageSize]="pageSize"
+    [pageIndex]="pageIndex()"
+    [hidePageSize]="true"
+    (page)="updatePage($event)"
+  />
+} @else {
+  <section class="data-panel empty-state">
+    <mat-icon>search_off</mat-icon>
+    <p>No accounts match your search.</p>
+    <button mat-stroked-button class="text-button" type="button" (click)="clearFilters()">
+      Clear filters
+    </button>
+  </section>
+}

@@ -1,0 +1,79 @@
+mat-chip-option.filter-chip {
+  --mat-chip-container-height: 36px;
+  --mat-chip-container-shape-radius: 999px;
+  --mat-chip-outline-color: rgba(255, 255, 255, 0.12);
+  --mat-chip-outline-width: 1px;
+  --mat-chip-flat-selected-outline-width: 1px;
+  --mat-chip-elevated-container-color: transparent;
+  --mat-chip-elevated-selected-container-color: rgba(122, 0, 25, 0.25);
+  --mat-chip-label-text-color: var(--gray);
+  --mat-chip-selected-label-text-color: var(--text);
+  --mat-chip-label-text-font: 'Inter', sans-serif;
+  --mat-chip-label-text-size: 13px;
+  --mat-chip-label-text-weight: 500;
+  --mat-chip-focus-outline-color: var(--gold);
+
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+}
+
+mat-chip-option.filter-chip:hover,
+mat-chip-option.filter-chip.selected {
+  --mat-chip-outline-color: rgba(224, 194, 127, 0.45);
+  --mat-chip-elevated-container-color: rgba(122, 0, 25, 0.25);
+}
+
+:host ::ng-deep .filter-group .mdc-evolution-chip-set__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.text-button {
+  --mat-button-outlined-label-text-color: var(--text);
+  --mat-button-outlined-outline-color: rgba(255, 255, 255, 0.18);
+  --mat-button-outlined-container-shape: 8px;
+
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text);
+  font:
+    500 13px 'Inter',
+    sans-serif;
+  cursor: pointer;
+}
+
+.action-button {
+  --mat-button-outlined-label-text-color: #ff6b76;
+  --mat-button-outlined-outline-color: rgba(229, 9, 20, 0.65);
+  --mat-button-outlined-container-shape: 8px;
+  --mat-button-outlined-container-height: 36px;
+  --mat-button-outlined-label-text-font: 'Inter', sans-serif;
+
+  min-height: 36px;
+  padding: 0 13px;
+  border-radius: 8px;
+  background: transparent;
+  color: #ff6b76;
+  font:
+    600 12px 'Inter',
+    sans-serif;
+  cursor: pointer;
+}
+
+.action-button.activate {
+  --mat-button-outlined-label-text-color: #55d9a9;
+  --mat-button-outlined-outline-color: rgba(16, 185, 129, 0.65);
+
+  color: #55d9a9;
+}
+
+.action-button:disabled {
+  --mat-button-outlined-disabled-label-text-color: var(--gray);
+  --mat-button-outlined-disabled-outline-color: rgba(255, 255, 255, 0.12);
+
+  color: var(--gray);
+  cursor: not-allowed;
+  opacity: 0.55;
+}

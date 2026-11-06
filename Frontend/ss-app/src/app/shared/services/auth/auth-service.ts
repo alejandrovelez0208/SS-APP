@@ -88,7 +88,11 @@ export class AuthService {
   }
 
   redirectBasedOnRole() {
-    this.router.navigate(['/agency']);
+    if (this.isAdmin()) {
+      this.router.navigate(['/admin']);
+    } else {
+      this.router.navigate(['/agency']);
+    }
   }
 
   signup(signupData: any) {

@@ -52,7 +52,7 @@ public class AuthServiceImpl implements AuthService {
 		User user = new User();
 		user.setEmail(userRequest.getEmail());
 		user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-		user.setRole(Role.USER);
+		user.setRole(Role.ADMIN);
 
 		String verificationToken = UUID.randomUUID().toString();
 		user.setVerificationToken(verificationToken);
