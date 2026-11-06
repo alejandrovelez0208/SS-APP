@@ -1,0 +1,14 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
+.departures-step {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.departures-field {
+    margin-bottom: 10px;
+}

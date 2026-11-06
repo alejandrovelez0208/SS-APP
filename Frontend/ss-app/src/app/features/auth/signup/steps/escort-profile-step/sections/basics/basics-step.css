@@ -1,0 +1,10 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
+.basics-step {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}

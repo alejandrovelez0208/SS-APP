@@ -1,0 +1,25 @@
+.slider-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.slider-container-wide {
+    width: 100%;
+}
+
+.slider-container-wide mat-slider {
+    width: 100%;
+
+    --mdc-slider-active-track-height: 8px;
+    --mdc-slider-inactive-track-height: 8px;
+    --mdc-slider-handle-height: 26px;
+    --mdc-slider-handle-width: 26px;
+    --mdc-slider-active-track-color: var(--primary-light);
+    --mdc-slider-handle-color: var(--primary-light);
+    --mdc-slider-focus-handle-color: var(--primary-light);
+    --mdc-slider-hover-handle-color: var(--primary-light);
+    --mdc-slider-with-tick-marks-active-container-color: #fff;
+    --mdc-slider-with-tick-marks-inactive-container-color: rgba(255, 255, 255, 0.4);
+}

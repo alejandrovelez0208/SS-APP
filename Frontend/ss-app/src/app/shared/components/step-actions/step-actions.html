@@ -1,0 +1,15 @@
+<div class="btn-row">
+  @if (showBack) {
+    <button type="button" class="back-btn" (click)="back.emit()">BACK</button>
+  }
+
+  <button
+    mat-flat-button
+    class="nextstep-btn"
+    type="button"
+    [disabled]="nextDisabled"
+    (click)="next.emit()"
+  >
+    {{ nextLabel }}
+  </button>
+</div>

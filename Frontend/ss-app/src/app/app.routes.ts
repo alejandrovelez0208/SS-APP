@@ -1,13 +1,22 @@
 import { Routes } from '@angular/router';
-import { Landing } from './landing/landing';
-import { Login } from './login/login';
-import { Signup } from './signup/signup';
-import { AgencyDashboard } from './features/agency-dashboard/agency-dashboard/agency-dashboard';
 
 export const routes: Routes = [
-    { path: '', component: Landing },
-    { path: 'signup', component: Signup },
-    { path: 'login', component: Login },
-    { path: 'agency', component: AgencyDashboard },
-    { path: '**', redirectTo: '', pathMatch: 'full' }
+  {
+    path: '',
+    loadComponent: () => import('./features/landing/landing').then((m) => m.Landing),
+  },
+  {
+    path: 'signup',
+    loadComponent: () => import('./features/auth/signup/signup').then((m) => m.Signup),
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./features/auth/login/login').then((m) => m.Login),
+  },
+  {
+    path: 'agency',
+    loadComponent: () =>
+      import('./features/agency-dashboard/agency-dashboard').then((m) => m.AgencyDashboard),
+  },
+  { path: '**', redirectTo: '', pathMatch: 'full' },
 ];

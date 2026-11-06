@@ -1,0 +1,18 @@
+<div class="escort-step" [formGroup]="escortform">
+  @if (!showProfileForm()) {
+    <span class="step-title">Account Type</span>
+
+    <mat-radio-group formControlName="accountType" class="radio-group-container">
+      <mat-radio-button value="escort" class="custom-radio">Independent escort</mat-radio-button>
+      <mat-radio-button value="agency" class="custom-radio">Several profiles</mat-radio-button>
+    </mat-radio-group>
+
+    <app-step-actions
+      [nextDisabled]="escortform.get('accountType')?.invalid ?? false"
+      (back)="back()"
+      (next)="openProfileForm()"
+    />
+  } @else {
+    <app-escort-profile-step [escortProfileform]="escortProfileForm" (backToProfileType)="back()" />
+  }
+</div>

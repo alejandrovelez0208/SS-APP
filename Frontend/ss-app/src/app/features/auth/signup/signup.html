@@ -1,0 +1,39 @@
+<div class="signup-page">
+  <app-brand-logo class="logo" />
+
+  <div class="profile-type-container">
+    <form [formGroup]="signupForm" class="form">
+      @if (currentStep === 0) {
+        <h1>Profile Type</h1>
+
+        <div class="options">
+          @for (option of profileOptions; track option.value) {
+            <mat-card
+              class="profile-card"
+              [class]="option.class"
+              [class.selected]="selectedType === option.value"
+              (click)="selectType(option.value)"
+            >
+              <div class="card-content">
+                <div>
+                  <img class="profile-image" [src]="option.img" [alt]="option.title" />
+                </div>
+                <div>
+                  <h2>{{ option.title }}</h2>
+                  <p>{{ option.description }}</p>
+                </div>
+              </div>
+            </mat-card>
+          }
+        </div>
+
+        <app-step-actions [showBack]="false" [nextDisabled]="!selectedType" (next)="continue()" />
+      }
+      @if (selectedType === 'member' && currentStep > 0) {
+        <app-member-step [memberform]="memberForm" (backToProfileType)="back()" />
+      } @else if (selectedType === 'escort' && currentStep > 0) {
+        <app-escort-step [escortform]="escortForm" (backToProfileType)="back()" />
+      }
+    </form>
+  </div>
+</div>

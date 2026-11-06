@@ -1,0 +1,61 @@
+.checkbox-options {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.application-checkbox {
+    min-width: 158px;
+    height: 44px;
+    padding: 10px;
+    margin-bottom: 5px;
+    display: inline-flex;
+    align-items: center;
+    background: var(--mdc-switch-selected-track-color);
+    border: 1px solid #435063;
+    border-radius: 6px;
+}
+
+.application-checkbox-row {
+    background: var(--mdc-switch-selected-track-color);
+    border: 1px solid #435063;
+    border-radius: 6px;
+    margin: 5px;
+    padding-right: 10px;
+}
+
+.application-checkbox ::ng-deep .mdc-form-field {
+    width: 100%;
+}
+
+.application-checkbox ::ng-deep .mdc-label,
+.application-checkbox-row ::ng-deep .mdc-label {
+    color: #b8c0cb;
+    font-weight: 600;
+}
+
+.application-checkbox:has(.mdc-checkbox__native-control:checked) {
+    border-color: #39f58c;
+}
+
+.application-checkbox-row:has(.mdc-checkbox__native-control:checked) {
+    border-color: #39f58c;
+}
+
+.application-checkbox:has(.mdc-checkbox__native-control:checked) ::ng-deep .mdc-label {
+    color: #39f58c;
+}
+
+.application-checkbox-row:has(.mdc-checkbox__native-control:checked) ::ng-deep .mdc-label {
+    color: #39f58c;
+}
+
+.application-checkbox ::ng-deep .mdc-checkbox__native-control:checked ~ .mdc-checkbox__background {
+    background-color: #39f58c !important;
+    border-color: #39f58c !important;
+}
+
+.application-checkbox ::ng-deep .mdc-checkbox__checkmark-path {
+    stroke: #101820 !important;
+}

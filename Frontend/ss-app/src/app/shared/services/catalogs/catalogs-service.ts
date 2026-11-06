@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { CatalogItem } from '../../models/escort.model';
-import { CatalogFilter } from '../../CatalogFilter';
-import { OTHERS_CATEGORY_LABEL, SERVICE_CATEGORY_RANGES } from '../../enums/constants/fieldOptions';
+import { OTHERS_CATEGORY_LABEL, SERVICE_CATEGORY_RANGES } from '../../constants/field-options';
+import { CatalogFilter } from '../../models/catalog-filter';
 import { environment } from '../../../../environments/environment';
 
 export type CatalogType = 'modality' | 'channels' | 'typeOfServices' | 'departures';
@@ -19,7 +19,10 @@ export class CatalogsService {
   private formulaMaps = new Map<CatalogType, Map<number, string>>();
   private _groupedServicesCache: [string, CatalogItem[]][] = [];
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+  ) {}
 
   getPTipos(filters: CatalogFilter): Observable<CatalogItem[]> {
     return this.http.post<CatalogItem[]>(this.apiUrl + 'search', filters);
@@ -40,9 +43,15 @@ export class CatalogsService {
     const map = new Map<number, string>();
     for (const item of items) {
       switch (item.code) {
-        case 210: map.set(item.code, 'own_location'); break;
-        case 220: map.set(item.code, 'hotels'); break;
-        case 230: map.set(item.code, 'customer_address'); break;
+        case 210:
+          map.set(item.code, 'own_location');
+          break;
+        case 220:
+          map.set(item.code, 'hotels');
+          break;
+        case 230:
+          map.set(item.code, 'customer_address');
+          break;
       }
     }
     this.formulaMaps.set('modality', map);

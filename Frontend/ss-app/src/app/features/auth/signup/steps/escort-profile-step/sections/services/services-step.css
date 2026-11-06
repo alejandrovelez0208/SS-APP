@@ -1,0 +1,67 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
+.services-step {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.applications-field {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+}
+
+.services-accordion {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: transparent;
+}
+
+.services-panel {
+    background: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.services-panel:hover {
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    background: transparent !important;
+}
+
+:host ::ng-deep .services-panel .mat-expansion-panel-header {
+    height: 48px;
+    padding: 0 16px;
+    background: transparent !important;
+}
+
+:host ::ng-deep .services-panel .mat-expansion-panel-header-title {
+    color: #ffffff !important;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+:host ::ng-deep .services-panel .mat-expansion-indicator::after {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+:host ::ng-deep .services-panel .mat-expansion-panel-body {
+    padding: 0 16px 16px;
+    background: transparent;
+}
+
+:host ::ng-deep .services-panel.mat-expanded {
+    background: transparent !important;
+}
+
+:host ::ng-deep .services-panel.mat-expanded .mat-expansion-panel-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
