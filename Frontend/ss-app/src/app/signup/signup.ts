@@ -26,7 +26,7 @@ export function atLeastOneCheckedValidator(): ValidatorFn {
   selector: 'app-signup',
   imports: [SharedModule, MemberStep, EscortStep],
   templateUrl: './signup.html',
-  styleUrl: './signup.css',
+  styleUrls: ['../shared/styles/brand.css', '../shared/styles/step-actions.css', './signup.css'],
 })
 export class Signup {
   readonly fields = SIGN_UP_FIELDS;

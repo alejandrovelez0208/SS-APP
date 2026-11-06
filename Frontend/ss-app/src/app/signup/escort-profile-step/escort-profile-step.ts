@@ -20,7 +20,13 @@ interface PhotoPreview {
   selector: 'app-escort-profile-step',
   imports: [SharedModule, CredentialsStep],
   templateUrl: './escort-profile-step.html',
-  styleUrl: './escort-profile-step.css',
+  styleUrls: [
+    '../../shared/styles/form-field.css',
+    '../../shared/styles/avatar-upload.css',
+    '../../shared/styles/step-actions.css',
+    '../../shared/styles/step-divider.css',
+    './escort-profile-step.css'
+  ],
 })
 export class EscortProfileStep {
 

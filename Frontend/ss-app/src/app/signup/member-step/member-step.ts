@@ -9,7 +9,12 @@ import { CredentialsStep } from '../credentials-step/credentials-step';
   selector: 'app-member-step',
   imports: [SharedModule, CredentialsStep, ReactiveFormsModule],
   templateUrl: './member-step.html',
-  styleUrl: './member-step.css',
+  styleUrls: [
+    '../../shared/styles/form-field.css',
+    '../../shared/styles/avatar-upload.css',
+    '../../shared/styles/step-actions.css',
+    './member-step.css'
+  ],
 })
 export class MemberStep {
   @Input() memberform!: FormGroup;

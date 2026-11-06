@@ -10,7 +10,7 @@ import { ErrorHandlerService } from '../shared/services/error/error-handler-serv
   selector: 'app-login',
   imports: [SharedModule],
   templateUrl: './login.html',
-  styleUrl: './login.css',
+  styleUrls: ['../shared/styles/brand.css', '../shared/styles/form-field.css', './login.css'],
 })
 export class Login {
   loginForm !: FormGroup;

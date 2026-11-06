@@ -84,64 +84,22 @@
     }
 }
 
-/* Logo - Horizontal alignment of image and text */
+/* Logo */
 .logo {
-    display: flex;
-    align-items: center;
     font-size: 40px;
     margin: 10px 0px 15px 0px;
 }
 
-/* Logo image */
-.logo img {
-    height: 40px;
-    margin-right: -5px;
-    object-fit: contain;
-}
-
-/* Logo text container */
-.logo-title {
-    position: relative;
-    display: inline-block;
-}
-
 .logo-text {
-    font-family: 'Cormorant Garamond', serif !important;
-    background: #7A0019;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
     font-size: 1.45rem;
-    font-weight: bold;
-    letter-spacing: 4px;
 }
 
-/* Divider with lines and diamond */
-.divider {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 220px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Side lines of the divider */
 .line {
     width: 65px;
-    height: 1px;
-    background: #7A0019;
 }
 
-/* Decorative diamond */
 .diamond {
-    width: 10px;
-    height: 10px;
-    margin: 0 14px;
-    border: 2px solid #7A0019;
-    transform: rotate(45deg);
-    background: #111111;
+    background: var(--background);
 }
 
 /* Layout */
@@ -238,46 +196,4 @@
     width: 3px;
     border-radius: 0 3px 3px 0;
     background: var(--primary-light);
-}
-
-.dialog-container {
-    width: 100%;
-}
-
-.dialog-header {
-    padding: 24px 32px;
-    border-bottom: 1px solid rgba(229, 9, 20, 0.2);
-    background: rgba(10, 10, 10, 0.95);
-}
-
-.dialog-header h1 {
-    margin: 0;
-    font-size: 28px;
-    font-weight: 700;
-    color: #ffffff;
-    letter-spacing: -0.5px;
-}
-
-.dialog-content {
-    padding: 24px 32px;
-    max-height: 60vh;
-    overflow-y: auto;
-}
-
-.dialog-content::-webkit-scrollbar {
-    width: 8px;
-}
-
-.dialog-content::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 4px;
-}
-
-.dialog-content::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-}
-
-.dialog-content::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.3);
 }

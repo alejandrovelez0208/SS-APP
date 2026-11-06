@@ -7,7 +7,12 @@ import { CREDENTIALS_FIELDS } from '../../shared/enums/constants/sign-up.fields'
   selector: 'app-credentials-step',
   imports: [SharedModule],
   templateUrl: './credentials-step.html',
-  styleUrl: './credentials-step.css',
+  styleUrls: [
+    '../../shared/styles/form-field.css',
+    '../../shared/styles/step-actions.css',
+    '../../shared/styles/step-divider.css',
+    './credentials-step.css'
+  ],
 })
 export class CredentialsStep {
   @Input() form!: FormGroup;

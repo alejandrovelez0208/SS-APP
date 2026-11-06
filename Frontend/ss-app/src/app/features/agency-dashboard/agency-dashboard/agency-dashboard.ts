@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   selector: 'app-agency-dashboard',
   imports: [SharedModule],
   templateUrl: './agency-dashboard.html',
-  styleUrl: './agency-dashboard.css',
+  styleUrls: ['../../../shared/styles/brand.css', './agency-dashboard.css'],
 })
 export class AgencyDashboard {
 
