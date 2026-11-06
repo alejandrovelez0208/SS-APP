@@ -1,0 +1,61 @@
+.restricted-page {
+  display: grid;
+  min-height: 100dvh;
+  padding: 24px;
+  place-items: center;
+  background: #111111;
+}
+
+.restricted-card {
+  width: min(440px, 100%);
+  padding: 40px 28px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  background: #1b1b1b;
+  text-align: center;
+}
+
+.lock-icon {
+  display: grid;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 22px;
+  place-items: center;
+  border: 1px solid rgba(224, 194, 127, 0.45);
+  border-radius: 50%;
+  color: #e0c27f;
+}
+
+.lock-icon mat-icon {
+  width: 30px;
+  height: 30px;
+  font-size: 30px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+p {
+  margin: 12px 0 28px;
+  color: #b5b5b5;
+  line-height: 1.6;
+}
+
+a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  padding: 0 22px;
+  border-radius: 8px;
+  background: #7a0019;
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+a:focus-visible {
+  outline: 2px solid #e0c27f;
+  outline-offset: 2px;
+}

@@ -1,0 +1,11 @@
+.status-filters {
+  margin: -4px 0 20px;
+}
+
+.admin-help {
+  display: block;
+  margin-top: 10px;
+  color: var(--gray);
+  font-size: 12px;
+  text-align: right;
+}

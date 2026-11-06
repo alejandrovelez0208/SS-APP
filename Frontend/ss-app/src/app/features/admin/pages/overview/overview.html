@@ -1,0 +1,40 @@
+<header class="page-header">
+  <div>
+    <h1>Overview</h1>
+    <p class="page-description">A quick view of account activity.</p>
+  </div>
+</header>
+
+<section class="stats-grid" aria-label="Account summary">
+  <article class="stat-card">
+    <span>Total accounts</span>
+    <strong>{{ overview().total }}</strong>
+  </article>
+  <article class="stat-card active-stat">
+    <span>Active accounts</span>
+    <strong>{{ overview().active }}</strong>
+  </article>
+  <article class="stat-card inactive-stat">
+    <span>Inactive accounts</span>
+    <strong>{{ overview().inactive }}</strong>
+  </article>
+</section>
+
+<section class="quick-links" aria-label="Quick links">
+  <a routerLink="/admin/accounts">
+    <mat-icon>group</mat-icon>
+    <span>
+      <strong>Manage accounts</strong>
+      <small>Search accounts and view complete profiles.</small>
+    </span>
+    <mat-icon>chevron_right</mat-icon>
+  </a>
+  <a routerLink="/admin/user-control">
+    <mat-icon>manage_accounts</mat-icon>
+    <span>
+      <strong>User control</strong>
+      <small>Review access and activate or deactivate users.</small>
+    </span>
+    <mat-icon>chevron_right</mat-icon>
+  </a>
+</section>

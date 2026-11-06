@@ -1,0 +1,55 @@
+<mat-sidenav-container class="admin-layout">
+  <mat-sidenav
+    #drawer
+    class="admin-sidebar"
+    [mode]="isMobile() ? 'over' : 'side'"
+    [opened]="!isMobile()"
+  >
+    <div class="sidebar-inner">
+      <div class="sidebar-brand">
+        <span>Admin Panel</span>
+        <app-role-badge role="ADMIN" />
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Admin navigation">
+        <a routerLink="/admin/overview" routerLinkActive="active" (click)="closeMenu(drawer)">
+          <mat-icon>dashboard</mat-icon>
+          Overview
+        </a>
+        <a routerLink="/admin/accounts" routerLinkActive="active" (click)="closeMenu(drawer)">
+          <mat-icon>group</mat-icon>
+          Accounts
+        </a>
+        <a routerLink="/admin/user-control" routerLinkActive="active" (click)="closeMenu(drawer)">
+          <mat-icon>manage_accounts</mat-icon>
+          User Control
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a routerLink="/" (click)="closeMenu(drawer)">
+          <mat-icon>arrow_back</mat-icon>
+          Back to App
+        </a>
+        <button type="button" (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          Sign out
+        </button>
+      </div>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="admin-workspace">
+    <header class="mobile-header">
+      <button mat-icon-button type="button" aria-label="Open menu" (click)="drawer.open()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span>Admin Panel</span>
+      <app-role-badge role="ADMIN" />
+    </header>
+
+    <main class="admin-content">
+      <router-outlet />
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

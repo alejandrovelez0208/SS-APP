@@ -1,0 +1,205 @@
+<a class="back-link" routerLink="/admin/accounts">
+  <mat-icon>arrow_back</mat-icon>
+  Accounts
+</a>
+
+@if (account(); as account) {
+  <header class="detail-header">
+    <div>
+      <h1>{{ account.username }}</h1>
+      <p>{{ account.email }}</p>
+    </div>
+    <app-account-status-chip [status]="account.status" />
+  </header>
+
+  <div class="detail-grid">
+    <section class="detail-card account-card-section">
+      <h2>Account</h2>
+      <dl class="fields-grid">
+        <div>
+          <dt>Username</dt>
+          <dd>{{ account.username }}</dd>
+        </div>
+        <div>
+          <dt>Email</dt>
+          <dd>{{ account.email }}</dd>
+        </div>
+        <div>
+          <dt>Role</dt>
+          <dd><app-role-badge [role]="account.role" /></dd>
+        </div>
+        <div>
+          <dt>Profile type</dt>
+          <dd>{{ account.profileType ?? 'None' }}</dd>
+        </div>
+        <div>
+          <dt>Joined</dt>
+          <dd>{{ account.joinedAt | date: 'mediumDate' }}</dd>
+        </div>
+      </dl>
+    </section>
+
+    @if (escortProfile(account); as profile) {
+      <section class="detail-card">
+        <h2>Basics</h2>
+        <dl class="fields-grid">
+          <div>
+            <dt>Companion name</dt>
+            <dd>{{ profile.companionName }}</dd>
+          </div>
+          <div>
+            <dt>Gender</dt>
+            <dd>{{ profile.gender }}</dd>
+          </div>
+          <div>
+            <dt>Age</dt>
+            <dd>{{ profile.age }}</dd>
+          </div>
+          <div>
+            <dt>Hair color</dt>
+            <dd>{{ profile.hairColor }}</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="detail-card">
+        <h2>Physical</h2>
+        <dl class="fields-grid">
+          <div>
+            <dt>Height</dt>
+            <dd>{{ profile.height | number: '1.1-1' }} m</dd>
+          </div>
+          <div>
+            <dt>Weight</dt>
+            <dd>{{ profile.weight }} kg</dd>
+          </div>
+          <div>
+            <dt>Orientation</dt>
+            <dd>{{ profile.orientation }}</dd>
+          </div>
+          <div>
+            <dt>Nationality</dt>
+            <dd>{{ profile.nationality }}</dd>
+          </div>
+          <div>
+            <dt>Base city</dt>
+            <dd>{{ profile.baseCity }}</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="detail-card">
+        <h2>Contact & Availability</h2>
+        <dl class="fields-grid">
+          <div>
+            <dt>Phone</dt>
+            <dd>{{ profile.phoneCode }} {{ profile.phone }}</dd>
+          </div>
+          <div>
+            <dt>Attends to</dt>
+            <dd>{{ profile.attendsTo.join(', ') }}</dd>
+          </div>
+          <div class="full-field">
+            <dt>Availability</dt>
+            <dd>
+              {{
+                profile.availableAllDay
+                  ? 'Available 24/7'
+                  : profile.scheduleFrom + ' - ' + profile.scheduleTo
+              }}
+            </dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="detail-card">
+        <h2>Services</h2>
+        <dl class="fields-grid">
+          <div class="full-field">
+            <dt>Communication channels</dt>
+            <dd>{{ profile.communicationChannels.join(', ') }}</dd>
+          </div>
+          <div class="full-field">
+            <dt>Website / URL</dt>
+            <dd>{{ profile.website || 'Not provided' }}</dd>
+          </div>
+        </dl>
+        <div class="service-groups">
+          @for (group of profile.serviceTypes; track group.category) {
+            <div>
+              <h3>{{ group.category }}</h3>
+              <p>{{ group.services.join(', ') }}</p>
+            </div>
+          }
+        </div>
+      </section>
+
+      <section class="detail-card">
+        <h2>Departures & Rates</h2>
+        <dl class="fields-grid">
+          <div>
+            <dt>Departures</dt>
+            <dd>{{ profile.departures.join(', ') }}</dd>
+          </div>
+          <div>
+            <dt>Basic rate</dt>
+            <dd>{{ profile.basicRate | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</dd>
+          </div>
+          <div>
+            <dt>Photos</dt>
+            <dd>{{ profile.photosCount }} uploaded</dd>
+          </div>
+        </dl>
+      </section>
+    }
+
+    @if (memberProfile(account); as profile) {
+      <section class="detail-card">
+        <h2>Profile</h2>
+        <dl class="fields-grid">
+          <div>
+            <dt>How do you identify?</dt>
+            <dd>{{ profile.identity }}</dd>
+          </div>
+          <div>
+            <dt>What are you looking for?</dt>
+            <dd>{{ profile.lookingFor }}</dd>
+          </div>
+        </dl>
+      </section>
+    }
+
+    <section class="detail-card status-card">
+      <div>
+        <h2>Status</h2>
+        <p>
+          {{
+            account.status === 'ACTIVE'
+              ? 'Active users can sign in.'
+              : 'Deactivated users cannot sign in.'
+          }}
+        </p>
+      </div>
+      <button
+        mat-flat-button
+        class="status-action"
+        [class.activate]="account.status === 'INACTIVE'"
+        type="button"
+        [disabled]="!canChangeStatus(account)"
+        (click)="changeStatus(account)"
+      >
+        {{ account.status === 'ACTIVE' ? 'Deactivate' : 'Activate' }}
+      </button>
+      @if (!canChangeStatus(account)) {
+        <small>Admin accounts can't be deactivated.</small>
+      }
+    </section>
+  </div>
+} @else {
+  <section class="detail-card empty-state">
+    <mat-icon>error_outline</mat-icon>
+    <h1>Account not found</h1>
+    <p>The requested account does not exist.</p>
+    <a class="text-button" routerLink="/admin/accounts">Back to accounts</a>
+  </section>
+}

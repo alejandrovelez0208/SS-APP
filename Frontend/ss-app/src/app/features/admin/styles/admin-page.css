@@ -1,0 +1,258 @@
+:host {
+  display: block;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.25;
+  font-weight: 600;
+}
+
+.page-description {
+  margin: 6px 0 0;
+  color: var(--gray);
+  font-size: 14px;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.search-field {
+  width: min(420px, 100%);
+}
+
+.filter-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.data-panel {
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.account-table {
+  --mat-table-background-color: transparent;
+  --mat-table-header-headline-color: var(--gray);
+  --mat-table-row-item-label-text-color: var(--text);
+  --mat-table-row-item-outline-color: rgba(255, 255, 255, 0.06);
+  --mat-table-header-headline-font: 'Inter', sans-serif;
+  --mat-table-row-item-label-text-font: 'Inter', sans-serif;
+
+  width: 100%;
+  border-collapse: collapse;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+}
+
+.account-table th {
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--gray);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.account-table td {
+  height: 56px;
+  padding: 10px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 14px;
+}
+
+.account-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.account-table a,
+.account-name {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.account-name {
+  font-weight: 500;
+}
+
+.account-email {
+  color: var(--gray);
+}
+
+.row-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.account-cards {
+  display: none;
+}
+
+.account-card {
+  display: block;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.account-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.account-avatar {
+  display: grid;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border: 1px solid rgba(224, 194, 127, 0.35);
+  border-radius: 50%;
+  background: var(--primary);
+  font-weight: 600;
+}
+
+.account-card-title {
+  min-width: 0;
+  flex: 1;
+}
+
+.account-card-title strong,
+.account-card-title span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-card-title span {
+  margin-top: 3px;
+  color: var(--gray);
+  font-size: 13px;
+}
+
+.account-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.account-paginator {
+  --mat-paginator-container-text-color: var(--gray);
+  --mat-paginator-enabled-icon-color: var(--text);
+  --mat-paginator-disabled-icon-color: rgba(255, 255, 255, 0.3);
+  --mat-paginator-container-background-color: transparent;
+  --mat-paginator-container-text-font: 'Inter', sans-serif;
+  --mat-paginator-container-text-size: 13px;
+
+  margin-top: 18px;
+  background: transparent;
+  color: var(--gray);
+  font-size: 13px;
+}
+
+.empty-state {
+  padding: 56px 24px;
+  text-align: center;
+  color: var(--gray);
+}
+
+.empty-state mat-icon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 12px;
+  color: var(--gold);
+  font-size: 40px;
+}
+
+.empty-state p {
+  margin: 0 0 18px;
+}
+
+.text-button {
+  min-height: 40px;
+  padding: 0 16px;
+}
+
+@media (max-width: 767px) {
+  .page-header {
+    margin-bottom: 18px;
+  }
+
+  h1 {
+    font-size: 22px;
+  }
+
+  .toolbar {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .search-field {
+    width: 100%;
+  }
+
+  .filter-group {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 3px;
+  }
+
+  :host ::ng-deep .filter-group .mdc-evolution-chip-set__chips {
+    width: max-content;
+    flex-wrap: nowrap;
+  }
+
+  .account-table {
+    display: none;
+  }
+
+  .data-panel {
+    overflow: visible;
+    border: 0;
+    background: transparent;
+  }
+
+  .account-cards {
+    display: grid;
+    gap: 12px;
+  }
+
+  .account-card-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 14px;
+  }
+
+  .account-paginator {
+    width: 100%;
+  }
+}
