@@ -1,0 +1,26 @@
+:host ::ng-deep .field .mdc-text-field--outlined .mdc-notched-outline__leading,
+:host ::ng-deep .field .mdc-text-field--outlined .mdc-notched-outline__notch,
+:host ::ng-deep .field .mdc-text-field--outlined .mdc-notched-outline__trailing {
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+:host ::ng-deep .field .mdc-text-field--focused .mdc-notched-outline__leading,
+:host ::ng-deep .field .mdc-text-field--focused .mdc-notched-outline__notch,
+:host ::ng-deep .field .mdc-text-field--focused .mdc-notched-outline__trailing {
+  border-color: #fff;
+}
+
+:host ::ng-deep .field .mdc-text-field .mdc-floating-label,
+:host ::ng-deep .field .mat-mdc-form-field-hint-wrapper,
+:host ::ng-deep .field .mat-mdc-form-field-subscript-wrapper {
+  color: #b3b3b3 !important;
+}
+
+:host ::ng-deep .field .mat-mdc-select-value,
+:host ::ng-deep .field .mat-mdc-select-arrow {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+:host ::ng-deep .field .mat-mdc-select-placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}

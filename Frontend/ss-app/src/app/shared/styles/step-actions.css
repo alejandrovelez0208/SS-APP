@@ -1,0 +1,17 @@
+.btn-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
+.nextstep-btn {
+  background: var(--primary-light) !important;
+  margin-top: 20px;
+}
+
+.back-btn {
+  margin-top: 30px;
+  color: red;
+  cursor: pointer;
+}
