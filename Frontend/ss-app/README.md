@@ -1,4 +1,5 @@
 
+**11-06*2026**: Styles is modified.
 **05-20*2026**: Bugs are being fixed
 **05-20*2026**: Title is being refactored.
 **05-19*2026**: Agency dasboard is implemented.

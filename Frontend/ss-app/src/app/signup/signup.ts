@@ -9,6 +9,8 @@ import { Preference } from '../shared/enums/preference';
 import { createCredentialsFormGroup } from './credentials-step/credentials-form.factory';
 import { AuthService } from '../shared/services/auth/auth-service';
 import { CatalogsService } from '../shared/services/catalogs/catalogs-service';
+import { ErrorHandlerService } from '../shared/services/error/error-handler-service';
+import { NotificationService } from '../shared/services/notification/notification-service';
 
 // TODO: Considerar mover a un archivo de validadores personalizados (validators/custom.validators.ts)
 export function atLeastOneCheckedValidator(): ValidatorFn {
@@ -48,7 +50,9 @@ export class Signup {
     private fb: FormBuilder,
     private authService: AuthService,
     private cdr: ChangeDetectorRef,
-    private catalogService: CatalogsService
+    private catalogService: CatalogsService,
+    private notification: NotificationService,
+    private erroHandlerService: ErrorHandlerService
   ) {
     this.signupForm = this.fb.group({
       profileType: [null],

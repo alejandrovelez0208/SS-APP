@@ -45,6 +45,7 @@ export class Login {
       next: (response: any) => {
         this.loading.set(false);
         this.authService.redirectBasedOnRole();
+        this.notification.success(response.message || 'Login successful.');
       },
       error: (err) => {
         this.loading.set(false);
