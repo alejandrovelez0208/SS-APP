@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { SharedModule } from '../../shared/shared-module';
-import { CREDENTIALS_FIELDS } from '../fields/sign-up.fields';
+import { CREDENTIALS_FIELDS } from '../../shared/enums/constants/sign-up.fields';
 
 @Component({
   selector: 'app-credentials-step',

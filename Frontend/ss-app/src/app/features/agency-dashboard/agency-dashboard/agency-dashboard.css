@@ -34,13 +34,53 @@
         flex: 1;
     }
 
-    /* Sign-in button - Burgundy color */
-    .signin-btn {
-        background: #7A0019 !important;
-        border: none;
+    /* Logout button - matches project primary palette */
+    .logout-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        height: 44px;
+        padding: 0 22px;
+        background: linear-gradient(135deg, var(--primary) 0%, #5e0013 100%) !important;
+        color: var(--text) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: 6px;
-        padding: 12px 22px;
-        transition: .3s;
+        font-family: 'Inter', sans-serif !important;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1;
+        letter-spacing: 0.3px;
+        text-transform: none;
+        box-shadow: 0 4px 12px rgba(122, 0, 25, 0.35);
+        transition: box-shadow 0.25s ease, transform 0.15s ease;
+
+        .mat-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            color: inherit;
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+        }
+
+        &:hover:not(:disabled) {
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%) !important;
+            box-shadow: 0 6px 18px rgba(177, 18, 38, 0.45);
+            transform: translateY(-1px);
+        }
+
+        &:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--gold);
+            outline-offset: 2px;
+        }
     }
 }
 

@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, signal } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { SharedModule } from '../shared/shared-module';
-import { SIGN_UP_FIELDS } from './fields/sign-up.fields';
+import { SIGN_UP_FIELDS } from '../shared/enums/constants/sign-up.fields';
 import { MemberStep } from './member-step/member-step';
 import { EscortStep } from './escort-step/escort-step';
 import { GENDER } from '../shared/enums/gender';
