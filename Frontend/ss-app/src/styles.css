@@ -1,3 +1,4 @@
+@import './app/shared/styles/dialog-dinamic.css';
 :root {
 
   --background: #111111;
@@ -478,71 +479,4 @@ mat-hint {
   .custom_dialog-container .confirm-dialog .dialog-actions button {
     width: 100%;
   }
-}
-
-/* ===== Diálogo dinámico ===== */
-.dialog-dinamic-panel {
-  --mat-dialog-container-color: #1a1114;
-  --mat-dialog-subhead-color: #f5e6c8;
-  --mat-dialog-supporting-text-color: #e5e7eb;
-
-  --mat-form-field-outlined-outline-color: rgba(212, 175, 55, 0.35);
-  --mat-form-field-outlined-hover-outline-color: rgba(212, 175, 55, 0.6);
-  --mat-form-field-outlined-focus-outline-color: #969491;
-  --mat-form-field-outlined-label-text-color: #b8a98a;
-  --mat-form-field-outlined-hover-label-text-color: #d9c9a6;
-  --mat-form-field-outlined-focus-label-text-color: #d4af37;
-  --mat-form-field-outlined-input-text-color: #f3f4f6;
-  --mat-form-field-outlined-caret-color: #d4af37;
-
-  --mat-select-enabled-trigger-text-color: #f3f4f6;
-  --mat-select-enabled-arrow-icon-color: #b8a98a;
-  --mat-select-focused-arrow-icon-color: #d4af37;
-
-  --mat-button-text-label-text-color: #b8a98a;
-  --mat-button-filled-container-color: #d4af37;
-  --mat-button-filled-label-text-color: #1a1114;
-  --mat-button-filled-disabled-container-color: rgba(212, 175, 55, 0.2);
-  --mat-button-filled-disabled-label-text-color: rgba(243, 244, 246, 0.4);
-}
-
-.dialog-dinamic-panel .mat-mdc-dialog-surface {
-  border: 1px solid rgba(212, 175, 55, 0.25);
-  border-radius: 16px !important;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-}
-
-.dialog-dinamic-panel .mat-mdc-dialog-title {
-  font-weight: 600;
-  letter-spacing: 0.3px;
-}
-
-.dialog-dinamic-panel .mat-mdc-dialog-actions {
-  padding: 8px 24px 20px;
-  gap: 8px;
-}
-
-.dialog-dinamic-panel .mat-mdc-dialog-actions button[mat-flat-button] {
-  font-weight: 600;
-  border-radius: 20px;
-}
-
-/* ===== Panel desplegable del select (overlay aparte) ===== */
-.dialog-select-panel.mat-mdc-select-panel {
-  background: #221519 !important;
-  border: 1px solid rgba(212, 175, 55, 0.25);
-  border-radius: 10px !important;
-}
-
-.dialog-select-panel .mat-mdc-option {
-  color: #f3f4f6 !important;
-}
-
-.dialog-select-panel .mat-mdc-option:hover:not(.mdc-list-item--disabled),
-.dialog-select-panel .mat-mdc-option.mat-mdc-option-active {
-  background: rgba(212, 175, 55, 0.12) !important;
-}
-
-.dialog-select-panel .mdc-list-item--selected .mdc-list-item__primary-text {
-  color: #d4af37 !important;
 }

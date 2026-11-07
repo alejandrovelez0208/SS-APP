@@ -1,0 +1,8 @@
+<mat-form-field appearance="outline">
+    <mat-label>{{ config().etiqueta }}</mat-label>
+    <mat-select [formControl]="control()" panelClass="dialog-select-panel">
+        @for (op of config().opciones; track op) {
+        <mat-option [value]="op">{{ op }}</mat-option>
+        }
+    </mat-select>
+</mat-form-field>
