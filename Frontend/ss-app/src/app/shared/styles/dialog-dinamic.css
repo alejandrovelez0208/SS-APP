@@ -1,0 +1,134 @@
+/* ===== Variables de Material (en los elementos que las redefinen) ===== */
+.dialog-dinamic-panel .mat-mdc-dialog-container {
+  --mat-dialog-container-color: #171314;
+  --mat-dialog-subhead-color: #f3f4f6;
+  --mat-dialog-supporting-text-color: #d1d5db;
+}
+
+.dialog-dinamic-panel .mat-mdc-form-field {
+  --mat-form-field-outlined-outline-color: rgba(255, 255, 255, 0.18);
+  --mat-form-field-outlined-hover-outline-color: rgba(255, 255, 255, 0.35);
+  --mat-form-field-outlined-focus-outline-color: #969491;
+  --mat-form-field-outlined-label-text-color: #9ca3af;
+  --mat-form-field-outlined-hover-label-text-color: #d1d5db;
+  --mat-form-field-outlined-focus-label-text-color: #d1d5db;
+  --mat-form-field-outlined-input-text-color: #f3f4f6;
+  --mat-form-field-outlined-caret-color: #f3f4f6;
+}
+
+.dialog-dinamic-panel .mat-mdc-select {
+  --mat-select-enabled-trigger-text-color: #f3f4f6;
+  --mat-select-enabled-arrow-icon-color: #9ca3af;
+  --mat-select-focused-arrow-icon-color: #9ca3af;
+}
+
+/* ===== Reglas directas (no dependen de tokens) ===== */
+.dialog-dinamic-panel .mat-mdc-dialog-container,
+.dialog-dinamic-panel .mdc-dialog__container,
+.dialog-dinamic-panel .mat-mdc-dialog-container .mat-mdc-dialog-surface,
+.dialog-dinamic-panel .mat-mdc-dialog-container .mdc-dialog__surface {
+  background: linear-gradient(180deg, #171314 0%, #201a1b 100%) !important;
+  opacity: 1 !important;
+}
+
+.dialog-dinamic-panel .mat-mdc-dialog-surface {
+  border: 1px solid #383132 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.dialog-dinamic-panel .mat-mdc-dialog-title {
+  font-weight: 600;
+}
+
+.dialog-dinamic-panel .mat-mdc-form-field {
+  width: 100%;
+}
+
+/* Foco neutro */
+.dialog-dinamic-panel .mdc-text-field--focused .mdc-notched-outline__leading,
+.dialog-dinamic-panel .mdc-text-field--focused .mdc-notched-outline__notch,
+.dialog-dinamic-panel .mdc-text-field--focused .mdc-notched-outline__trailing {
+  border-color: #969491 !important;
+}
+
+.dialog-dinamic-panel .mdc-text-field--focused .mdc-floating-label {
+  color: #d1d5db !important;
+}
+
+/* Flecha del select */
+.dialog-dinamic-panel .mat-mdc-select-arrow,
+.dialog-dinamic-panel .mat-mdc-select-arrow svg {
+  color: #9ca3af !important;
+  fill: #9ca3af !important;
+}
+
+/* Botones transparentes con borde */
+.dialog-dinamic-panel .mat-mdc-dialog-actions {
+  padding: 8px 24px 20px;
+  gap: 10px;
+}
+
+.dialog-dinamic-panel .mat-mdc-dialog-actions button {
+  background: transparent !important;
+  border-radius: 8px !important;
+  font-weight: 600;
+  min-width: 90px;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.dialog-dinamic-panel .mat-mdc-dialog-actions button[mat-button] {
+  color: #9ca3af !important;
+  border: 1px solid rgba(239, 68, 68, 0.6) !important;
+}
+
+.dialog-dinamic-panel .mat-mdc-dialog-actions button[mat-button]:hover {
+  background: rgba(239, 68, 68, 0.12) !important;
+  border-color: #ef4444 !important;
+}
+
+.dialog-dinamic-panel .mat-mdc-dialog-actions button[mat-flat-button] {
+  color: #34d399 !important;
+  border: 1px solid rgba(52, 211, 153, 0.6) !important;
+}
+
+.dialog-dinamic-panel .mat-mdc-dialog-actions button[mat-flat-button]:hover:not(:disabled) {
+  background: rgba(52, 211, 153, 0.12) !important;
+  border-color: #34d399 !important;
+}
+
+.dialog-dinamic-panel .mat-mdc-dialog-actions button[mat-flat-button]:disabled {
+  color: rgba(255, 255, 255, 0.3) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+/* ===== Panel desplegable del select (overlay aparte) ===== */
+.dialog-select-panel.mat-mdc-select-panel {
+  background: #222222 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px !important;
+}
+
+.dialog-select-panel .mat-mdc-option {
+  color: #f3f4f6 !important;
+}
+
+.dialog-select-panel .mat-mdc-option:hover:not(.mdc-list-item--disabled),
+.dialog-select-panel .mat-mdc-option.mat-mdc-option-active {
+  background: rgba(255, 255, 255, 0.07) !important;
+}
+
+.dialog-select-panel .mat-mdc-option.mdc-list-item--selected {
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+.dialog-select-panel .mdc-list-item--selected .mdc-list-item__primary-text {
+  color: #ffffff !important;
+}
+
+/* Backdrop del diálogo de formulario */
+.cdk-overlay-backdrop.dialog-dinamic-backdrop {
+  background: rgba(0, 0, 0, 0.85) !important;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}

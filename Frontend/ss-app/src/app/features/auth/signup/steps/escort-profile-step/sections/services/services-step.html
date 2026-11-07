@@ -21,7 +21,7 @@
   </mat-form-field>
 
   <mat-accordion class="services-accordion" multi formGroupName="serviceType">
-    @for (group of catalogsService.groupedServices; track group[0]) {
+    @for (group of catalogOptions.groupedServices; track group[0]) {
       <mat-expansion-panel class="services-panel" [expanded]="$first">
         <mat-expansion-panel-header>
           <mat-panel-title>{{ group[0] }}</mat-panel-title>

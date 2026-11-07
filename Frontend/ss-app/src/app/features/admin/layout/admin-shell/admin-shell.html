@@ -1,10 +1,5 @@
 <mat-sidenav-container class="admin-layout">
-  <mat-sidenav
-    #drawer
-    class="admin-sidebar"
-    [mode]="isMobile() ? 'over' : 'side'"
-    [opened]="!isMobile()"
-  >
+  <mat-sidenav #drawer class="admin-sidebar" [mode]="isMobile() ? 'over' : 'side'" [opened]="!isMobile()">
     <div class="sidebar-inner">
       <div class="sidebar-brand">
         <span>Admin Panel</span>
@@ -23,6 +18,10 @@
         <a routerLink="/admin/user-control" routerLinkActive="active" (click)="closeMenu(drawer)">
           <mat-icon>manage_accounts</mat-icon>
           User Control
+        </a>
+        <a routerLink="/admin/catalogs" routerLinkActive="active" (click)="closeMenu(drawer)">
+          <mat-icon>dns</mat-icon>
+          Catalogs
         </a>
       </nav>
 

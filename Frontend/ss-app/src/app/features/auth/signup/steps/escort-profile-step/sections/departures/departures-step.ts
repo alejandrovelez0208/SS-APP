@@ -2,8 +2,8 @@ import { Component, Input, OnInit, inject, signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSliderModule } from '@angular/material/slider';
-import { CatalogItem } from '@shared/models/escort.model';
-import { CatalogsService } from '@shared/services/catalogs/catalogs-service';
+import { CatalogItem } from '@shared/models/catalog.model';
+import { CatalogOptionsService } from '@shared/services/catalogs/catalog-options.service';
 
 @Component({
   selector: 'app-departures-step',
@@ -22,7 +22,7 @@ export class DeparturesStep implements OnInit {
 
   readonly rateValue = signal(50000);
 
-  private readonly catalogsService = inject(CatalogsService);
+  private readonly catalogOptions = inject(CatalogOptionsService);
 
   ngOnInit(): void {
     this.rateValue.set(this.form.get('basicRate')?.value ?? 50000);
@@ -43,6 +43,6 @@ export class DeparturesStep implements OnInit {
   }
 
   getControlDepartureNamesByFormula(id: number): string {
-    return this.catalogsService.getFormulaMap('departures').get(id) ?? 'Departures not found';
+    return this.catalogOptions.getFormulaMap('departures').get(id) ?? 'Departures not found';
   }
 }

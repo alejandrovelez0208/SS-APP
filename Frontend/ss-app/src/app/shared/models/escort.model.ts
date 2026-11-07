@@ -23,9 +23,3 @@ export interface ServiceItem {
     code: number;
     description: string;
 }
-
-export interface CatalogItem {
-    id: number;
-    code: number;
-    description: string;
-}

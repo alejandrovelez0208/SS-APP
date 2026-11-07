@@ -23,6 +23,10 @@ export const adminRoutes: Routes = [
         path: 'user-control',
         loadComponent: () => import('./pages/user-control/user-control').then((m) => m.UserControl),
       },
+      {
+        path: 'catalogs',
+        loadComponent: () => import('./pages/catalogs/catalogs').then((m) => m.Catalogs),
+      },
     ],
   },
 ];

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup } from '@angular/forms';
 import { EMPTY } from 'rxjs';
-import { CatalogsService } from '@shared/services/catalogs/catalogs-service';
+import { CatalogOptionsService } from '@shared/services/catalogs/catalog-options.service';
 import { DataService } from '@shared/services/data/data-service';
 import { EscortProfileStep } from './escort-profile-step';
 
@@ -50,7 +50,10 @@ describe('EscortProfileStep', () => {
             getCitiesColombia: () => EMPTY,
           },
         },
-        { provide: CatalogsService, useValue: { groupedServices: [] } },
+        {
+          provide: CatalogOptionsService,
+          useValue: { groupedServices: [], getFormulaMap: () => new Map() },
+        },
       ],
     }).compileComponents();
 

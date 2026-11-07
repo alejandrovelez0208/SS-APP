@@ -1,0 +1,17 @@
+<h2 mat-dialog-title class="dialog-title">
+  <mat-icon aria-hidden="true">{{ data.icono ?? 'add_circle' }}</mat-icon>
+  {{ data.titulo }}
+</h2>
+<mat-dialog-content>
+  <app-dynamic-form [campos]="data.campos" [form]="form" />
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancelar()">
+    <mat-icon>close</mat-icon>
+    Cancelar
+  </button>
+  <button mat-flat-button type="button" [disabled]="form.invalid" (click)="guardar()">
+    <mat-icon>check</mat-icon>
+    Guardar
+  </button>
+</mat-dialog-actions>

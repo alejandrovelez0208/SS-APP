@@ -5,8 +5,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { CatalogItem } from '@shared/models/escort.model';
-import { CatalogsService } from '@shared/services/catalogs/catalogs-service';
+import { CatalogItem } from '@shared/models/catalog.model';
+import { CatalogOptionsService } from '@shared/services/catalogs/catalog-options.service';
 
 @Component({
   selector: 'app-services-step',
@@ -30,15 +30,15 @@ export class ServicesStep {
   @Input({ required: true }) form!: FormGroup;
   @Input() channels: CatalogItem[] = [];
 
-  readonly catalogsService = inject(CatalogsService);
+  readonly catalogOptions = inject(CatalogOptionsService);
 
   getControlChannelNameByFormula(id: number): string {
-    return this.catalogsService.getFormulaMap('channels').get(id) ?? 'Channels not found';
+    return this.catalogOptions.getFormulaMap('channels').get(id) ?? 'Channels not found';
   }
 
   getControlTypeOfServicesNameByFormula(id: number): string {
     return (
-      this.catalogsService.getFormulaMap('typeOfServices').get(id) ?? 'Type of services not found'
+      this.catalogOptions.getFormulaMap('typeOfServices').get(id) ?? 'Type of services not found'
     );
   }
 }
