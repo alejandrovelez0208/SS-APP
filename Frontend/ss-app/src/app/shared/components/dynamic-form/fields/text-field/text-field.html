@@ -1,5 +1,8 @@
 <mat-form-field appearance="outline">
     <mat-label>{{ config().etiqueta }}</mat-label>
+    @if (config().icono) {
+        <mat-icon matPrefix>{{ config().icono }}</mat-icon>
+    }
     <input matInput [type]="config().tipo" [formControl]="control()">
     @if (control().hasError('required')) { <mat-error>Required field</mat-error> }
 </mat-form-field>

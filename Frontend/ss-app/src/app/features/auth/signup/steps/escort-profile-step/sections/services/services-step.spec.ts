@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup } from '@angular/forms';
-import { CatalogsService } from '@shared/services/catalogs/catalogs-service';
+import { CatalogOptionsService } from '@shared/services/catalogs/catalog-options.service';
 import { ServicesStep } from './services-step';
 
 describe('ServicesStep', () => {
@@ -10,7 +10,12 @@ describe('ServicesStep', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ServicesStep],
-      providers: [{ provide: CatalogsService, useValue: { groupedServices: [] } }],
+      providers: [
+        {
+          provide: CatalogOptionsService,
+          useValue: { groupedServices: [], getFormulaMap: () => new Map() },
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ServicesStep);

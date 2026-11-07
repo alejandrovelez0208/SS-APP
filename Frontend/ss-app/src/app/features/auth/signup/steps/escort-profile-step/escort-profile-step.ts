@@ -10,15 +10,9 @@ import {
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { EMPTY, map, Observable, startWith } from 'rxjs';
 import { StepActions } from '@shared/components/step-actions/step-actions';
-import { FieldOptions } from '@shared/constants/field-options';
-import { CatalogFilter } from '@shared/models/catalog-filter';
-import {
-  CatalogItem,
-  City,
-  InternationalCodePhone,
-  Nationality,
-} from '@shared/models/escort.model';
-import { CatalogsService } from '@shared/services/catalogs/catalogs-service';
+import { CatalogItem, CatalogType } from '@shared/models/catalog.model';
+import { City, InternationalCodePhone, Nationality } from '@shared/models/escort.model';
+import { CatalogOptionsService } from '@shared/services/catalogs/catalog-options.service';
 import { DataService } from '@shared/services/data/data-service';
 import { CredentialsStep } from '../credentials-step/credentials-step';
 import { PhotoPreview } from './models/photo-preview';
@@ -53,7 +47,7 @@ export class EscortProfileStep {
   @Output() backToProfileType = new EventEmitter<void>();
 
   private readonly dataService = inject(DataService);
-  private readonly catalogsService = inject(CatalogsService);
+  private readonly catalogOptions = inject(CatalogOptionsService);
   private readonly cdr = inject(ChangeDetectorRef);
 
   nationalities: Nationality[] = [];
@@ -191,18 +185,13 @@ export class EscortProfileStep {
   }
 
   private loadServiceModalities(): void {
-    const serviceModalityFilter: CatalogFilter = {
-      type: FieldOptions.I_ATTEND_TO,
-      fathertype: null,
-    };
-
-    this.catalogsService.getPTipos(serviceModalityFilter).subscribe((data) => {
+    this.catalogOptions.search(CatalogType.MODALITY).subscribe((data) => {
       this.serviceModality = data;
-      this.catalogsService.assignModalityFormula(this.serviceModality);
+      this.catalogOptions.assignModalityFormula(this.serviceModality);
 
       const appGroup = this.escortProfileform.get('serviceModality') as FormGroup;
       if (appGroup) {
-        this.catalogsService.getFormulaMap('modality').forEach((formulaName) => {
+        this.catalogOptions.getFormulaMap('modality').forEach((formulaName) => {
           if (!appGroup.contains(formulaName)) {
             appGroup.addControl(formulaName, new FormControl(false));
           }
@@ -213,18 +202,13 @@ export class EscortProfileStep {
   }
 
   private loadCommunicationChannels(): void {
-    const channelsFilter: CatalogFilter = {
-      type: FieldOptions.CHANNELS_COMMUNICATION,
-      fathertype: null,
-    };
-
-    this.catalogsService.getPTipos(channelsFilter).subscribe((data) => {
+    this.catalogOptions.search(CatalogType.CHANNEL).subscribe((data) => {
       this.channelsCommunication = data;
-      this.catalogsService.assignChannelsFormula(this.channelsCommunication);
+      this.catalogOptions.assignChannelsFormula(this.channelsCommunication);
 
       const appGroup = this.escortProfileform.get('applications') as FormGroup;
       if (appGroup) {
-        this.catalogsService.getFormulaMap('channels').forEach((formulaName) => {
+        this.catalogOptions.getFormulaMap('channels').forEach((formulaName) => {
           if (!appGroup.contains(formulaName)) {
             appGroup.addControl(formulaName, new FormControl(false));
           }
@@ -233,17 +217,12 @@ export class EscortProfileStep {
       this.cdr.detectChanges();
     });
 
-    const typeOfServices: CatalogFilter = {
-      type: FieldOptions.TYPES_OF_SERVICES,
-      fathertype: null,
-    };
-
-    this.catalogsService.getPTipos(typeOfServices).subscribe((data) => {
-      this.catalogsService.assignTypeOfServicesFormula(data);
+    this.catalogOptions.search(CatalogType.SERVICE).subscribe((data) => {
+      this.catalogOptions.assignTypeOfServicesFormula(data);
 
       const appGroup = this.escortProfileform.get('serviceType') as FormGroup;
       if (appGroup) {
-        this.catalogsService.getFormulaMap('typeOfServices').forEach((formulaName) => {
+        this.catalogOptions.getFormulaMap('typeOfServices').forEach((formulaName) => {
           if (!appGroup.contains(formulaName)) {
             appGroup.addControl(formulaName, new FormControl(false));
           }
@@ -254,18 +233,13 @@ export class EscortProfileStep {
   }
 
   private loadDepartures(): void {
-    const departuresFilter: CatalogFilter = {
-      type: FieldOptions.DEPARTURES,
-      fathertype: null,
-    };
-
-    this.catalogsService.getPTipos(departuresFilter).subscribe((data) => {
+    this.catalogOptions.search(CatalogType.TRAVEL).subscribe((data) => {
       this.departures = data;
-      this.catalogsService.assingDeparturesFormula(this.departures);
+      this.catalogOptions.assignDeparturesFormula(this.departures);
 
       const appGroup = this.escortProfileform.get('departures') as FormGroup;
       if (appGroup) {
-        this.catalogsService.getFormulaMap('departures').forEach((formulaName) => {
+        this.catalogOptions.getFormulaMap('departures').forEach((formulaName) => {
           if (!appGroup.contains(formulaName)) {
             appGroup.addControl(formulaName, new FormControl(false));
           }

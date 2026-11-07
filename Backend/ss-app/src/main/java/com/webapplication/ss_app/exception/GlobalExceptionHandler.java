@@ -26,6 +26,12 @@ public class GlobalExceptionHandler {
 		return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
 	}
 
+	@ExceptionHandler(CatalogAlreadyExistsException.class)
+	public ResponseEntity<Map<String, Object>> handleCatalogAlreadyExists(CatalogAlreadyExistsException ex) {
+		log.warn("CatalogAlreadyExistsException: {}", ex.getMessage());
+		return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
+	}
+
 	@ExceptionHandler(EmailNotVerifiedException.class)
 	public ResponseEntity<Map<String, Object>> handleEmailNotVerified(EmailNotVerifiedException ex) {
 		log.warn("EmailNotVerifiedException: {}", ex.getMessage());

@@ -19,12 +19,18 @@ import lombok.RequiredArgsConstructor;
 /**
  * Reglas de acceso a la API.
  *
- * Criterio general: - Autenticación (login, registro, recuperación): publica,
- * sin sesión. - Consultas genéricas de lectura (catálogos, imágenes): publicas.
- * - Escritura en datos compartidos (crear catálogos, subir imágenes): solo
- * ADMIN. - Resto (p. ej. cambiar contraseña, ver mi usuario): cualquier usuario
- * autenticado.
+ * <p>
+ * Criterio general:
+ * <ul>
+ * <li>Autenticación (login, registro, recuperación): pública, sin sesión.</li>
+ * <li>Consultas genéricas de lectura (catálogos, imágenes): públicas.</li>
+ * <li>Búsqueda de catálogos del signup: pública (el usuario aún no tiene
+ * sesión).</li>
+ * <li>Escritura de catálogos e imágenes: solo ADMIN.</li>
+ * <li>Resto: cualquier usuario autenticado.</li>
+ * </ul>
  *
+ * <p>
  * El orden de las reglas importa: las más específicas van antes.
  */
 @RequiredArgsConstructor
@@ -41,10 +47,11 @@ public class SecurityConfig {
 			"/api/auth/forgot-password", "/api/auth/reset-password" };
 
 	// ---- Públicos: consultas genéricas de lectura ----
-	private static final String[] PUBLIC_READ_ENDPOINTS = { "/api/catalogs/**", "/api/images/**" };
+	private static final String[] PUBLIC_READ_ENDPOINTS = { "/api/catalogs", "/api/catalogs/**", "/api/images/**" };
 
 	// ---- Solo ADMIN: escritura en datos compartidos ----
-	private static final String[] ADMIN_ENDPOINTS = { "/api/catalogs/create", "/api/images/upload" };
+	private static final String[] ADMIN_WRITE_ENDPOINTS = { "/api/catalogs", "/api/catalogs/**",
+			"/api/images/upload" };
 
 	@Bean
 	PasswordEncoder passwordEncoder() {
@@ -55,8 +62,10 @@ public class SecurityConfig {
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable()).cors(cors -> {
 		}).authorizeHttpRequests(auth -> auth.requestMatchers(PUBLIC_AUTH_ENDPOINTS).permitAll()
-				.requestMatchers(HttpMethod.GET, PUBLIC_READ_ENDPOINTS).permitAll().requestMatchers(ADMIN_ENDPOINTS)
-				.hasRole("ADMIN").anyRequest().authenticated())
+				.requestMatchers(HttpMethod.GET, PUBLIC_READ_ENDPOINTS).permitAll()
+				.requestMatchers(HttpMethod.POST, ADMIN_WRITE_ENDPOINTS).hasRole("ADMIN")
+				.requestMatchers(HttpMethod.PATCH, ADMIN_WRITE_ENDPOINTS).hasRole("ADMIN").anyRequest()
+				.authenticated())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

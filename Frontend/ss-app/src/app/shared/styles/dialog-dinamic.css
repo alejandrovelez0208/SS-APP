@@ -1,6 +1,6 @@
 /* ===== Variables de Material (en los elementos que las redefinen) ===== */
 .dialog-dinamic-panel .mat-mdc-dialog-container {
-  --mat-dialog-container-color: #222222;
+  --mat-dialog-container-color: #171314;
   --mat-dialog-subhead-color: #f3f4f6;
   --mat-dialog-supporting-text-color: #d1d5db;
 }
@@ -23,10 +23,16 @@
 }
 
 /* ===== Reglas directas (no dependen de tokens) ===== */
+.dialog-dinamic-panel .mat-mdc-dialog-container,
+.dialog-dinamic-panel .mdc-dialog__container,
+.dialog-dinamic-panel .mat-mdc-dialog-container .mat-mdc-dialog-surface,
+.dialog-dinamic-panel .mat-mdc-dialog-container .mdc-dialog__surface {
+  background: linear-gradient(180deg, #171314 0%, #201a1b 100%) !important;
+  opacity: 1 !important;
+}
+
 .dialog-dinamic-panel .mat-mdc-dialog-surface {
-  background: #222222 !important;
-  border: 1px solid #383132 !important; /*#2E0C13*/
-  /* Cambia #34d399 por el color que desees (ej: verde) */
+  border: 1px solid #383132 !important;
   border-radius: 12px !important;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
 }
@@ -118,4 +124,11 @@
 
 .dialog-select-panel .mdc-list-item--selected .mdc-list-item__primary-text {
   color: #ffffff !important;
+}
+
+/* Backdrop del diálogo de formulario */
+.cdk-overlay-backdrop.dialog-dinamic-backdrop {
+  background: rgba(0, 0, 0, 0.85) !important;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
 }

@@ -5,6 +5,7 @@ interface BaseField {
   valor?: unknown;
   requerido?: boolean;
   validators?: ValidatorFn[];
+  icono?: string;
 }
 
 export interface TextFieldConfig extends BaseField {
@@ -20,5 +21,6 @@ export type CampoConfig = TextFieldConfig | SelectFieldConfig;
 
 export interface DialogData {
   titulo: string;
+  icono?: string;
   campos: CampoConfig[];
 }

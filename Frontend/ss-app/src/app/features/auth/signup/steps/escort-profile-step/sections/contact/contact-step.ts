@@ -6,8 +6,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { CatalogItem, InternationalCodePhone } from '@shared/models/escort.model';
-import { CatalogsService } from '@shared/services/catalogs/catalogs-service';
+import { CatalogItem } from '@shared/models/catalog.model';
+import { InternationalCodePhone } from '@shared/models/escort.model';
+import { CatalogOptionsService } from '@shared/services/catalogs/catalog-options.service';
 
 @Component({
   selector: 'app-contact-step',
@@ -33,13 +34,13 @@ export class ContactStep {
   @Input() internationalCodes: InternationalCodePhone[] = [];
   @Input() serviceModalities: CatalogItem[] = [];
 
-  private readonly catalogsService = inject(CatalogsService);
+  private readonly catalogOptions = inject(CatalogOptionsService);
 
   get isAvailable247(): boolean {
     return this.form.get('availableAllDay')?.value === true;
   }
 
   getControlModalityNameByFormula(id: number): string {
-    return this.catalogsService.getFormulaMap('modality').get(id) ?? 'Modalities not found';
+    return this.catalogOptions.getFormulaMap('modality').get(id) ?? 'Modalities not found';
   }
 }

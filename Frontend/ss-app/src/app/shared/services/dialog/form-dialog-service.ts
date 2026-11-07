@@ -15,6 +15,7 @@ export class FormDialogService {
       .open<DialogDinamic, DialogData, T>(DialogDinamic, {
         width: '500px',
         panelClass: 'dialog-dinamic-panel',
+        backdropClass: 'dialog-dinamic-backdrop',
         data,
       })
       .afterClosed();

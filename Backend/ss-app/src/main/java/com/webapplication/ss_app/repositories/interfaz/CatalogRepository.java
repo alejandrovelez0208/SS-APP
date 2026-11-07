@@ -1,9 +1,12 @@
 package com.webapplication.ss_app.repositories.interfaz;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
+import com.webapplication.ss_app.dtos.enums.CatalogType;
 import com.webapplication.ss_app.entity.Catalog;
 
-public interface CatalogRepository extends JpaRepository<Catalog, Long> {
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+public interface CatalogRepository extends JpaRepository<Catalog, Long>, JpaSpecificationExecutor<Catalog> {
+
+	boolean existsByCatalogTypeAndNameIgnoreCase(CatalogType catalogType, String name);
 }
