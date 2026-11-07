@@ -13,6 +13,8 @@ import { CATALOG_TYPE_OPTIONS, CatalogType } from './Constants/Catalog';
 import { CampoConfig, DialogDinamic } from '../../components/dialog-dinamic/dialog-dinamic';
 import { MatDialog } from '@angular/material/dialog';
 import { FormDialogService } from '@shared/services/dialog/form-dialog-service';
+import { filter, map, switchMap, tap } from 'rxjs';
+import { CatalogsService } from '../../services/catalogs-service';
 
 @Component({
   selector: 'app-catalogs',
@@ -22,19 +24,46 @@ import { FormDialogService } from '@shared/services/dialog/form-dialog-service';
 })
 export class Catalogs {
   private readonly formDialog = inject(FormDialogService);
-  readonly catalogTypes = Object.values(CatalogType);
+  readonly catalogTypes = Object.values(CATALOG_TYPE_OPTIONS).map(option => option.label);
+
+  constructor(private catalogsService: CatalogsService) { }
 
   abrirDialogoCatalogo(): void {
     this.formDialog
-      .open<{ tipoCatalogo: string }>({
-        titulo: 'Seleccionar Catálogo',
+      .open<any>({
+        titulo: 'Create Element',
         campos: [{
           tipo: 'select',
-          nombre: 'tipoCatalogo',
+          nombre: 'catalogType',
           etiqueta: 'Catalog Type',
           opciones: this.catalogTypes,
-        }],
-      })
-      .subscribe(res => { if (res) console.log(res.tipoCatalogo); });
+        }, {
+          tipo: 'text',
+          nombre: 'name',
+          etiqueta: 'Name',
+        }]
+      }).pipe(
+        filter((res): res is any => !!res),
+        map(res => {
+          const encontrada = CATALOG_TYPE_OPTIONS.find(opt => opt.label === res.catalogType);
+          return {
+            catalogType: encontrada ? encontrada.value : res.catalogType,
+            name: res.name
+          };
+        }),
+        tap(payloadMapeado => console.log('Payload que se enviará a la API (Enum):', payloadMapeado)),
+        switchMap(payloadMapeado => this.catalogsService.createElement(payloadMapeado))
+      )
+      .subscribe({
+        next: (response) => {
+          console.log('¡Guardado con éxito!', response);
+          this.recargarTabla();
+        },
+        error: err => console.error('Error al guardar', err),
+      });
   }
+  recargarTabla(): void {
+    /*   this.catalogsService.recargarTabla(); */
+  }
+
 }

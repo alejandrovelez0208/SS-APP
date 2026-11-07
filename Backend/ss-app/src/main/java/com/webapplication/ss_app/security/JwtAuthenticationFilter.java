@@ -17,7 +17,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -28,15 +30,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 
-		String jwt = extractJwtToken(request);
-		String userName = null;
+		try {
+			String jwt = extractJwtToken(request);
 
-		if (jwt != null) {
-			userName = jwtUtil.getUsernameFromToken(jwt);
-		}
+			if (jwt != null && jwtUtil.validateToken(jwt)) {
+				String userName = jwtUtil.getUsernameFromToken(jwt);
 
-		if (shouldProcessAuthentication(request, userName)) {
-			processAuthentication(request, jwt, userName);
+				if (shouldProcessAuthentication(userName)) {
+					processAuthentication(request, jwt, userName);
+				}
+			}
+		} catch (Exception ex) {
+			// Un token inválido o expirado no debe tumbar la petición (500).
+			// Se deja la petición como anónima: las reglas de SecurityConfig
+			// decidirán si el endpoint es público o devuelve 401/403.
+			log.warn("Token JWT inválido o expirado: {}", ex.getMessage());
+			SecurityContextHolder.clearContext();
 		}
 
 		filterChain.doFilter(request, response);
@@ -55,15 +64,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		return null;
 	}
 
-	private boolean shouldProcessAuthentication(HttpServletRequest request, String userName) {
+	private boolean shouldProcessAuthentication(String userName) {
 		return userName != null && SecurityContextHolder.getContext().getAuthentication() == null;
 	}
 
 	private void processAuthentication(HttpServletRequest request, String jwt, String userName) {
-		if (jwtUtil.validateToken(jwt)) {
-			UserDetails userDetails = createUserDetailsFromToken(jwt, userName);
-			setAuthenticationInContext(request, userDetails);
-		}
+		UserDetails userDetails = createUserDetailsFromToken(jwt, userName);
+		setAuthenticationInContext(request, userDetails);
 	}
 
 	private UserDetails createUserDetailsFromToken(String jwt, String userName) {

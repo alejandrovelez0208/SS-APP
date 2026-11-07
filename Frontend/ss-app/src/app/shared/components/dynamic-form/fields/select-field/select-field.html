@@ -5,4 +5,5 @@
         <mat-option [value]="op">{{ op }}</mat-option>
         }
     </mat-select>
+    @if (control().hasError('required')) { <mat-error>Required field</mat-error> }
 </mat-form-field>

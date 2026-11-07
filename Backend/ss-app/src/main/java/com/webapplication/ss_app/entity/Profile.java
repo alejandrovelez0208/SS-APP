@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.webapplication.ss_app.dtos.enums.Catalog;
 import com.webapplication.ss_app.dtos.enums.Gender;
 import com.webapplication.ss_app.dtos.enums.Orientation;
 import com.webapplication.ss_app.dtos.enums.ProfileStatus;

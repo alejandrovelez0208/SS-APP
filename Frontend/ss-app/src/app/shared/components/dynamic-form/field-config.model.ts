@@ -1,12 +1,14 @@
+import { ValidatorFn } from '@angular/forms';
 interface BaseField {
   nombre: string;
   etiqueta: string;
   valor?: unknown;
   requerido?: boolean;
+  validators?: ValidatorFn[];
 }
 
 export interface TextFieldConfig extends BaseField {
-  tipo: 'text' | 'number' | 'email';
+  tipo: 'text' | 'number' | 'email' | 'Field';
 }
 
 export interface SelectFieldConfig extends BaseField {

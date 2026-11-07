@@ -12,9 +12,9 @@ export interface CatalogTypeOption {
 }
 
 export const CATALOG_TYPE_OPTIONS: CatalogTypeOption[] = [
-  { value: CatalogType.CATEGORY, label: 'Categoría Raíz / Principal' },
-  { value: CatalogType.CHANNEL, label: 'Canales de Comunicación' },
-  { value: CatalogType.MODALITY, label: 'Modalidad de Servicio' },
-  { value: CatalogType.SERVICE, label: 'Servicios y Prácticas' },
-  { value: CatalogType.TRAVEL, label: 'Viajes y Desplazamientos' }
+  { value: CatalogType.CATEGORY, label: 'Root Category / Main' },
+  { value: CatalogType.CHANNEL, label: 'Channels Communication' },
+  { value: CatalogType.MODALITY, label: 'Service Modality' },
+  { value: CatalogType.SERVICE, label: 'Services and Practices' },
+  { value: CatalogType.TRAVEL, label: 'Trips and Movements' }
 ];
