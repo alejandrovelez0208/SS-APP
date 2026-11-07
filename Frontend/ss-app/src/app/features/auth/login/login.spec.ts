@@ -1,8 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { AuthService } from '@shared/services/auth/auth-service';
-import { ErrorHandlerService } from '@shared/services/error/error-handler-service';
-import { NotificationService } from '@shared/services/notification/notification-service';
+import { AuthSessionService } from '@core/auth/auth-session.service';
+import { AuthApiService } from '@core/auth/auth-api.service';
+import { ErrorHandlerService } from '@core/error/error-handler.service';
+import { NotificationService } from '@shared/services/notification/notification.service';
 import { Login } from './login';
 
 describe('Login', () => {
@@ -14,7 +15,8 @@ describe('Login', () => {
       imports: [Login],
       providers: [
         provideRouter([]),
-        { provide: AuthService, useValue: { isLoggedIn: () => false } },
+        { provide: AuthSessionService, useValue: { isLoggedIn: () => false } },
+        { provide: AuthApiService, useValue: {} },
         { provide: NotificationService, useValue: {} },
         { provide: ErrorHandlerService, useValue: {} },
       ],

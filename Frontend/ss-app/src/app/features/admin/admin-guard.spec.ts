@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
-import { AuthService } from '@shared/services/auth/auth-service';
+import { AuthSessionService } from '@core/auth/auth-session.service';
 import { adminGuard } from './admin-guard';
 
 describe('adminGuard', () => {
@@ -14,7 +14,7 @@ describe('adminGuard', () => {
       providers: [
         { provide: Router, useValue: router },
         {
-          provide: AuthService,
+          provide: AuthSessionService,
           useValue: { isLoggedIn: () => isLoggedIn, isAdmin: () => isAdmin },
         },
       ],

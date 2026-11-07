@@ -1,7 +1,7 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '@shared/services/auth/auth-service';
+import { passwordMatchValidator } from '@shared/validators/password-match.validator';
 
-export function createCredentialsFormGroup(authService: AuthService): FormGroup {
+export function createCredentialsFormGroup(): FormGroup {
   return new FormGroup({
     userName: new FormControl('', [
       Validators.required,
@@ -12,7 +12,7 @@ export function createCredentialsFormGroup(authService: AuthService): FormGroup 
     password: new FormControl('', [Validators.required, Validators.minLength(6)]),
     confirmPassword: new FormControl('', [
       Validators.required,
-      authService.passwordMatchValidator('password'),
+      passwordMatchValidator('password'),
     ]),
   });
 }

@@ -1,3 +1,4 @@
+ /*crear api getUsers to accounts in ADMIN*/
  **11-07*2026**:Catalog items is being implemented
 **11-06*2026**: Pannel admin is being implemented
 **11-06*2026**: Fronted code is being refactored
@@ -5,7 +6,7 @@
 **05-20*2026**: Bugs are being fixed
 **05-20*2026**: Title is being refactored.
 **05-19*2026**: Agency dasboard is implemented.
-**05-17*2026**: Escort field component is being refactored.
+**05-17*2026**: Escort field component is being refactorFed.
 **05-10*2026**: Step 7 adding photos is being implemented.
 **05-10*2026**: Sign Up is being refactored.
 **29-09*2026**: Basic rate and departures is being implemented.

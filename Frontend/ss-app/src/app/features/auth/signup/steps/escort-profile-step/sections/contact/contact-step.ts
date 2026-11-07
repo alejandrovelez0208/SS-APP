@@ -8,7 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CatalogItem } from '@shared/models/catalog.model';
 import { InternationalCodePhone } from '@shared/models/escort.model';
-import { CatalogOptionsService } from '@shared/services/catalogs/catalog-options.service';
+import { SignupCatalogStateService } from '@features/auth/signup/data-access/signup-catalog-state.service';
 
 @Component({
   selector: 'app-contact-step',
@@ -34,7 +34,7 @@ export class ContactStep {
   @Input() internationalCodes: InternationalCodePhone[] = [];
   @Input() serviceModalities: CatalogItem[] = [];
 
-  private readonly catalogOptions = inject(CatalogOptionsService);
+  private readonly catalogOptions = inject(SignupCatalogStateService);
 
   get isAvailable247(): boolean {
     return this.form.get('availableAllDay')?.value === true;

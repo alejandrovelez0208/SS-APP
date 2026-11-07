@@ -12,8 +12,8 @@ import { EMPTY, map, Observable, startWith } from 'rxjs';
 import { StepActions } from '@shared/components/step-actions/step-actions';
 import { CatalogItem, CatalogType } from '@shared/models/catalog.model';
 import { City, InternationalCodePhone, Nationality } from '@shared/models/escort.model';
-import { CatalogOptionsService } from '@shared/services/catalogs/catalog-options.service';
-import { DataService } from '@shared/services/data/data-service';
+import { SignupCatalogStateService } from '@features/auth/signup/data-access/signup-catalog-state.service';
+import { StaticDataService } from '@shared/data/static-data.service';
 import { CredentialsStep } from '../credentials-step/credentials-step';
 import { PhotoPreview } from './models/photo-preview';
 import { BasicsStep } from './sections/basics/basics-step';
@@ -46,8 +46,8 @@ export class EscortProfileStep {
   @Input() escortProfileform!: FormGroup;
   @Output() backToProfileType = new EventEmitter<void>();
 
-  private readonly dataService = inject(DataService);
-  private readonly catalogOptions = inject(CatalogOptionsService);
+  private readonly dataService = inject(StaticDataService);
+  private readonly catalogOptions = inject(SignupCatalogStateService);
   private readonly cdr = inject(ChangeDetectorRef);
 
   nationalities: Nationality[] = [];

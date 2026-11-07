@@ -7,9 +7,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Router, RouterLink } from '@angular/router';
 import { BrandLogo } from '@shared/components/brand-logo/brand-logo';
-import { AuthService } from '@shared/services/auth/auth-service';
-import { ErrorHandlerService } from '@shared/services/error/error-handler-service';
-import { NotificationService } from '@shared/services/notification/notification-service';
+import { AuthSessionService } from '@core/auth/auth-session.service';
+import { AuthApiService } from '@core/auth/auth-api.service';
+import { ErrorHandlerService } from '@core/error/error-handler.service';
+import { NotificationService } from '@shared/services/notification/notification.service';
 
 @Component({
   selector: 'app-login',
@@ -35,7 +36,8 @@ export class Login implements OnInit {
 
   constructor(
     private readonly fb: FormBuilder,
-    private readonly authService: AuthService,
+    private readonly authService: AuthSessionService,
+    private readonly authApi: AuthApiService,
     private readonly router: Router,
     private readonly notification: NotificationService,
     private readonly errorHandlerService: ErrorHandlerService,
@@ -89,7 +91,7 @@ export class Login implements OnInit {
 
     this.showResendLink.set(false);
     this.loading.set(true);
-    this.authService.resendVerificationEmail(this.userEmail).subscribe({
+    this.authApi.resendVerificationEmail(this.userEmail).subscribe({
       next: (response: any) => {
         this.loading.set(false);
         this.notification.success(

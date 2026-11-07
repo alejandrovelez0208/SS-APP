@@ -4,7 +4,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
 import { BrandLogo } from '@shared/components/brand-logo/brand-logo';
 import { StepActions } from '@shared/components/step-actions/step-actions';
-import { AuthService } from '@shared/services/auth/auth-service';
 import { ProfileType, PROFILE_TYPE_OPTIONS } from './constants/signup-fields';
 import { createCredentialsFormGroup } from './steps/credentials-step/credentials-form.factory';
 import { EscortStep } from './steps/escort-step/escort-step';
@@ -27,19 +26,18 @@ export class Signup {
 
   constructor(
     private readonly fb: FormBuilder,
-    private readonly authService: AuthService,
     private readonly cdr: ChangeDetectorRef,
   ) {
     this.signupForm = this.fb.group({
       member: this.fb.group({
-        ...createCredentialsFormGroup(this.authService).controls,
+        ...createCredentialsFormGroup().controls,
         identity: ['', [Validators.required]],
         preferences: ['', [Validators.required]],
       }),
       escort: this.fb.group({
         accountType: ['', [Validators.required]],
         escortProfile: this.fb.group({
-          ...createCredentialsFormGroup(this.authService).controls,
+          ...createCredentialsFormGroup().controls,
           nameCompanion: ['', Validators.required],
           gender: ['', Validators.required],
           age: [18, Validators.required],

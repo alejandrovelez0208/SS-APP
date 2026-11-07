@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { AdminAccountsService } from './admin-accounts.service';
+import { AdminAccountsStateService } from './admin-accounts.state.service';
 
-describe('AdminAccountsService', () => {
-  let service: AdminAccountsService;
+describe('AdminAccountsStateService', () => {
+  let service: AdminAccountsStateService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({ providers: [AdminAccountsService] });
-    service = TestBed.inject(AdminAccountsService);
+    TestBed.configureTestingModule({ providers: [AdminAccountsStateService] });
+    service = TestBed.inject(AdminAccountsStateService);
   });
 
   it('filters accounts by search, status and role', () => {

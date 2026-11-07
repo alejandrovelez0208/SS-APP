@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { FormControl } from '@angular/forms';
 import { TextField } from './text-field';
 
 describe('TextField', () => {
@@ -13,6 +13,12 @@ describe('TextField', () => {
 
     fixture = TestBed.createComponent(TextField);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('config', {
+      tipo: 'text',
+      nombre: 'name',
+      etiqueta: 'Name',
+    });
+    fixture.componentRef.setInput('control', new FormControl(''));
     await fixture.whenStable();
   });
 

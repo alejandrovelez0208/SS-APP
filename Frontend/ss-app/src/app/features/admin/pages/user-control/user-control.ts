@@ -6,8 +6,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
-import { DialogService } from '@shared/services/dialog/dialog-service';
-import { NotificationService } from '@shared/services/notification/notification-service';
+import { DialogService } from '@shared/services/dialog/dialog.service';
+import { NotificationService } from '@shared/services/notification/notification.service';
 import { AccountStatusChip } from '../../components/account-status-chip/account-status-chip';
 import { RoleBadge } from '../../components/role-badge/role-badge';
 import {
@@ -16,7 +16,7 @@ import {
   AccountSummary,
   canChangeAccountStatus,
 } from '../../models/admin-account.model';
-import { AdminAccountsService } from '../../services/admin-accounts.service';
+import { AdminAccountsStateService } from '../../data-access/admin-accounts.state.service';
 
 @Component({
   selector: 'app-admin-user-control',
@@ -39,7 +39,7 @@ import { AdminAccountsService } from '../../services/admin-accounts.service';
   ],
 })
 export class UserControl {
-  private readonly accountsService = inject(AdminAccountsService);
+  private readonly accountsService = inject(AdminAccountsStateService);
   private readonly dialogService = inject(DialogService);
   private readonly notificationService = inject(NotificationService);
 

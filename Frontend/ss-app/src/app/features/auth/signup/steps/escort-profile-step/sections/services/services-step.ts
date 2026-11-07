@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { CatalogItem } from '@shared/models/catalog.model';
-import { CatalogOptionsService } from '@shared/services/catalogs/catalog-options.service';
+import { SignupCatalogStateService } from '@features/auth/signup/data-access/signup-catalog-state.service';
 
 @Component({
   selector: 'app-services-step',
@@ -30,7 +30,7 @@ export class ServicesStep {
   @Input({ required: true }) form!: FormGroup;
   @Input() channels: CatalogItem[] = [];
 
-  readonly catalogOptions = inject(CatalogOptionsService);
+  readonly catalogOptions = inject(SignupCatalogStateService);
 
   getControlChannelNameByFormula(id: number): string {
     return this.catalogOptions.getFormulaMap('channels').get(id) ?? 'Channels not found';

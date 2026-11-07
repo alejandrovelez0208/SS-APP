@@ -6,8 +6,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { BrandLogo } from '@shared/components/brand-logo/brand-logo';
-import { AuthService } from '@shared/services/auth/auth-service';
-import { DialogService } from '@shared/services/dialog/dialog-service';
+import { AuthSessionService } from '@core/auth/auth-session.service';
+import { DialogService } from '@shared/services/dialog/dialog.service';
 
 @Component({
   selector: 'app-agency-dashboard',
@@ -27,7 +27,7 @@ import { DialogService } from '@shared/services/dialog/dialog-service';
 })
 export class AgencyDashboard {
   constructor(
-    private readonly authService: AuthService,
+    private readonly authService: AuthSessionService,
     private readonly dialogService: DialogService,
   ) {}
 

@@ -8,14 +8,14 @@ import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app.routes';
-import { authInterceptor } from '@shared/interceptors/auth-interceptor';
-import { AuthService } from '@shared/services/auth/auth-service';
+import { authInterceptor } from '@core/interceptors/auth.interceptor';
+import { AuthSessionService } from '@core/auth/auth-session.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor])),
-    provideAppInitializer(() => inject(AuthService).initializeAuth()),
+    provideAppInitializer(() => inject(AuthSessionService).initializeAuth()),
   ],
 };

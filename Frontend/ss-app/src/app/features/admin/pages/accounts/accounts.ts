@@ -9,7 +9,7 @@ import { MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
 import { AccountStatusChip } from '../../components/account-status-chip/account-status-chip';
 import { AccountStatus } from '../../models/admin-account.model';
-import { AdminAccountsService } from '../../services/admin-accounts.service';
+import { AdminAccountsStateService } from '../../data-access/admin-accounts.state.service';
 
 @Component({
   selector: 'app-admin-accounts',
@@ -28,7 +28,7 @@ import { AdminAccountsService } from '../../services/admin-accounts.service';
   styleUrls: ['../../styles/admin-page.css', '../../styles/admin-material.css', './accounts.css'],
 })
 export class Accounts {
-  private readonly accountsService = inject(AdminAccountsService);
+  private readonly accountsService = inject(AdminAccountsStateService);
 
   readonly pageSize = 5;
   readonly displayedColumns = ['name', 'email', 'type', 'status', 'view'];
