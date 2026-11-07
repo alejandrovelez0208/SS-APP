@@ -38,10 +38,15 @@ export class Catalogs {
   abrirDialogoCatalogo(): void {
     const camposCatalogo: CampoConfig[] = [
       {
-        nombre: 'tipoCatalogo',
-        etiqueta: 'Catalog Type',
+        nombre: 'CatalogFather',
+        etiqueta: 'Catalog Father',
         tipo: 'select', // <-- Definimos que será un select
         opciones: this.catalogTypes // (Nota: Asegúrate de soportar opciones en tu DialogDinamic si las usas)
+      },
+      {
+        nombre: 'CatalogType',
+        etiqueta: 'Catalog Type',
+        tipo: 'field', // <-- Definimos que será un select
       }
     ];
 
