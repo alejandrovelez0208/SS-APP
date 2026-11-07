@@ -3,7 +3,7 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSliderModule } from '@angular/material/slider';
 import { CatalogItem } from '@shared/models/catalog.model';
-import { CatalogOptionsService } from '@shared/services/catalogs/catalog-options.service';
+import { SignupCatalogStateService } from '@features/auth/signup/data-access/signup-catalog-state.service';
 
 @Component({
   selector: 'app-departures-step',
@@ -22,7 +22,7 @@ export class DeparturesStep implements OnInit {
 
   readonly rateValue = signal(50000);
 
-  private readonly catalogOptions = inject(CatalogOptionsService);
+  private readonly catalogOptions = inject(SignupCatalogStateService);
 
   ngOnInit(): void {
     this.rateValue.set(this.form.get('basicRate')?.value ?? 50000);

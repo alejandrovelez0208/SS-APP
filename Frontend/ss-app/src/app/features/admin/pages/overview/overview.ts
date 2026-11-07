@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
-import { AdminAccountsService } from '../../services/admin-accounts.service';
+import { AdminAccountsStateService } from '../../data-access/admin-accounts.state.service';
 
 @Component({
   selector: 'app-admin-overview',
@@ -10,7 +10,7 @@ import { AdminAccountsService } from '../../services/admin-accounts.service';
   styleUrls: ['../../styles/admin-page.css', './overview.css'],
 })
 export class Overview {
-  private readonly accountsService = inject(AdminAccountsService);
+  private readonly accountsService = inject(AdminAccountsStateService);
 
   readonly overview = this.accountsService.overview;
 }

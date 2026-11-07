@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup } from '@angular/forms';
-import { CatalogOptionsService } from '@shared/services/catalogs/catalog-options.service';
+import { SignupCatalogStateService } from '@features/auth/signup/data-access/signup-catalog-state.service';
 import { ServicesStep } from './services-step';
 
 describe('ServicesStep', () => {
@@ -12,7 +12,7 @@ describe('ServicesStep', () => {
       imports: [ServicesStep],
       providers: [
         {
-          provide: CatalogOptionsService,
+          provide: SignupCatalogStateService,
           useValue: { groupedServices: [], getFormulaMap: () => new Map() },
         },
       ],

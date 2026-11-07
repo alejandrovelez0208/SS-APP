@@ -9,12 +9,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { filter, switchMap } from 'rxjs';
 import { Catalog, CatalogFormValue, CatalogType } from '@shared/models/catalog.model';
-import { DialogService } from '@shared/services/dialog/dialog-service';
-import { FormDialogService } from '@shared/services/dialog/form-dialog-service';
-import { NotificationService } from '@shared/services/notification/notification-service';
+import { DialogService } from '@shared/services/dialog/dialog.service';
+import { FormDialogService } from '@shared/services/dialog/form-dialog.service';
+import { NotificationService } from '@shared/services/notification/notification.service';
 import { AccountStatusChip } from '../../components/account-status-chip/account-status-chip';
 import { CATALOG_TYPE_OPTIONS } from '../../constants/catalog-type-options';
-import { AdminCatalogService } from '../../services/admin-catalog.service';
+import { AdminCatalogFacade } from '../../data-access/admin-catalog.facade';
 
 type CatalogStatusFilter = 'ALL' | 'ACTIVE' | 'INACTIVE';
 
@@ -35,7 +35,7 @@ type CatalogStatusFilter = 'ALL' | 'ACTIVE' | 'INACTIVE';
 })
 export class Catalogs implements OnInit {
   private readonly formDialog = inject(FormDialogService);
-  private readonly adminCatalog = inject(AdminCatalogService);
+  private readonly adminCatalog = inject(AdminCatalogFacade);
   private readonly dialogService = inject(DialogService);
   private readonly notification = inject(NotificationService);
   private readonly destroyRef = inject(DestroyRef);

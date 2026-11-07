@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { CatalogItem, CatalogType } from '@shared/models/catalog.model';
-import { CatalogApiService } from './catalog-api.service';
+import { CatalogApiService } from '@shared/services/catalogs/catalog-api.service';
 import { toCatalogItem } from './catalog.mapper';
 
 export type CatalogKey = 'modality' | 'channels' | 'typeOfServices' | 'departures';
@@ -14,7 +14,7 @@ const SERVICES_GROUP_LABEL = 'Services and Practices';
 @Injectable({
   providedIn: 'root',
 })
-export class CatalogOptionsService {
+export class SignupCatalogStateService {
   private readonly catalogApi = inject(CatalogApiService);
 
   private readonly catalogLists = new Map<CatalogKey, CatalogItem[]>();

@@ -1,11 +1,15 @@
 package com.webapplication.ss_app.service.impl;
 
 import java.time.Instant;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import com.webapplication.ss_app.dtos.UserDto;
 import com.webapplication.ss_app.dtos.request.UserRequest;
 import com.webapplication.ss_app.dtos.response.MessageResponse;
 import com.webapplication.ss_app.entity.Account;
@@ -55,6 +59,27 @@ public class UserServiceImpl implements UserService {
 
 		/* CREAR EL BORRADOR MULTIPASOS */
 		return new MessageResponse("User created succesfully.");
+	}
+
+	@Override
+	public List<UserDto> getAllUsers() {
+		List<User> userList = userRepository.findAll();
+
+		if (CollectionUtils.isEmpty(userList)) {
+			return Collections.emptyList();
+		}
+
+		return userList.stream().map(tmpUser -> {
+			UserDto user = new UserDto();
+			user.setId(tmpUser.getIdUsers());
+			user.setEmail(tmpUser.getEmail());
+			user.setEmailVerified(tmpUser.isEmailVerified());
+			user.setEnabled(tmpUser.isEnabled());
+			user.setLastLoginAt(tmpUser.getLastLoginAt());
+			user.setCreatedAt(tmpUser.getCreatedAt());
+			user.setRole(tmpUser.getRole());
+			return user;
+		}).toList();
 	}
 
 }

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { AuthService } from '@shared/services/auth/auth-service';
-import { DialogService } from '@shared/services/dialog/dialog-service';
+import { AuthSessionService } from '@core/auth/auth-session.service';
+import { DialogService } from '@shared/services/dialog/dialog.service';
 import { AgencyDashboard } from './agency-dashboard';
 
 describe('AgencyDashboard', () => {
@@ -13,7 +13,7 @@ describe('AgencyDashboard', () => {
       imports: [AgencyDashboard],
       providers: [
         provideRouter([]),
-        { provide: AuthService, useValue: {} },
+        { provide: AuthSessionService, useValue: {} },
         { provide: DialogService, useValue: {} },
       ],
     }).compileComponents();

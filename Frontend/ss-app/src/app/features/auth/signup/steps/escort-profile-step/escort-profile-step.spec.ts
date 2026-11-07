@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup } from '@angular/forms';
 import { EMPTY } from 'rxjs';
-import { CatalogOptionsService } from '@shared/services/catalogs/catalog-options.service';
-import { DataService } from '@shared/services/data/data-service';
+import { SignupCatalogStateService } from '@features/auth/signup/data-access/signup-catalog-state.service';
+import { StaticDataService } from '@shared/data/static-data.service';
 import { EscortProfileStep } from './escort-profile-step';
 
 function createProfileForm(): FormGroup {
@@ -43,7 +43,7 @@ describe('EscortProfileStep', () => {
       imports: [EscortProfileStep],
       providers: [
         {
-          provide: DataService,
+          provide: StaticDataService,
           useValue: {
             getNationalities: () => EMPTY,
             getInternationalCodes: () => EMPTY,
@@ -51,7 +51,7 @@ describe('EscortProfileStep', () => {
           },
         },
         {
-          provide: CatalogOptionsService,
+          provide: SignupCatalogStateService,
           useValue: { groupedServices: [], getFormulaMap: () => new Map() },
         },
       ],

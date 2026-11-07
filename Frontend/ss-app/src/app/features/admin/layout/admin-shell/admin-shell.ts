@@ -7,9 +7,9 @@ import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 import { map } from 'rxjs';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { RoleBadge } from '../../components/role-badge/role-badge';
-import { AdminAccountsService } from '../../services/admin-accounts.service';
-import { AuthService } from '@shared/services/auth/auth-service';
-import { DialogService } from '@shared/services/dialog/dialog-service';
+import { AdminAccountsStateService } from '../../data-access/admin-accounts.state.service';
+import { AuthSessionService } from '@core/auth/auth-session.service';
+import { DialogService } from '@shared/services/dialog/dialog.service';
 
 @Component({
   selector: 'app-admin-shell',
@@ -22,12 +22,12 @@ import { DialogService } from '@shared/services/dialog/dialog-service';
     RouterLinkActive,
     RouterOutlet,
   ],
-  providers: [AdminAccountsService],
+  providers: [AdminAccountsStateService],
   templateUrl: './admin-shell.html',
   styleUrl: './admin-shell.css',
 })
 export class AdminShell {
-  private readonly authService = inject(AuthService);
+  private readonly authService = inject(AuthSessionService);
   private readonly dialogService = inject(DialogService);
   private readonly breakpointObserver = inject(BreakpointObserver);
 

@@ -5,8 +5,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
-import { DialogService } from '@shared/services/dialog/dialog-service';
-import { NotificationService } from '@shared/services/notification/notification-service';
+import { DialogService } from '@shared/services/dialog/dialog.service';
+import { NotificationService } from '@shared/services/notification/notification.service';
 import { AccountStatusChip } from '../../components/account-status-chip/account-status-chip';
 import { RoleBadge } from '../../components/role-badge/role-badge';
 import {
@@ -18,7 +18,7 @@ import {
   isEscortProfile,
   isMemberProfile,
 } from '../../models/admin-account.model';
-import { AdminAccountsService } from '../../services/admin-accounts.service';
+import { AdminAccountsStateService } from '../../data-access/admin-accounts.state.service';
 
 @Component({
   selector: 'app-admin-account-detail',
@@ -41,7 +41,7 @@ import { AdminAccountsService } from '../../services/admin-accounts.service';
 })
 export class AccountDetailPage {
   private readonly route = inject(ActivatedRoute);
-  private readonly accountsService = inject(AdminAccountsService);
+  private readonly accountsService = inject(AdminAccountsStateService);
   private readonly dialogService = inject(DialogService);
   private readonly notificationService = inject(NotificationService);
 

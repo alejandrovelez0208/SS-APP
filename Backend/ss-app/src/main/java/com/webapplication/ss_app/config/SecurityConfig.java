@@ -13,6 +13,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.webapplication.ss_app.security.JwtAuthenticationFilter;
+import com.webapplication.ss_app.security.JsonSecurityHandlers;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,7 +27,7 @@ import lombok.RequiredArgsConstructor;
  * <li>Consultas genéricas de lectura (catálogos, imágenes): públicas.</li>
  * <li>Búsqueda de catálogos del signup: pública (el usuario aún no tiene
  * sesión).</li>
- * <li>Escritura de catálogos e imágenes: solo ADMIN.</li>
+ * <li>Escritura de catálogos e imágenes y listado de usuarios: solo ADMIN.</li>
  * <li>Resto: cualquier usuario autenticado.</li>
  * </ul>
  *
@@ -41,6 +42,8 @@ public class SecurityConfig {
 
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+	private final JsonSecurityHandlers jsonSecurityHandlers;
+
 	// ---- Públicos: autenticación sin sesión ----
 	private static final String[] PUBLIC_AUTH_ENDPOINTS = { "/api/auth/login", "/api/auth/signup",
 			"/api/auth/validate-email*", "/api/auth/verify-email", "/api/auth/resend-verification",
@@ -53,6 +56,9 @@ public class SecurityConfig {
 	private static final String[] ADMIN_WRITE_ENDPOINTS = { "/api/catalogs", "/api/catalogs/**",
 			"/api/images/upload" };
 
+	// ---- Solo ADMIN: lecturas sensibles ----
+	private static final String[] ADMIN_READ_ENDPOINTS = { "/api/users", "/api/users/**" };
+
 	@Bean
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -63,9 +69,13 @@ public class SecurityConfig {
 		http.csrf(csrf -> csrf.disable()).cors(cors -> {
 		}).authorizeHttpRequests(auth -> auth.requestMatchers(PUBLIC_AUTH_ENDPOINTS).permitAll()
 				.requestMatchers(HttpMethod.GET, PUBLIC_READ_ENDPOINTS).permitAll()
+				.requestMatchers(HttpMethod.GET, ADMIN_READ_ENDPOINTS).hasRole("ADMIN")
 				.requestMatchers(HttpMethod.POST, ADMIN_WRITE_ENDPOINTS).hasRole("ADMIN")
 				.requestMatchers(HttpMethod.PATCH, ADMIN_WRITE_ENDPOINTS).hasRole("ADMIN").anyRequest()
 				.authenticated())
+				.exceptionHandling(ex -> ex
+						.authenticationEntryPoint(jsonSecurityHandlers)
+						.accessDeniedHandler(jsonSecurityHandlers))
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

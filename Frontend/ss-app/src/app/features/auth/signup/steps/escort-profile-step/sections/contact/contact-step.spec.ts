@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup } from '@angular/forms';
-import { CatalogOptionsService } from '@shared/services/catalogs/catalog-options.service';
+import { SignupCatalogStateService } from '@features/auth/signup/data-access/signup-catalog-state.service';
 import { ContactStep } from './contact-step';
 
 describe('ContactStep', () => {
@@ -10,7 +10,7 @@ describe('ContactStep', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ContactStep],
-      providers: [{ provide: CatalogOptionsService, useValue: {} }],
+      providers: [{ provide: SignupCatalogStateService, useValue: {} }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ContactStep);

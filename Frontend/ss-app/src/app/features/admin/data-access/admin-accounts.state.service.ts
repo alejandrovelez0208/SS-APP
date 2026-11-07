@@ -9,7 +9,7 @@ import {
 import { ADMIN_ACCOUNTS_MOCK } from './admin-accounts.mock';
 
 @Injectable()
-export class AdminAccountsService {
+export class AdminAccountsStateService {
   private readonly accountsState = signal<AccountDetail[]>(ADMIN_ACCOUNTS_MOCK);
 
   readonly accounts = this.accountsState.asReadonly();

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { City, InternationalCodePhone, Nationality } from '../../models/escort.model';
+import { City, InternationalCodePhone, Nationality } from '../models/escort.model';
 
 interface NationalitiesResponse {
   data?: {
@@ -12,7 +12,7 @@ interface NationalitiesResponse {
 @Injectable({
   providedIn: 'root',
 })
-export class DataService {
+export class StaticDataService {
   private http = inject(HttpClient);
 
   getNationalities(): Observable<Nationality[]> {

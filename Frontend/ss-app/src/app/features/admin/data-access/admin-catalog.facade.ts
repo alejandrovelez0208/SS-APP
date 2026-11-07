@@ -10,7 +10,7 @@ import { CatalogApiService } from '@shared/services/catalogs/catalog-api.service
 @Injectable({
   providedIn: 'root',
 })
-export class AdminCatalogService {
+export class AdminCatalogFacade {
   private readonly catalogApi = inject(CatalogApiService);
 
   getAll(): Observable<Catalog[]> {

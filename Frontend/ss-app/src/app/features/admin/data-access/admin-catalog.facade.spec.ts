@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { CatalogApiService } from '@shared/services/catalogs/catalog-api.service';
-import { AdminCatalogService } from './admin-catalog.service';
+import { AdminCatalogFacade } from './admin-catalog.facade';
 
-describe('AdminCatalogService', () => {
-  let service: AdminCatalogService;
+describe('AdminCatalogFacade', () => {
+  let service: AdminCatalogFacade;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -19,7 +19,7 @@ describe('AdminCatalogService', () => {
         },
       ],
     });
-    service = TestBed.inject(AdminCatalogService);
+    service = TestBed.inject(AdminCatalogFacade);
   });
 
   it('should be created', () => {
