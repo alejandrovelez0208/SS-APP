@@ -1,0 +1,26 @@
+<h2 mat-dialog-title>{{ data.titulo }}</h2>
+
+<mat-dialog-content>
+    <form [formGroup]="form">
+        @for (campo of data.campos; track campo.nombre) {
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>{{ campo.etiqueta }}</mat-label>
+
+            @if (campo.tipo === 'select') {
+            <mat-select [formControlName]="campo.nombre" panelClass="dialog-select-panel">
+                @for (op of campo.opciones; track op) {
+                <mat-option [value]="op">{{ op }}</mat-option>
+                }
+            </mat-select>
+            } @else {
+            <input matInput [type]="campo.tipo || 'text'" [formControlName]="campo.nombre">
+            }
+        </mat-form-field>
+        }
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions style="justify-content: flex-end;">
+    <button mat-button (click)="onNoClick()">Cancelar</button>
+    <button mat-flat-button color="primary" [disabled]="form.invalid" (click)="guardar()">Guardar</button>
+</mat-dialog-actions>
