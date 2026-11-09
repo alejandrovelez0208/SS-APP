@@ -140,24 +140,43 @@ export class Catalogs implements OnInit {
     this.pageIndex.set(0);
   }
 
-  toggleStatus(catalog: Catalog): void {
-    if (!catalog.active) {
-      this.applyStatus(catalog, true);
-      return;
-    }
+  confirmAndExecute(actionType: 'activate' | 'deactivate' | 'delete', catalog: Catalog): void {
+    const config = {
+      activate: {
+        title: 'Activate catalog item?',
+        message: `"${catalog.name}" will be available again in the signup.`,
+        confirmText: 'Activate',
+        severity: 'warning' as const,
+        action: () => this.applyStatus(catalog, true),
+      },
+      deactivate: {
+        title: 'Deactivate catalog item?',
+        message: `"${catalog.name}" will stop appearing in the signup until reactivated.`,
+        confirmText: 'Deactivate',
+        severity: 'warning' as const,
+        action: () => this.applyStatus(catalog, false),
+      },
+      delete: {
+        title: 'Delete catalog item?',
+        message: `"${catalog.name}" will be permanently removed.`,
+        confirmText: 'Delete',
+        severity: 'danger' as const,
+        action: () => this.applyDelete(catalog),
+      }
+    }[actionType];
 
     this.dialogService
       .openConfirmation(
-        'Deactivate catalog item?',
-        `"${catalog.name}" will stop appearing in the signup until reactivated.`,
-        'Deactivate',
+        config.title,
+        config.message,
+        config.confirmText,
         'Cancel',
-        'danger',
+        config.severity
       )
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((confirmed) => {
         if (confirmed) {
-          this.applyStatus(catalog, false);
+          config.action();
         }
       });
   }
@@ -179,6 +198,23 @@ export class Catalogs implements OnInit {
         error: (error: unknown) => {
           console.error('Error updating catalog status', error);
           this.notification.error('Could not update the catalog item.');
+        },
+      });
+  }
+
+  private applyDelete(catalog: Catalog): void {
+    this.adminCatalog
+      .deleteItem(catalog.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.catalogs.update((items) => items.filter((item) => item.id !== catalog.id));
+          this.pageIndex.set(0);
+          this.notification.success('Catalog item deleted.');
+        },
+        error: (error: unknown) => {
+          console.error('Error deleting catalog item', error);
+          this.notification.error('Could not delete the catalog item.');
         },
       });
   }

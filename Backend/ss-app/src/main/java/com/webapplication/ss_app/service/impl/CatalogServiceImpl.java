@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.webapplication.ss_app.dtos.enums.CatalogType;
 import com.webapplication.ss_app.dtos.request.CatalogCreateRequest;
 import com.webapplication.ss_app.dtos.response.CatalogResponse;
+import com.webapplication.ss_app.dtos.response.MessageResponse;
 import com.webapplication.ss_app.entity.Catalog;
 import com.webapplication.ss_app.exception.CatalogAlreadyExistsException;
 import com.webapplication.ss_app.exception.ResourceNotFoundException;
@@ -60,12 +61,12 @@ public class CatalogServiceImpl implements CatalogService {
 		Specification<Catalog> specification = (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
 
 		if (type != null) {
-			specification = specification.and((root, query, criteriaBuilder) -> criteriaBuilder
-					.equal(root.get("catalogType"), type));
+			specification = specification
+					.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("catalogType"), type));
 		}
 		if (active != null) {
-			specification = specification.and(
-					(root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("active"), active));
+			specification = specification
+					.and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("active"), active));
 		}
 
 		return catalogRepository.findAll(specification, DEFAULT_SORT).stream().map(this::toResponse).toList();
@@ -74,5 +75,14 @@ public class CatalogServiceImpl implements CatalogService {
 	private CatalogResponse toResponse(Catalog catalog) {
 		return CatalogResponse.builder().id(catalog.getId()).name(catalog.getName())
 				.catalogType(catalog.getCatalogType()).active(catalog.getActive()).build();
+	}
+
+	@Override
+	public MessageResponse deleteItem(Long id) {
+		Catalog catalog = catalogRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Catalog item not found: " + id));
+
+		catalogRepository.delete(catalog);
+		return new MessageResponse("Item is being deleted");
 	}
 }

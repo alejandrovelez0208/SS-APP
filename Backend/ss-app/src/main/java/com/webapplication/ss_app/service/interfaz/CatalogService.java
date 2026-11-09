@@ -5,6 +5,7 @@ import java.util.List;
 import com.webapplication.ss_app.dtos.enums.CatalogType;
 import com.webapplication.ss_app.dtos.request.CatalogCreateRequest;
 import com.webapplication.ss_app.dtos.response.CatalogResponse;
+import com.webapplication.ss_app.dtos.response.MessageResponse;
 
 public interface CatalogService {
 
@@ -13,4 +14,6 @@ public interface CatalogService {
 	CatalogResponse updateStatus(Long id, Boolean active);
 
 	List<CatalogResponse> getAllCatalogs(CatalogType type, Boolean active);
+	
+	MessageResponse deleteItem(Long id);
 }

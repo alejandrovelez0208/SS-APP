@@ -35,19 +35,25 @@
 }
 
 .catalog-table .mat-column-name {
-  width: 38%;
+  width: 36%;
 }
 
 .catalog-table .mat-column-type {
-  width: 24%;
+  width: 22%;
 }
 
 .catalog-table .mat-column-status {
-  width: 18%;
+  width: 16%;
 }
 
 .catalog-table .mat-column-action {
-  width: 20%;
+  width: 26%;
+}
+
+.action-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .catalog-table td.mat-column-name,
@@ -55,6 +61,24 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.delete-button {
+  color: #ff6b76;
+
+  --mat-icon-button-icon-color: #ff6b76;
+
+  padding: 0;
+}
+
+.delete-button mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.delete-button:hover {
+  background-color: rgba(229, 9, 20, 0.12);
 }
 
 .btn-new {
