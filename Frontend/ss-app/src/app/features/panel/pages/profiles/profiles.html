@@ -1,0 +1,99 @@
+<header class="page-header">
+  <div>
+    <h1>{{ isAgency() ? 'My Profiles' : 'My Profile' }}</h1>
+    <p class="page-description">
+      {{ isAgency()
+      ? 'Manage every profile your agency publishes. Pause or edit them at any time.'
+      : 'This is the profile the public sees. Keep it complete and up to date.' }}
+    </p>
+  </div>
+
+  @if (isAgency()) {
+  <button mat-flat-button class="btn-primary" type="button" [disabled]="!canAddProfile()">
+    <mat-icon>add</mat-icon>
+    New profile
+  </button>
+  }
+</header>
+
+@if (isAgency()) {
+<section class="data-panel">
+  <table class="profile-table">
+    <thead>
+      <tr>
+        <th>Profile</th>
+        <th>Status</th>
+        <th>Completion</th>
+        <th>Photos</th>
+        <th class="actions-col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of rows(); track row.profile.id) {
+      <tr>
+        <td>
+          <div class="profile-name">
+            <span class="avatar">{{ row.profile.profileName.charAt(0) }}</span>
+            <div>
+              <strong>{{ row.profile.profileName }}</strong>
+              <span>{{ row.profile.city }}, {{ row.profile.country }}</span>
+            </div>
+          </div>
+        </td>
+        <td><app-profile-status-chip [status]="row.profile.status" /></td>
+        <td>
+          <div class="completion-cell">
+            <div class="mini-bar"><span [style.width.%]="row.completion"></span></div>
+            <span>{{ row.completion }}%</span>
+          </div>
+        </td>
+        <td>{{ row.photoCount }}</td>
+        <td class="actions-col">
+          <a mat-icon-button [routerLink]="['/panel', 'profiles', row.profile.id]" aria-label="Edit profile">
+            <mat-icon>edit</mat-icon>
+          </a>
+          <button mat-icon-button type="button" (click)="pause(row)"
+            [attr.aria-label]="row.profile.status === profileStatus.PAUSED ? 'Resume profile' : 'Pause profile'">
+            <mat-icon>
+              {{ row.profile.status === profileStatus.PAUSED ? 'play_circle' : 'pause_circle' }}
+            </mat-icon>
+          </button>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</section>
+
+<p class="plan-note">
+  {{ rows().length }} of {{ maxProfiles() }} profiles used.
+</p>
+} @else {
+<section class="section-grid">
+  @for (row of rows(); track row.profile.id) {
+  <article class="card profile-card">
+    <div class="card-header">
+      <span class="card-title">{{ row.profile.profileName }}</span>
+      <app-profile-status-chip [status]="row.profile.status" />
+    </div>
+    <span class="card-hint">{{ row.profile.city }}, {{ row.profile.country }}</span>
+    <div class="completion-cell">
+      <div class="mini-bar"><span [style.width.%]="row.completion"></span></div>
+      <span>{{ row.completion }}% complete</span>
+    </div>
+    <div class="profile-card-actions">
+      <a mat-flat-button class="btn-primary" [routerLink]="['/panel', 'profiles', row.profile.id]">
+        <mat-icon>edit</mat-icon>
+        Edit profile
+      </a>
+      <button mat-stroked-button class="btn-ghost" type="button" (click)="pause(row)">
+        <mat-icon>
+          {{ row.profile.status === profileStatus.PAUSED ? 'play_arrow' : 'pause' }}
+        </mat-icon>
+        {{ row.profile.status === profileStatus.PAUSED ? 'Resume' : 'Pause' }}
+      </button>
+    </div>
+  </article>
+  }
+</section>
+}

@@ -43,3 +43,10 @@ export interface CatalogFormValue {
   catalogType: string;
   name: string;
 }
+
+/**
+ * Respuesta simple usada por endpoints que no devuelven un recurso.
+ */
+export interface MessageResponse {
+  message: string;
+}

@@ -1,0 +1,87 @@
+<header class="page-header">
+  <div>
+    <h1>Settings</h1>
+    <p class="page-description">Manage your account details, notifications and preferences.</p>
+  </div>
+</header>
+
+@if (account(); as acc) {
+<div class="settings-grid">
+  <section class="data-panel settings-card">
+    <h2 class="card-title">Account</h2>
+    <p class="card-hint">
+      {{ isAgency() ? 'Agency account' : 'Independent account' }} · Member since
+      2025
+    </p>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Display name</mat-label>
+      <input matInput [value]="acc.userName" readonly />
+      <mat-icon matPrefix>badge</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Email</mat-label>
+      <input matInput [value]="acc.email" readonly />
+      <mat-icon matPrefix>mail</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" value="········" readonly />
+      <mat-icon matPrefix>lock</mat-icon>
+      <mat-hint>Password management — Coming soon</mat-hint>
+    </mat-form-field>
+
+    <div class="settings-actions">
+      <button mat-flat-button class="btn-primary" type="button" (click)="saveAccount()">
+        <mat-icon>save</mat-icon>
+        Save changes
+      </button>
+    </div>
+
+    @if (isAgency()) {
+    <div class="plan-box">
+      <mat-icon>workspace_premium</mat-icon>
+      <div>
+        <strong>Agency plan · {{ acc.profiles.length }} of {{ acc.maxProfiles }} profiles</strong>
+        <span>Billing is per account. Upgrade to add more profiles.</span>
+      </div>
+    </div>
+    }
+  </section>
+
+  <section class="data-panel settings-card">
+    <h2 class="card-title">Notifications</h2>
+    <p class="card-hint">Choose what we send to your email.</p>
+
+    <div class="toggle-row">
+      <span>Product updates</span>
+      <mat-slide-toggle [formControl]="notifications.controls.emailUpdates" hideIcon />
+    </div>
+    <div class="toggle-row">
+      <span>New messages</span>
+      <mat-slide-toggle [formControl]="notifications.controls.newMessages" hideIcon />
+    </div>
+    <div class="toggle-row">
+      <span>Marketing & tips</span>
+      <mat-slide-toggle [formControl]="notifications.controls.marketing" hideIcon />
+    </div>
+
+    <div class="verification-note">
+      <mat-icon>verified_user</mat-icon>
+      <div>
+        <strong>Identity verification — Coming soon</strong>
+        <span>Age verification runs once at account level and is shared by all profiles.</span>
+      </div>
+    </div>
+
+    <h2 class="card-title danger-title">Danger zone</h2>
+    <p class="card-hint">Deleting your account removes every profile you manage.</p>
+    <button mat-stroked-button class="btn-danger" type="button" (click)="deleteAccount()">
+      <mat-icon>delete_forever</mat-icon>
+      Delete account
+    </button>
+  </section>
+</div>
+}

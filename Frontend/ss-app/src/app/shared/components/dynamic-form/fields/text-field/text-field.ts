@@ -9,7 +9,6 @@ import { MatInputModule } from '@angular/material/input';
   selector: 'app-text-field',
   imports: [MatLabel, MatPrefix, ReactiveFormsModule, MatFormField, MatIconModule, MatInputModule],
   templateUrl: './text-field.html',
-  styleUrl: './text-field.css',
 })
 export class TextField {
   config = input.required<TextFieldConfig>();

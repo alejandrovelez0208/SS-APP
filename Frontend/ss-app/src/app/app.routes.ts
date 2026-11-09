@@ -16,8 +16,12 @@ export const routes: Routes = [
   },
   {
     path: 'agency',
-    loadComponent: () =>
-      import('./features/agency-dashboard/agency-dashboard').then((m) => m.AgencyDashboard),
+    pathMatch: 'full',
+    redirectTo: 'panel/profiles',
+  },
+  {
+    path: 'panel',
+    loadChildren: () => import('./features/panel/panel.routes').then((m) => m.panelRoutes),
   },
   {
     path: 'admin',
