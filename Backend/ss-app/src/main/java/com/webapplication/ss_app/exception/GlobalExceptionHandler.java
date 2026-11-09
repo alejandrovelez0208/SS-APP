@@ -74,4 +74,15 @@ public class GlobalExceptionHandler {
 		return buildResponse(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
 	}
 
+	@ExceptionHandler(ProfileAlreadyExistsException.class)
+	public ResponseEntity<Map<String, Object>> ProfileAlreadyExistsException(ProfileAlreadyExistsException ex) {
+		log.warn("ProfileAlreadyExistsException: {}", ex.getMessage());
+		return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
+	}
+
+	@ExceptionHandler(AccountNotFoundException.class)
+	public ResponseEntity<Map<String, Object>> AccountNotFoundException(AccountNotFoundException ex) {
+		log.warn("AccountNotFoundException: {}", ex.getMessage());
+		return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+	}
 }

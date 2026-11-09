@@ -1,7 +1,14 @@
-import { CanActivateFn } from '@angular/router';
+import { inject } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
+import { AuthSessionService } from '@core/auth/auth-session.service';
 
 /**
- * Guard provisional de la maqueta. Cuando exista backend se validará
- * sesión + tipo de cuenta antes de entrar al panel.
+ * Protege el panel: sin sesión activa se redirige al login.
+ * Como la sesión vive en memoria, cualquier recarga obliga a loguearse.
  */
-export const panelGuard: CanActivateFn = () => true;
+export const panelGuard: CanActivateFn = () => {
+  const auth = inject(AuthSessionService);
+  const router = inject(Router);
+
+  return auth.isLoggedIn() ? true : router.createUrlTree(['/login']);
+};

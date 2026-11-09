@@ -8,11 +8,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.webapplication.ss_app.dtos.enums.Role;
+import com.webapplication.ss_app.dtos.enums.ProfileStatus;
 import com.webapplication.ss_app.dtos.request.UserRequest;
 import com.webapplication.ss_app.dtos.response.EmailValidationResponse;
 import com.webapplication.ss_app.dtos.response.LoginResponse;
 import com.webapplication.ss_app.dtos.response.MessageResponse;
 import com.webapplication.ss_app.entity.Account;
+import com.webapplication.ss_app.entity.Profile;
 import com.webapplication.ss_app.entity.User;
 import com.webapplication.ss_app.exception.AccountDeactivatedException;
 import com.webapplication.ss_app.exception.BadCredentialsException;
@@ -20,6 +22,7 @@ import com.webapplication.ss_app.exception.EmailAlreadyExistsException;
 import com.webapplication.ss_app.exception.InvalidCredentialsException;
 import com.webapplication.ss_app.exception.InvalidTokenException;
 import com.webapplication.ss_app.repositories.interfaz.AccountRepository;
+import com.webapplication.ss_app.repositories.interfaz.ProfileRepository;
 import com.webapplication.ss_app.repositories.interfaz.UserRepository;
 import com.webapplication.ss_app.security.JwtUtil;
 import com.webapplication.ss_app.service.interfaz.AuthService;
@@ -36,6 +39,10 @@ public class AuthServiceImpl implements AuthService {
 
 	private final AccountRepository accountRepository;
 
+	private final ProfileRepository profileRepository;
+
+	private final RefreshTokenService refreshTokenService;
+
 	private final EmailService emailService;
 
 	private final PasswordEncoder passwordEncoder;
@@ -45,7 +52,8 @@ public class AuthServiceImpl implements AuthService {
 	private final ServiceUtils serviceUtils;
 
 	@Override
-	public MessageResponse signup(UserRequest userRequest) {
+	@Transactional
+	public LoginResponse signup(UserRequest userRequest) {
 		if (userRepository.existsByEmail(userRequest.getEmail())) {
 			throw new EmailAlreadyExistsException("Email already exists");
 		}
@@ -53,7 +61,7 @@ public class AuthServiceImpl implements AuthService {
 		User user = new User();
 		user.setEmail(userRequest.getEmail());
 		user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-		user.setRole(Role.ADMIN);
+		user.setRole(Role.USER);
 
 		String verificationToken = UUID.randomUUID().toString();
 		user.setVerificationToken(verificationToken);
@@ -63,14 +71,23 @@ public class AuthServiceImpl implements AuthService {
 		account.setType(userRequest.getAccountType());
 		account.setUserName(userRequest.getUserName());
 		account.setOwner(user);
-		
+
 		user.setAccount(account);
 
 		accountRepository.save(account);
 
+		Profile profile = new Profile();
+		profile.setAccount(account);
+		profile.setProfileName(userRequest.getUserName());
+		profile.setStatus(ProfileStatus.DRAFT);
+		profileRepository.save(profile);
+
 		emailService.sendVerificationEmail(userRequest.getEmail(), verificationToken);
 
-		return new MessageResponse("Login registration succesful!");
+		final String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
+		final String refreshToken = refreshTokenService.createToken(user);
+
+		return toLoginResponse(user, profile, token, refreshToken);
 	}
 
 	@Override
@@ -95,7 +112,13 @@ public class AuthServiceImpl implements AuthService {
 
 		final String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
 
-		return new LoginResponse(token, user.getEmail(), user.getAccount().getUserName(), user.getRole().name());
+		Profile profile = profileRepository
+				.findFirstByAccount_IdAccount(user.getAccount().getIdAccount())
+				.orElse(null);
+
+		final String refreshToken = refreshTokenService.createToken(user);
+
+		return toLoginResponse(user, profile, token, refreshToken);
 	}
 
 	@Override
@@ -117,6 +140,8 @@ public class AuthServiceImpl implements AuthService {
 		user.setVerificationTokenExpiry(null);
 
 		userRepository.save(user);
+
+		activateCompletedProfile(user);
 
 		return new MessageResponse("Email verified succesfully! you can now login");
 	}
@@ -184,7 +209,54 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	public LoginResponse currentUser(String email) {
 		User user = serviceUtils.getUserByEmailOrThrow(email);
-		return new LoginResponse(null, user.getEmail(), user.getAccount().getUserName(), user.getRole().name());
+		Profile profile = profileRepository
+				.findFirstByAccount_IdAccount(user.getAccount().getIdAccount())
+				.orElse(null);
+		return toLoginResponse(user, profile, null, null);
+	}
+
+	@Override
+	@Transactional
+	public LoginResponse refresh(String refreshToken) {
+		RefreshTokenService.RotatedToken rotated = refreshTokenService.rotate(refreshToken);
+		User user = rotated.user();
+
+		final String accessToken = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
+		Profile profile = profileRepository
+				.findFirstByAccount_IdAccount(user.getAccount().getIdAccount())
+				.orElse(null);
+
+		return toLoginResponse(user, profile, accessToken, rotated.refreshToken());
+	}
+
+	@Override
+	@Transactional
+	public MessageResponse logout(String refreshToken) {
+		refreshTokenService.revoke(refreshToken);
+		return new MessageResponse("Logged out successfully");
+	}
+
+	private LoginResponse toLoginResponse(User user, Profile profile, String token, String refreshToken) {
+		return LoginResponse.builder()
+				.token(token)
+				.email(user.getEmail())
+				.fullName(user.getAccount() != null ? user.getAccount().getUserName() : null)
+				.role(user.getRole().name())
+				.profileId(profile != null ? profile.getId() : null)
+				.profileComplete(profile != null && profile.getCompletedAt() != null)
+				.emailVerified(user.isEmailVerified())
+				.accountType(user.getAccount() != null ? user.getAccount().getType() : null)
+				.refreshToken(refreshToken)
+				.build();
+	}
+
+	private void activateCompletedProfile(User user) {
+		profileRepository.findFirstByAccount_IdAccount(user.getAccount().getIdAccount())
+				.filter(profile -> profile.getCompletedAt() != null)
+				.ifPresent(profile -> {
+					profile.setStatus(ProfileStatus.ACTIVE);
+					profileRepository.save(profile);
+				});
 	}
 
 }

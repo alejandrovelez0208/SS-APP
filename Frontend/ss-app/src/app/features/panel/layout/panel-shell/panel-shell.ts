@@ -7,7 +7,9 @@ import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { map } from 'rxjs';
 import { DialogService } from '@shared/services/dialog/dialog.service';
+import { NotificationService } from '@shared/services/notification/notification.service';
 import { AuthSessionService } from '@core/auth/auth-session.service';
+import { AuthApiService } from '@core/auth/auth-api.service';
 import { navFor } from '../../constants/panel-nav.config';
 import { ProfileStateService } from '../../data-access/profile-state.service';
 import { AccountType, MockScenario } from '../../models/profile.model';
@@ -28,12 +30,23 @@ import { AccountType, MockScenario } from '../../models/profile.model';
 export class PanelShell implements OnInit {
   private readonly state = inject(ProfileStateService);
   private readonly authService = inject(AuthSessionService);
+  private readonly authApi = inject(AuthApiService);
   private readonly dialogService = inject(DialogService);
+  private readonly notification = inject(NotificationService);
   private readonly route = inject(ActivatedRoute);
   private readonly breakpointObserver = inject(BreakpointObserver);
 
   readonly account = this.state.account;
   readonly navItems = computed(() => navFor(this.state.accountType()));
+  readonly user = toSignal(this.authService.currentUser$, {
+    initialValue: this.authService.getCurrentUser(),
+  });
+  readonly needsEmailVerification = computed(
+    () => this.user() !== null && !this.user()?.emailVerified,
+  );
+  readonly needsProfile = computed(
+    () => this.user() !== null && !this.user()?.profileComplete,
+  );
 
   readonly accountTypeLabel = computed(() => {
     switch (this.state.accountType()) {
@@ -55,12 +68,44 @@ export class PanelShell implements OnInit {
     const scenario: MockScenario =
       this.route.snapshot.queryParamMap.get('mock') === 'agency' ? 'AGENCY' : 'INDEPENDENT';
     void this.state.load(scenario);
+    this.showProfileNotice();
+  }
+
+  private showProfileNotice(): void {
+    const user = this.authService.getCurrentUser();
+    if (!user) {
+      return;
+    }
+
+    const incomplete = !user.profileComplete;
+    const unverified = !user.emailVerified;
+    if (!incomplete && !unverified) {
+      return;
+    }
+
+    const message = incomplete
+      ? 'Your profile is out of date. Complete it so clients can find you.'
+      : 'Your email is not verified. Verify it to publish your profile.';
+
+    this.dialogService.openNotice('Profile notice', message).subscribe();
   }
 
   closeMenu(drawer: MatDrawer): void {
     if (this.isMobile()) {
       drawer.close();
     }
+  }
+
+  resendVerification(): void {
+    const email = this.user()?.email;
+    if (!email) {
+      return;
+    }
+
+    this.authApi.resendVerificationEmail(email).subscribe({
+      next: () => this.notification.success('Verification email sent. Please check your inbox.'),
+      error: () => this.notification.error('Could not send the verification email.'),
+    });
   }
 
   logout(): void {

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.webapplication.ss_app.dtos.request.ChangePasswordRequest;
 import com.webapplication.ss_app.dtos.request.EmailRequest;
 import com.webapplication.ss_app.dtos.request.LoginRequest;
+import com.webapplication.ss_app.dtos.request.RefreshTokenRequest;
 import com.webapplication.ss_app.dtos.request.ResetPasswordRequest;
 import com.webapplication.ss_app.dtos.request.UserRequest;
 import com.webapplication.ss_app.dtos.response.EmailValidationResponse;
@@ -30,7 +31,7 @@ public class AuthController {
 	private final AuthService authService;
 
 	@PostMapping("/signup")
-	public ResponseEntity<MessageResponse> register(@Valid @RequestBody UserRequest userRequest) {
+	public ResponseEntity<LoginResponse> register(@Valid @RequestBody UserRequest userRequest) {
 		return ResponseEntity.ok(authService.signup(userRequest));
 	}
 
@@ -81,5 +82,15 @@ public class AuthController {
 	public ResponseEntity<LoginResponse> currentUser(Authentication authentication) {
 		String email = authentication.getName();
 		return ResponseEntity.ok(authService.currentUser(email));
+	}
+
+	@PostMapping("/refresh")
+	public ResponseEntity<LoginResponse> refresh(@Valid @RequestBody RefreshTokenRequest request) {
+		return ResponseEntity.ok(authService.refresh(request.getRefreshToken()));
+	}
+
+	@PostMapping("/logout")
+	public ResponseEntity<MessageResponse> logout(@Valid @RequestBody RefreshTokenRequest request) {
+		return ResponseEntity.ok(authService.logout(request.getRefreshToken()));
 	}
 }

@@ -27,6 +27,7 @@ import { CREDENTIALS_FIELDS } from '../../constants/signup-fields';
 export class CredentialsStep {
   @Input() form!: FormGroup;
   @Input() stepIndex!: number;
+  @Input() busy = false;
 
   @Output() next = new EventEmitter<void>();
   @Output() back = new EventEmitter<void>();

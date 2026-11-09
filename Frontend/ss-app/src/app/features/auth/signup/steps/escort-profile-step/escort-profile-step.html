@@ -3,6 +3,7 @@
     <app-credentials-step
       [form]="escortProfileform"
       [stepIndex]="currentStep"
+      [busy]="registering()"
       (next)="continue()"
       (back)="back()"
     />
