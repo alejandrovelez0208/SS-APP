@@ -35,10 +35,10 @@ export class PhysicalStep implements OnInit {
   @Input() filteredNationalities!: Observable<Nationality[]>;
   @Input() baseCity: City[] = [];
 
-  readonly heightValue = signal(1.6);
+  readonly heightValue = signal(160);
 
   ngOnInit(): void {
-    this.heightValue.set(this.form.get('height')?.value ?? 1.6);
+    this.heightValue.set(this.form.get('heightCm')?.value ?? 160);
   }
 
   displayFn = (nationality: Nationality | null): string => {
@@ -50,8 +50,8 @@ export class PhysicalStep implements OnInit {
   }
 
   formatHeight(value: number): string {
-    if (!value) return '1.6 m';
-    return value.toFixed(1).replace('.', ',') + ' m';
+    if (!value) return '1.60 m';
+    return (value / 100).toFixed(2) + ' m';
   }
 
   formatWeight(value: number): string {

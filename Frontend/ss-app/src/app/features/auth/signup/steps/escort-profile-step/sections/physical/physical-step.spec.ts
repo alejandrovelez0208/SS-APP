@@ -15,9 +15,9 @@ describe('PhysicalStep', () => {
     fixture = TestBed.createComponent(PhysicalStep);
     component = fixture.componentInstance;
     component.form = new FormGroup({
-      height: new FormControl(1.6),
+      heightCm: new FormControl(160),
       weight: new FormControl(60),
-      orientation: new FormControl('heterosexual'),
+      orientation: new FormControl('HETEROSEXUAL'),
       nationality: new FormControl(''),
       baseCity: new FormControl(''),
     });

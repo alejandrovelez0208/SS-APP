@@ -1,5 +1,5 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -26,15 +26,21 @@ import { DialogService } from '@shared/services/dialog/dialog.service';
   templateUrl: './admin-shell.html',
   styleUrl: './admin-shell.css',
 })
-export class AdminShell {
+export class AdminShell implements OnInit {
   private readonly authService = inject(AuthSessionService);
   private readonly dialogService = inject(DialogService);
+  private readonly accountsService = inject(AdminAccountsStateService);
   private readonly breakpointObserver = inject(BreakpointObserver);
 
   readonly isMobile = toSignal(
     this.breakpointObserver.observe('(max-width: 1023px)').pipe(map((result) => result.matches)),
     { initialValue: false },
   );
+
+  ngOnInit(): void {
+    // Carga única compartida por Accounts y User Control.
+    this.accountsService.load();
+  }
 
   closeMenu(drawer: MatDrawer): void {
     if (this.isMobile()) {

@@ -44,13 +44,19 @@ export const MOCK_HAIR_COLORS = ['Black', 'Brown', 'Blonde', 'Red', 'Auburn', 'O
 export const MOCK_GENDERS: { value: Profile['gender']; label: string }[] = [
   { value: 'FEMALE', label: 'Female' },
   { value: 'MALE', label: 'Male' },
+  { value: 'NON_BINARY', label: 'Non-binary' },
   { value: 'OTHER', label: 'Other' },
 ];
 
 export const MOCK_ORIENTATIONS: { value: Profile['orientation']; label: string }[] = [
   { value: 'HETEROSEXUAL', label: 'Heterosexual' },
+  { value: 'HOMOSEXUAL', label: 'Homosexual' },
   { value: 'BISEXUAL', label: 'Bisexual' },
-  { value: 'GAY', label: 'Gay' },
+  { value: 'ASEXUAL', label: 'Asexual' },
+  { value: 'PANSEXUAL', label: 'Pansexual' },
+  { value: 'QUEER', label: 'Queer' },
+  { value: 'QUESTIONING', label: 'Questioning' },
+  { value: 'OTHER', label: 'Other' },
 ];
 
 const ACCOUNT_ID = 'acc-1';

@@ -2,8 +2,8 @@
   <div class="slider-group">
     <span class="step-title">Height: {{ formatHeight(heightValue()) }}</span>
     <div class="slider-container-wide">
-      <mat-slider min="1.0" max="2.2" step="0.1">
-        <input matSliderThumb formControlName="height" (valueChange)="onHeightChange($event)" />
+      <mat-slider min="140" max="220" step="1">
+        <input matSliderThumb formControlName="heightCm" (valueChange)="onHeightChange($event)" />
       </mat-slider>
     </div>
   </div>
@@ -20,9 +20,9 @@
   <div class="toggle-group">
     <span class="step-title">Orientation</span>
     <mat-button-toggle-group formControlName="orientation" class="custom-toggle-group">
-      <mat-button-toggle value="heterosexual">Heterosexual</mat-button-toggle>
-      <mat-button-toggle value="bisexual">Bisexual</mat-button-toggle>
-      <mat-button-toggle value="gay">Gay</mat-button-toggle>
+      <mat-button-toggle value="HETEROSEXUAL">Heterosexual</mat-button-toggle>
+      <mat-button-toggle value="BISEXUAL">Bisexual</mat-button-toggle>
+      <mat-button-toggle value="HOMOSEXUAL">Gay</mat-button-toggle>
     </mat-button-toggle-group>
   </div>
 

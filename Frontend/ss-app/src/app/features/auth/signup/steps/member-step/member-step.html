@@ -37,8 +37,8 @@
     <mat-form-field appearance="outline" class="field">
       <mat-label>How do you identify?</mat-label>
       <mat-select formControlName="identity">
-        @for (gender of genders; track gender) {
-          <mat-option [value]="gender">{{ gender }}</mat-option>
+        @for (gender of genders; track gender.value) {
+          <mat-option [value]="gender.value">{{ gender.label }}</mat-option>
         }
       </mat-select>
 

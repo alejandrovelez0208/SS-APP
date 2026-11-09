@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
@@ -13,7 +14,7 @@ import { RoleBadge } from '../../components/role-badge/role-badge';
 import {
   AccountRole,
   AccountStatus,
-  AccountSummary,
+  DirectoryRow,
   canChangeAccountStatus,
 } from '../../models/admin-account.model';
 import { AdminAccountsStateService } from '../../data-access/admin-accounts.state.service';
@@ -22,6 +23,7 @@ import { AdminAccountsStateService } from '../../data-access/admin-accounts.stat
   selector: 'app-admin-user-control',
   imports: [
     AccountStatusChip,
+    DatePipe,
     MatButtonModule,
     MatChipsModule,
     MatFormFieldModule,
@@ -44,7 +46,7 @@ export class UserControl {
   private readonly notificationService = inject(NotificationService);
 
   readonly pageSize = 5;
-  readonly displayedColumns = ['email', 'role', 'status', 'action'];
+  readonly displayedColumns = ['email', 'role', 'lastLogin', 'status', 'action'];
   readonly search = signal('');
   readonly status = signal<AccountStatus | 'ALL'>('ALL');
   readonly role = signal<AccountRole | 'ALL'>('ALL');
@@ -52,6 +54,8 @@ export class UserControl {
   readonly statusOptions: Array<AccountStatus | 'ALL'> = ['ALL', 'ACTIVE', 'INACTIVE'];
   readonly roleOptions: Array<AccountRole | 'ALL'> = ['ALL', 'ADMIN', 'USERS'];
   readonly canChangeStatus = canChangeAccountStatus;
+  readonly loading = this.accountsService.loading;
+  readonly error = this.accountsService.error;
 
   readonly accounts = computed(() =>
     this.accountsService.searchAccounts({
@@ -92,7 +96,7 @@ export class UserControl {
     this.pageIndex.set(0);
   }
 
-  changeStatus(account: AccountSummary): void {
+  changeStatus(account: DirectoryRow): void {
     if (!this.canChangeStatus(account)) return;
 
     if (account.status === 'ACTIVE') {
@@ -115,10 +119,21 @@ export class UserControl {
     this.updateAccountStatus(account, 'ACTIVE');
   }
 
-  private updateAccountStatus(account: AccountSummary, status: AccountStatus): void {
-    this.accountsService.changeStatus(account.id, status);
-    this.notificationService.success(
-      status === 'ACTIVE' ? 'Account activated.' : 'Account deactivated.',
-    );
+  retry(): void {
+    this.accountsService.load(true);
+  }
+
+  private updateAccountStatus(account: DirectoryRow, status: AccountStatus): void {
+    this.accountsService.changeStatus(account.id, status).subscribe({
+      next: () => {
+        this.notificationService.success(
+          status === 'ACTIVE' ? 'Account activated.' : 'Account deactivated.',
+        );
+      },
+      error: (error: unknown) => {
+        console.error('Error updating account status', error);
+        this.notificationService.error('Could not update the account status.');
+      },
+    });
   }
 }

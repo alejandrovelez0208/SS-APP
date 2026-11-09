@@ -16,9 +16,17 @@ export enum VerificationStatus {
   REJECTED = 'REJECTED',
 }
 
-export type Gender = 'FEMALE' | 'MALE' | 'OTHER';
+export type Gender = 'MALE' | 'FEMALE' | 'NON_BINARY' | 'OTHER';
 
-export type Orientation = 'HETEROSEXUAL' | 'BISEXUAL' | 'GAY';
+export type Orientation =
+  | 'HETEROSEXUAL'
+  | 'HOMOSEXUAL'
+  | 'BISEXUAL'
+  | 'ASEXUAL'
+  | 'PANSEXUAL'
+  | 'QUEER'
+  | 'QUESTIONING'
+  | 'OTHER';
 
 /**
  * Scenario usado solo por los datos mock. Desaparece cuando exista backend.

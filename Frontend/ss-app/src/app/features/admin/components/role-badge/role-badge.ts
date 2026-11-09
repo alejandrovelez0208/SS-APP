@@ -10,7 +10,7 @@ import { AccountRole } from '../../models/admin-account.model';
       <mat-icon aria-hidden="true">
         {{ role() === 'ADMIN' ? 'admin_panel_settings' : 'person' }}
       </mat-icon>
-      {{ role() }}
+      {{ role() === 'ADMIN' ? 'Admin' : 'User' }}
     </span>
   `,
   styleUrl: './role-badge.css',

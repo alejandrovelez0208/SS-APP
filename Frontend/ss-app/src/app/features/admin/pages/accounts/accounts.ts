@@ -36,6 +36,8 @@ export class Accounts {
   readonly status = signal<AccountStatus | 'ALL'>('ALL');
   readonly statusOptions: Array<AccountStatus | 'ALL'> = ['ALL', 'ACTIVE', 'INACTIVE'];
   readonly pageIndex = signal(0);
+  readonly loading = this.accountsService.loading;
+  readonly error = this.accountsService.error;
 
   readonly filteredAccounts = computed(() =>
     this.accountsService.searchAccounts({
@@ -72,5 +74,20 @@ export class Accounts {
 
   initial(username: string): string {
     return username.charAt(0).toUpperCase();
+  }
+
+  accountTypeLabel(accountType: string | null): string {
+    switch (accountType) {
+      case 'INDEPENDENT':
+        return 'Independent';
+      case 'AGENCY':
+        return 'Agency';
+      default:
+        return '—';
+    }
+  }
+
+  retry(): void {
+    this.accountsService.load(true);
   }
 }

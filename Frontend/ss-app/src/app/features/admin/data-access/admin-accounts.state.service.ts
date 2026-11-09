@@ -1,18 +1,33 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
+import { Observable, map, tap, throwError } from 'rxjs';
 import {
-  AccountDetail,
   AccountFilters,
   AccountStatus,
-  AccountSummary,
+  DirectoryRow,
+  UserDetailDto,
   canChangeAccountStatus,
 } from '../models/admin-account.model';
-import { ADMIN_ACCOUNTS_MOCK } from './admin-accounts.mock';
+import { AdminDirectoryApiService } from './admin-directory-api-service';
+import { toDirectoryRow } from './admin-directory.mapper';
 
+/**
+ * Estado compartido del directorio de usuarios.
+ *
+ * Accounts y User Control consumen la misma instancia (provista en el shell),
+ * por lo que se realiza una sola carga y ambos ven los mismos datos.
+ */
 @Injectable()
 export class AdminAccountsStateService {
-  private readonly accountsState = signal<AccountDetail[]>(ADMIN_ACCOUNTS_MOCK);
+  private readonly api = inject(AdminDirectoryApiService);
 
-  readonly accounts = this.accountsState.asReadonly();
+  private readonly rowsState = signal<DirectoryRow[]>([]);
+  private readonly loadingState = signal(false);
+  private readonly errorState = signal<string | null>(null);
+  private loaded = false;
+
+  readonly accounts = this.rowsState.asReadonly();
+  readonly loading = this.loadingState.asReadonly();
+  readonly error = this.errorState.asReadonly();
 
   readonly overview = computed(() => ({
     total: this.accounts().length,
@@ -20,7 +35,28 @@ export class AdminAccountsStateService {
     inactive: this.accounts().filter((account) => account.status === 'INACTIVE').length,
   }));
 
-  searchAccounts(filters: AccountFilters): AccountSummary[] {
+  load(force = false): void {
+    if (this.loaded && !force) {
+      return;
+    }
+
+    this.loadingState.set(true);
+    this.errorState.set(null);
+
+    this.api.getAllUsers().subscribe({
+      next: (users) => {
+        this.rowsState.set(users.map(toDirectoryRow));
+        this.loaded = true;
+      },
+      error: (error: unknown) => {
+        console.error('Error loading directory users', error);
+        this.errorState.set('Could not load users. Please try again.');
+      },
+      complete: () => this.loadingState.set(false),
+    });
+  }
+
+  searchAccounts(filters: AccountFilters): DirectoryRow[] {
     const search = filters.search.trim().toLowerCase();
 
     return this.accounts()
@@ -29,39 +65,32 @@ export class AdminAccountsStateService {
       .filter(
         (account) =>
           !search ||
-          account.username.toLowerCase().includes(search) ||
+          account.userName.toLowerCase().includes(search) ||
           account.email.toLowerCase().includes(search),
-      )
-      .map((account) => ({
-        id: account.id,
-        username: account.username,
-        email: account.email,
-        role: account.role,
-        status: account.status,
-        profileType: account.profileType,
-      }));
+      );
   }
 
-  getAccount(id: string): AccountDetail | undefined {
+  getAccount(id: string): DirectoryRow | undefined {
     return this.accounts().find((account) => account.id === id);
   }
 
-  changeStatus(id: string, status: AccountStatus): AccountDetail {
+  getUserDetail(id: string): Observable<UserDetailDto> {
+    return this.api.getUserById(id);
+  }
+
+  changeStatus(id: string, status: AccountStatus): Observable<DirectoryRow> {
     const account = this.getAccount(id);
-
-    if (!account) {
-      throw new Error('Account not found.');
+    if (account && !canChangeAccountStatus(account)) {
+      return throwError(() => new Error("Admin accounts can't be deactivated."));
     }
 
-    if (!canChangeAccountStatus(account)) {
-      throw new Error("Admin accounts can't be deactivated.");
-    }
-
-    const updatedAccount = { ...account, status };
-    this.accountsState.update((accounts) =>
-      accounts.map((item) => (item.id === id ? updatedAccount : item)),
+    return this.api.updateStatus(id, status === 'ACTIVE').pipe(
+      map(toDirectoryRow),
+      tap((updated) => {
+        this.rowsState.update((accounts) =>
+          accounts.map((account) => (account.id === updated.id ? updated : account)),
+        );
+      }),
     );
-
-    return updatedAccount;
   }
 }
