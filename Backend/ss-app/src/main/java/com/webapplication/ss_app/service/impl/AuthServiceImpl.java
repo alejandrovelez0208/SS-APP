@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.webapplication.ss_app.dtos.enums.Role;
 import com.webapplication.ss_app.dtos.request.UserRequest;
@@ -73,6 +74,7 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
+	@Transactional
 	public LoginResponse login(String email, String password) {
 		User user = userRepository.findByEmail(email).filter(u -> passwordEncoder.matches(password, u.getPassword()))
 				.orElseThrow(() -> new BadCredentialsException("Invalid email or password"));
@@ -87,6 +89,9 @@ public class AuthServiceImpl implements AuthService {
 //			throw new EmailNotVerifiedException(
 //					"This verify your email address before loggin in. Check your inbox for the verification link");
 //		}
+
+		user.setLastLoginAt(Instant.now());
+		userRepository.save(user);
 
 		final String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
 

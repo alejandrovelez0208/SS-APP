@@ -1,6 +1,8 @@
 package com.webapplication.ss_app.entity;
 
+import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -65,9 +67,31 @@ public class Profile {
 	@Column(length = 20)
 	private Orientation orientation;
 
+	/** País de origen de la persona. */
 	private String country;
 
 	private String city;
+
+	@Column(name = "phone_country_code", length = 10)
+	private String phoneCountryCode;
+
+	@Column(name = "available_all_day", nullable = false)
+	private boolean availableAllDay = false;
+
+	@Column(name = "schedule_from")
+	private LocalTime scheduleFrom;
+
+	@Column(name = "schedule_to")
+	private LocalTime scheduleTo;
+
+	@Column(length = 255)
+	private String website;
+
+	@Column(name = "basic_rate", precision = 12, scale = 2)
+	private BigDecimal basicRate;
+
+	@Column(length = 3, nullable = false)
+	private String currency = "COP";
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "profile_services", joinColumns = @JoinColumn(name = "profile_id"), inverseJoinColumns = @JoinColumn(name = "catalog_id"))
@@ -76,6 +100,14 @@ public class Profile {
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "profile_departures", joinColumns = @JoinColumn(name = "profile_id"), inverseJoinColumns = @JoinColumn(name = "catalog_id"))
 	private Set<Catalog> departures = new HashSet<>();
+
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "profile_channels", joinColumns = @JoinColumn(name = "profile_id"), inverseJoinColumns = @JoinColumn(name = "catalog_id"))
+	private Set<Catalog> channels = new HashSet<>();
+
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "profile_modalities", joinColumns = @JoinColumn(name = "profile_id"), inverseJoinColumns = @JoinColumn(name = "catalog_id"))
+	private Set<Catalog> modalities = new HashSet<>();
 
 	@OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
 	@OrderBy("sortOrder ASC")

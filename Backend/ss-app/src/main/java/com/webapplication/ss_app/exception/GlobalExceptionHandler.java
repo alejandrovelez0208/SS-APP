@@ -68,4 +68,10 @@ public class GlobalExceptionHandler {
 		return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
 	}
 
+	@ExceptionHandler(BusinessRuleException.class)
+	public ResponseEntity<Map<String, Object>> handleBusinessRule(BusinessRuleException ex) {
+		log.warn("BusinessRuleException: {}", ex.getMessage());
+		return buildResponse(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
+	}
+
 }
