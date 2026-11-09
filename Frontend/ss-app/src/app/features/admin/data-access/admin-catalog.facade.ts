@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { resolveCatalogType } from '../constants/catalog-type-options';
-import { Catalog, CatalogFormValue } from '@shared/models/catalog.model';
+import { Catalog, CatalogFormValue, MessageResponse } from '@shared/models/catalog.model';
 import { CatalogApiService } from '@shared/services/catalogs/catalog-api.service';
 
 /**
@@ -26,5 +26,9 @@ export class AdminCatalogFacade {
 
   updateStatus(id: number, active: boolean): Observable<Catalog> {
     return this.catalogApi.updateStatus(id, active);
+  }
+
+  deleteItem(id: number): Observable<MessageResponse> {
+    return this.catalogApi.deleteItem(id);
   }
 }

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { Catalog, CatalogType, CreateCatalogRequest } from '@shared/models/catalog.model';
+import { Catalog, CatalogType, CreateCatalogRequest, MessageResponse } from '@shared/models/catalog.model';
 
 /**
  * Única puerta de entrada HTTP para catálogos.
@@ -28,5 +28,9 @@ export class CatalogApiService {
 
   updateStatus(id: number, active: boolean): Observable<Catalog> {
     return this.http.patch<Catalog>(`${this.apiUrl}/${id}/status`, { active });
+  }
+
+  deleteItem(id: number): Observable<MessageResponse> {
+    return this.http.delete<MessageResponse>(`${this.apiUrl}/${id}/delete`);
   }
 }

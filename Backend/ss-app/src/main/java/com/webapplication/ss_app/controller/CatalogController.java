@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import com.webapplication.ss_app.dtos.enums.CatalogType;
 import com.webapplication.ss_app.dtos.request.CatalogCreateRequest;
 import com.webapplication.ss_app.dtos.request.CatalogStatusRequest;
 import com.webapplication.ss_app.dtos.response.CatalogResponse;
+import com.webapplication.ss_app.dtos.response.MessageResponse;
 import com.webapplication.ss_app.service.interfaz.CatalogService;
 
 import jakarta.validation.Valid;
@@ -46,5 +48,10 @@ public class CatalogController {
 	public ResponseEntity<CatalogResponse> updateStatus(@PathVariable Long id,
 			@Valid @RequestBody CatalogStatusRequest request) {
 		return ResponseEntity.ok(catalogService.updateStatus(id, request.getActive()));
+	}
+
+	@DeleteMapping("/{id}/delete")
+	public ResponseEntity<MessageResponse> deleteItem(@PathVariable Long id) {
+		return ResponseEntity.ok(catalogService.deleteItem(id));
 	}
 }
