@@ -13,6 +13,10 @@
       (next)="openProfileForm()"
     />
   } @else {
-    <app-escort-profile-step [escortProfileform]="escortProfileForm" (backToProfileType)="back()" />
+    <app-escort-profile-step
+      [escortProfileform]="escortProfileForm"
+      [accountType]="escortform.get('accountType')?.value ?? 'escort'"
+      (backToProfileType)="back()"
+    />
   }
 </div>

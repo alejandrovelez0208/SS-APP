@@ -8,11 +8,14 @@ import {
   signal,
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { EMPTY, map, Observable, startWith } from 'rxjs';
+import { NotificationService } from '@shared/services/notification/notification.service';
 import { StepActions } from '@shared/components/step-actions/step-actions';
 import { CatalogItem, CatalogType } from '@shared/models/catalog.model';
 import { City, InternationalCodePhone, Nationality } from '@shared/models/escort.model';
 import { SignupCatalogStateService } from '@features/auth/signup/data-access/signup-catalog-state.service';
+import { SignupAccountService } from '@features/auth/signup/data-access/signup-account.service';
 import { StaticDataService } from '@shared/data/static-data.service';
 import { CredentialsStep } from '../credentials-step/credentials-step';
 import { PhotoPreview } from './models/photo-preview';
@@ -44,10 +47,14 @@ import { ServicesStep } from './sections/services/services-step';
 })
 export class EscortProfileStep {
   @Input() escortProfileform!: FormGroup;
+  @Input() accountType = 'escort';
   @Output() backToProfileType = new EventEmitter<void>();
 
   private readonly dataService = inject(StaticDataService);
   private readonly catalogOptions = inject(SignupCatalogStateService);
+  private readonly signupAccount = inject(SignupAccountService);
+  private readonly notification = inject(NotificationService);
+  private readonly router = inject(Router);
   private readonly cdr = inject(ChangeDetectorRef);
 
   nationalities: Nationality[] = [];
@@ -59,6 +66,7 @@ export class EscortProfileStep {
   departures: CatalogItem[] = [];
 
   currentStep = 0;
+  readonly registering = signal(false);
 
   readonly photos = signal<PhotoPreview[]>([]);
   readonly minPhotos = 3;
@@ -69,8 +77,73 @@ export class EscortProfileStep {
   }
 
   continue(): void {
+    // Paso 2 = email + password: se crea la cuenta y el perfil borrador.
+    if (this.currentStep === 1) {
+      this.registerAccount();
+      return;
+    }
+
+    // Pasos de perfil: guardado silencioso antes de avanzar.
+    if (this.currentStep >= 2 && this.currentStep <= 6) {
+      this.saveProgress();
+    }
+
+    // Último paso (fotos): completar perfil y entrar al panel.
+    if (this.currentStep === 7) {
+      this.completeRegistration();
+      return;
+    }
+
+    this.advance();
+  }
+
+  private advance(): void {
     this.currentStep++;
     this.loadFields();
+    this.cdr.detectChanges();
+  }
+
+  private registerAccount(): void {
+    if (this.registering()) {
+      return;
+    }
+
+    this.registering.set(true);
+    this.signupAccount
+      .register(this.escortProfileform, this.accountType)
+      .subscribe({
+        next: () => {
+          this.registering.set(false);
+          this.advance();
+        },
+        error: (error: unknown) => {
+          this.registering.set(false);
+          console.error('Error creating account', error);
+          this.notification.error('Could not create your account. Please try again.');
+        },
+      });
+  }
+
+  private saveProgress(): void {
+    this.signupAccount.saveProgress(this.escortProfileform).subscribe({
+      error: (error: unknown) => {
+        console.error('Error saving profile progress', error);
+        this.notification.error('Could not save your progress. Please try again.');
+      },
+    });
+  }
+
+  private completeRegistration(): void {
+    this.signupAccount.complete(this.escortProfileform).subscribe({
+      next: () => {
+        this.notification.success('Registration complete.');
+        void this.router.navigate(['/panel/overview']);
+      },
+      error: (error: unknown) => {
+        console.error('Error completing registration', error);
+        this.notification.error('Could not complete your profile. Please review your data.');
+      },
+    });
   }
 
   back(): void {

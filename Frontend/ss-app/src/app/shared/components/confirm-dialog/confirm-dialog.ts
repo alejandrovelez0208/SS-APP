@@ -11,6 +11,7 @@ export interface ConfirmDialogData {
   confirmText?: string;
   cancelText?: string;
   type: ConfirmDialogType;
+  notice?: boolean;
 }
 
 @Component({

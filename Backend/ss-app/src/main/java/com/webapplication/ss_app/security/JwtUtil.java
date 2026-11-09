@@ -17,7 +17,8 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtUtil {
 
-	private static final long JWT_TOKEN_VALIDITY = 30 * 24 * 60 * 60 * 1000L;
+	@Value("${jwt.access-expiration-minutes:15}")
+	private long accessExpirationMinutes;
 
 	// TODO: Change the default secret key to a more secure one and store it in a
 	// secure location (e.g., environment variable or external configuration file).
@@ -61,8 +62,9 @@ public class JwtUtil {
 	}
 
 	private String doGenerateToken(Map<String, Object> claims, String username) {
+		long validityMs = accessExpirationMinutes * 60 * 1000L;
 		return Jwts.builder().claims(claims).subject(username).issuedAt(new Date(System.currentTimeMillis()))
-				.expiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY)).signWith(getSecretKey())
+				.expiration(new Date(System.currentTimeMillis() + validityMs)).signWith(getSecretKey())
 				.compact();
 	}
 

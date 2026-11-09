@@ -21,9 +21,11 @@
   <p class="dialog-message">{{ data.message }}</p>
 
   <div class="dialog-actions">
+    @if (!data.notice) {
     <button type="button" mat-button class="cancel-btn" (click)="onCancel()">
       {{ data.cancelText }}
     </button>
+    }
     <button
       type="button"
       mat-raised-button

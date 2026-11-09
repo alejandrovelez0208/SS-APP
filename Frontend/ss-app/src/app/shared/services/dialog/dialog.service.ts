@@ -29,4 +29,21 @@ export class DialogService {
     });
     return dialogRef.afterClosed();
   }
+
+  /**
+   * Aviso informativo con un único botón (sin acción de cancelar).
+   */
+  openNotice(title: string, message: string, confirmText: string = 'Got it'): Observable<boolean> {
+    const dialogRef = this.dialog.open(ConfirmDialog, {
+      ...DIALOG_CONFIG.CONFIRM,
+      data: {
+        title,
+        message,
+        confirmText,
+        type: 'info',
+        notice: true,
+      },
+    });
+    return dialogRef.afterClosed();
+  }
 }

@@ -47,7 +47,7 @@ public class SecurityConfig {
 	// ---- Públicos: autenticación sin sesión ----
 	private static final String[] PUBLIC_AUTH_ENDPOINTS = { "/api/auth/login", "/api/auth/signup",
 			"/api/auth/validate-email*", "/api/auth/verify-email", "/api/auth/resend-verification",
-			"/api/auth/forgot-password", "/api/auth/reset-password" };
+			"/api/auth/forgot-password", "/api/auth/reset-password", "/api/auth/refresh", "/api/auth/logout" };
 
 	// ---- Públicos: consultas genéricas de lectura ----
 	private static final String[] PUBLIC_READ_ENDPOINTS = { "/api/catalogs", "/api/catalogs/**", "/api/images/**" };

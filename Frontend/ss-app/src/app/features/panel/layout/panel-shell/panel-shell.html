@@ -47,6 +47,29 @@
     </header>
 
     <main class="panel-content">
+      @if (needsEmailVerification() || needsProfile()) {
+      <section class="account-notice" aria-live="polite">
+        <mat-icon>info</mat-icon>
+        <div class="account-notice-text">
+          @if (needsEmailVerification()) {
+          <strong>Verify your email to publish your profile.</strong>
+          <span>We sent a verification link to {{ user()?.email }}.</span>
+          } @else {
+          <strong>Your profile is incomplete.</strong>
+          <span>Complete it so it can appear in the directory.</span>
+          }
+        </div>
+        @if (needsEmailVerification()) {
+        <button mat-stroked-button type="button" class="notice-action" (click)="resendVerification()">
+          Resend email
+        </button>
+        }
+        <a mat-flat-button class="notice-action notice-primary" routerLink="/panel/profiles">
+          {{ needsProfile() ? 'Complete profile' : 'Review profile' }}
+        </a>
+      </section>
+      }
+
       <router-outlet />
     </main>
   </mat-sidenav-content>

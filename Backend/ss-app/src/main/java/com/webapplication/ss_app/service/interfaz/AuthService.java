@@ -9,7 +9,7 @@ import jakarta.validation.Valid;
 
 public interface AuthService {
 
-	MessageResponse signup(@Valid UserRequest userRequest);
+	LoginResponse signup(@Valid UserRequest userRequest);
 
 	LoginResponse login(String email, String password);
 
@@ -26,4 +26,8 @@ public interface AuthService {
 	MessageResponse changePassword(String email, String currentPassword, String newPassword);
 
 	LoginResponse currentUser(String email);
+
+	LoginResponse refresh(String refreshToken);
+
+	MessageResponse logout(String refreshToken);
 }

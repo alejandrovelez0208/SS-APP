@@ -52,7 +52,7 @@ public class Profile {
 	private String profileName;
 
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false, length = 20)
+	@Column(length = 20)
 	private Gender gender;
 
 	private Integer age;
@@ -67,7 +67,6 @@ public class Profile {
 	@Column(length = 20)
 	private Orientation orientation;
 
-	/** País de origen de la persona. */
 	private String country;
 
 	private String city;
@@ -129,6 +128,9 @@ public class Profile {
 
 	@Column(length = 30)
 	private String phoneNumber;
+
+	@Column(name = "completed_at")
+	private Instant completedAt;
 
 	@PrePersist
 	void onCreate() {
