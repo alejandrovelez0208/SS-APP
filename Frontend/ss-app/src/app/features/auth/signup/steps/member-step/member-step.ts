@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { StepActions } from '@shared/components/step-actions/step-actions';
-import { GENDER } from '../../constants/gender';
+import { GENDER_OPTIONS } from '../../constants/gender';
 import { Preference } from '../../constants/preference';
 import { CredentialsStep } from '../credentials-step/credentials-step';
 
@@ -32,7 +32,7 @@ export class MemberStep {
   @Output() backToProfileType = new EventEmitter<void>();
 
   currentStep = 0;
-  readonly genders = Object.values(GENDER);
+  readonly genders = GENDER_OPTIONS;
   readonly preferences = Object.values(Preference);
   readonly previewUrl = signal<string | null>(null);
 

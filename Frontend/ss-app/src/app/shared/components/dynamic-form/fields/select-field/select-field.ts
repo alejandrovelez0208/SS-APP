@@ -18,7 +18,6 @@ import { MatOption, MatSelect } from '@angular/material/select';
     MatError,
   ],
   templateUrl: './select-field.html',
-  styleUrl: './select-field.css',
 })
 export class SelectField {
   config = input.required<SelectFieldConfig>();

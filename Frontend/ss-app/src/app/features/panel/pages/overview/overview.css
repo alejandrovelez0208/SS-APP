@@ -1,0 +1,137 @@
+.overview-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.profile-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.summary-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  color: var(--gray);
+  font: 600 11px 'Inter', sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.summary-head h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.summary-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  color: var(--gray);
+  font-size: 13px;
+}
+
+.summary-meta mat-icon {
+  color: var(--gold);
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.summary-meta .dot {
+  margin: 0 2px;
+}
+
+.summary-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.agency-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+  padding: 16px 20px;
+  border: 1px solid rgba(224, 194, 127, 0.3);
+  border-radius: 12px;
+  background: rgba(224, 194, 127, 0.06);
+}
+
+.agency-banner > mat-icon {
+  color: var(--gold);
+}
+
+.agency-banner div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.agency-banner strong {
+  font: 600 14px 'Inter', sans-serif;
+}
+
+.agency-banner span {
+  color: var(--gray);
+  font-size: 12px;
+}
+
+.agency-banner a {
+  margin-left: auto;
+}
+
+.card-icon {
+  margin-right: 6px;
+  color: var(--gold);
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+}
+
+.card-title {
+  display: inline-flex;
+  align-items: center;
+}
+
+.status-icon {
+  color: var(--gray);
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.status-icon.done {
+  color: #55d9a9;
+}
+
+@media (max-width: 860px) {
+  .overview-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .agency-banner {
+    flex-wrap: wrap;
+  }
+
+  .agency-banner a {
+    margin-left: 0;
+  }
+}

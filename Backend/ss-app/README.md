@@ -1,4 +1,5 @@
 
+**09-11-2026**: Changed are being implemented
 **09-11-2026**: Delete botton in catalogs is implemented.
 **04-11-2026**: Auth controller and services are being implemented.
 **27-10-2026**: Email services and repositories is implemented.

@@ -1,0 +1,315 @@
+@if (profile(); as current) {
+<header class="page-header">
+  <div class="detail-title">
+    <a mat-icon-button routerLink="/panel/profiles" aria-label="Back to profiles">
+      <mat-icon>arrow_back</mat-icon>
+    </a>
+    <div>
+      <h1>{{ current.profileName }}</h1>
+      <p class="page-description">
+        {{ isAgency() ? 'Agency profile' : 'Your public profile' }} · Updated
+        {{ current.updatedAt | slice: 0:10 }}
+      </p>
+    </div>
+  </div>
+
+  <div class="detail-actions">
+    <app-profile-status-chip [status]="current.status" />
+    <button mat-stroked-button class="btn-ghost" type="button" (click)="togglePause()">
+      <mat-icon>{{ current.status === profileStatus.PAUSED ? 'play_arrow' : 'pause' }}</mat-icon>
+      {{ current.status === profileStatus.PAUSED ? 'Resume' : 'Pause' }}
+    </button>
+    <button mat-flat-button class="btn-primary" type="button" [disabled]="saving()" (click)="save()">
+      <mat-icon>save</mat-icon>
+      {{ saving() ? 'Saving…' : 'Save changes' }}
+    </button>
+  </div>
+</header>
+
+<section class="verification-note">
+  <mat-icon>verified_user</mat-icon>
+  <div>
+    <strong>Identity verification — Coming soon</strong>
+    <span>
+      Age verification is handled once at account level, never per profile.
+      Current status: {{ current.verificationStatus }}.
+    </span>
+  </div>
+</section>
+
+<mat-tab-group class="profile-tabs" [selectedIndex]="activeTab()" (selectedIndexChange)="activeTab.set($event)"
+  animationDuration="150ms">
+  <!-- BASICS -->
+  <mat-tab label="Basics">
+    <div class="tab-body">
+      <div class="form-grid">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Profile name</mat-label>
+          <input matInput [formControl]="form.controls.profileName" />
+          <mat-icon matPrefix>person</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Gender</mat-label>
+          <mat-select [formControl]="form.controls.gender">
+            @for (gender of genders; track gender.value) {
+            <mat-option [value]="gender.value">{{ gender.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Hair color</mat-label>
+          <mat-select [formControl]="form.controls.hairColor">
+            @for (color of hairColors; track color) {
+            <mat-option [value]="color">{{ color }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Orientation</mat-label>
+          <mat-select [formControl]="form.controls.orientation">
+            @for (orientation of orientations; track orientation.value) {
+            <mat-option [value]="orientation.value">{{ orientation.label }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Country</mat-label>
+          <input matInput [formControl]="form.controls.country" />
+          <mat-icon matPrefix>public</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Base city</mat-label>
+          <input matInput [formControl]="form.controls.city" />
+          <mat-icon matPrefix>location_city</mat-icon>
+          <mat-hint>We currently operate exclusively in Medellín.</mat-hint>
+        </mat-form-field>
+      </div>
+
+      <div class="slider-group">
+        <span class="slider-label">Age: {{ form.controls.age.value }}</span>
+        <mat-slider min="18" max="99" step="1">
+          <input matSliderThumb [formControl]="form.controls.age" />
+        </mat-slider>
+      </div>
+
+      <div class="form-grid">
+        <div class="slider-group">
+          <span class="slider-label">Height: {{ form.controls.heightCm.value }} cm</span>
+          <mat-slider min="140" max="220" step="1">
+            <input matSliderThumb [formControl]="form.controls.heightCm" />
+          </mat-slider>
+        </div>
+
+        <div class="slider-group">
+          <span class="slider-label">Weight: {{ form.controls.weightKg.value }} kg</span>
+          <mat-slider min="40" max="150" step="1">
+            <input matSliderThumb [formControl]="form.controls.weightKg" />
+          </mat-slider>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+
+  <!-- ABOUT -->
+  <mat-tab label="About">
+    <div class="tab-body">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Headline</mat-label>
+        <input matInput [formControl]="form.controls.headline" maxlength="80" />
+        <mat-hint align="end">{{ form.controls.headline.value.length }}/80 · Recommended</mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Short description</mat-label>
+        <textarea matInput rows="3" [formControl]="form.controls.aboutShort" maxlength="280"></textarea>
+        <mat-hint align="end">{{ form.controls.aboutShort.value.length }}/280 · Recommended</mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>About me</mat-label>
+        <textarea matInput rows="6" [formControl]="form.controls.aboutLong" maxlength="1500"></textarea>
+        <mat-hint align="end">{{ form.controls.aboutLong.value.length }}/1500 · Recommended</mat-hint>
+      </mat-form-field>
+
+      <h3 class="section-title">Measurements (optional)</h3>
+      <div class="form-grid">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Bust (cm)</mat-label>
+          <input matInput type="number" [formControl]="form.controls.bustCm" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Waist (cm)</mat-label>
+          <input matInput type="number" [formControl]="form.controls.waistCm" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Hips (cm)</mat-label>
+          <input matInput type="number" [formControl]="form.controls.hipsCm" />
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-tab>
+
+  <!-- PHOTOS -->
+  <mat-tab label="Photos">
+    <div class="tab-body">
+      <div class="photos-head">
+        <div>
+          <p class="section-title">Gallery ({{ current.photos.length }}/10)</p>
+          <span class="field-hint">Any image format. At least 3 photos to publish.</span>
+        </div>
+        <label class="upload-btn">
+          <input type="file" accept="image/*" multiple hidden (change)="addPhoto($any($event.target).files)" />
+          <mat-icon>add_photo_alternate</mat-icon>
+          Add photos
+        </label>
+      </div>
+
+      @if (current.photos.length > 0) {
+      <div class="photo-grid">
+        @for (photo of current.photos; track photo.id) {
+        <figure class="photo-item" [class.cover]="photo.isCover">
+          @if (photo.url) {
+          <img [src]="photo.url" [alt]="'Photo ' + photo.sortOrder" />
+          } @else {
+          <div class="photo-placeholder"><mat-icon>image</mat-icon></div>
+          }
+          <div class="photo-actions">
+            @if (!photo.isCover) {
+            <button mat-icon-button type="button" aria-label="Set as cover" (click)="setCover(photo.id)">
+              <mat-icon>star_border</mat-icon>
+            </button>
+            }
+            <button mat-icon-button type="button" aria-label="Remove photo" (click)="removePhoto(photo.id)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+          @if (photo.isCover) {
+          <span class="cover-tag">Cover</span>
+          }
+        </figure>
+        }
+      </div>
+      } @else {
+      <div class="empty-state">
+        <mat-icon>photo_library</mat-icon>
+        <p>No photos yet.</p>
+      </div>
+      }
+    </div>
+  </mat-tab>
+
+  <!-- RATES -->
+  <mat-tab label="Rates">
+    <div class="tab-body">
+      <div class="slider-group">
+        <span class="slider-label">Basic rate (COP): {{ form.controls.basicRate.value | number }}</span>
+        <mat-slider min="50000" max="1000000" step="5000">
+          <input matSliderThumb [formControl]="form.controls.basicRate" />
+        </mat-slider>
+        <span class="field-hint">Single rate for now. Service/duration tiers come later.</span>
+      </div>
+    </div>
+  </mat-tab>
+
+  <!-- SERVICES -->
+  <mat-tab label="Services">
+    <div class="tab-body">
+      @for (group of servicesByGroup(); track group.group) {
+      <h3 class="section-title">{{ group.group }}</h3>
+      <div class="checkbox-grid">
+        @for (service of group.items; track service.id) {
+        <mat-checkbox [checked]="isServiceSelected(service.id)"
+          (change)="selectService(service.id, $event.checked)">
+          {{ service.label }}
+        </mat-checkbox>
+        }
+      </div>
+      }
+    </div>
+  </mat-tab>
+
+  <!-- SCHEDULE -->
+  <mat-tab label="Schedule">
+    <div class="tab-body">
+      <div class="schedule-toggle">
+        <span class="section-title">Available 24/7</span>
+        <mat-slide-toggle [formControl]="form.controls.availableAllDay" hideIcon />
+      </div>
+
+      @if (!availableAllDay) {
+      <div class="form-grid">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>From</mat-label>
+          <input matInput type="time" [formControl]="form.controls.scheduleFrom" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>To</mat-label>
+          <input matInput type="time" [formControl]="form.controls.scheduleTo" />
+        </mat-form-field>
+      </div>
+      } @else {
+      <p class="field-hint">Your profile shows you as available 24/7.</p>
+      }
+    </div>
+  </mat-tab>
+
+  <!-- DEPARTURES -->
+  <mat-tab label="Departures">
+    <div class="tab-body">
+      <p class="field-hint">Cities you are available to travel to. No dates needed.</p>
+      <div class="checkbox-grid">
+        @for (departure of departures; track departure.id) {
+        <mat-checkbox [checked]="isDepartureSelected(departure.city)"
+          (change)="selectDeparture(departure.city, $event.checked)">
+          {{ departure.city }}
+        </mat-checkbox>
+        }
+      </div>
+    </div>
+  </mat-tab>
+
+  <!-- CONTACT -->
+  <mat-tab label="Contact">
+    <div class="tab-body">
+      <div class="form-grid">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Country code</mat-label>
+          <input matInput [formControl]="form.controls.phoneCountryCode" />
+          <mat-icon matPrefix>public</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Phone number</mat-label>
+          <input matInput [formControl]="form.controls.phoneNumber" />
+          <mat-icon matPrefix>phone</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Website / URL</mat-label>
+        <input matInput [formControl]="form.controls.website" />
+        <mat-icon matPrefix>link</mat-icon>
+      </mat-form-field>
+
+      <h3 class="section-title">Contact channels</h3>
+      <div class="checkbox-grid">
+        @for (channel of channels; track channel.id) {
+        <mat-checkbox [checked]="isChannelSelected(channel.id)"
+          (change)="selectChannel(channel.id, $event.checked)">
+          {{ channel.label }}
+        </mat-checkbox>
+        }
+      </div>
+    </div>
+  </mat-tab>
+</mat-tab-group>
+} @else {
+<section class="data-panel empty-state">
+  <mat-icon>hourglass_empty</mat-icon>
+  <p>Loading profile…</p>
+</section>
+}

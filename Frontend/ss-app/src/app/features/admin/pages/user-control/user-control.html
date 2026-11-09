@@ -47,7 +47,18 @@
   }
 </mat-chip-listbox>
 
-@if (accounts().length > 0) {
+@if (loading()) {
+<section class="data-panel empty-state">
+  <mat-icon>hourglass_empty</mat-icon>
+  <p>Loading users…</p>
+</section>
+} @else if (error()) {
+<section class="data-panel empty-state">
+  <mat-icon>error_outline</mat-icon>
+  <p>{{ error() }}</p>
+  <button mat-stroked-button class="text-button" type="button" (click)="retry()">Retry</button>
+</section>
+} @else if (accounts().length > 0) {
   <section class="data-panel" aria-label="User access list">
     <table mat-table class="account-table" [dataSource]="visibleAccounts()">
       <ng-container matColumnDef="email">
@@ -58,6 +69,13 @@
       <ng-container matColumnDef="role">
         <th mat-header-cell *matHeaderCellDef>Role</th>
         <td mat-cell *matCellDef="let account"><app-role-badge [role]="account.role" /></td>
+      </ng-container>
+
+      <ng-container matColumnDef="lastLogin">
+        <th mat-header-cell *matHeaderCellDef>Last login</th>
+        <td mat-cell *matCellDef="let account">
+          {{ account.lastLoginAt ? (account.lastLoginAt | date: 'short') : 'Never' }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="status">
@@ -102,6 +120,9 @@
             <app-role-badge [role]="account.role" />
             <app-account-status-chip [status]="account.status" />
           </div>
+          <p class="account-card-login">
+            Last login: {{ account.lastLoginAt ? (account.lastLoginAt | date: 'short') : 'Never' }}
+          </p>
           <div class="account-card-actions">
             <button
               mat-stroked-button

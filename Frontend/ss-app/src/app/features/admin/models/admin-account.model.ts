@@ -1,57 +1,68 @@
-export type AccountRole = 'ADMIN' | 'USERS';
-export type AccountStatus = 'ACTIVE' | 'INACTIVE';
-export type ProfileType = 'ESCORT' | 'MEMBER';
+/**
+ * Roles tal como los expone la API (enum Role del backend).
+ */
+export type ApiRole = 'USER' | 'ADMIN';
 
-export interface UserAccount {
-  id: string;
-  username: string;
+/**
+ * Roles que usa la UI del panel (el backend no distingue "USERS").
+ */
+export type AccountRole = 'ADMIN' | 'USERS';
+
+export type AccountStatus = 'ACTIVE' | 'INACTIVE';
+
+export type ApiAccountStatus = 'ACTIVE' | 'SUSPENDED';
+
+export type AccountType = 'INDEPENDENT' | 'AGENCY';
+
+/**
+ * Fila que devuelve el directorio (GET /api/users/get-all).
+ */
+export interface DirectoryUserDto {
+  id: number;
   email: string;
-  role: AccountRole;
-  status: AccountStatus;
-  joinedAt: string;
+  emailVerified: boolean;
+  enabled: boolean;
+  lastLoginAt: string | null;
+  createdAt: string;
+  role: ApiRole;
+  userName: string | null;
+  accountType: AccountType | null;
+  accountStatus: ApiAccountStatus | null;
 }
 
-export interface EscortProfile {
-  companionName: string;
+export interface ProfileSummaryDto {
+  id: number;
+  profileName: string;
   gender: string;
-  age: number;
-  hairColor: string;
-  height: number;
-  weight: number;
-  orientation: string;
-  nationality: string;
-  baseCity: string;
-  phoneCode: string;
-  phone: string;
-  attendsTo: string[];
-  availableAllDay: boolean;
-  scheduleFrom: string;
-  scheduleTo: string;
-  communicationChannels: string[];
-  website: string;
-  serviceTypes: Array<{ category: string; services: string[] }>;
-  departures: string[];
-  basicRate: number;
+  age: number | null;
+  city: string | null;
+  country: string | null;
+  status: string;
+  verificationStatus: string;
+  phoneNumber: string | null;
   photosCount: number;
 }
 
-export interface MemberProfile {
-  identity: string;
-  lookingFor: string;
+/**
+ * Detalle que devuelve GET /api/users/{id}.
+ */
+export interface UserDetailDto extends DirectoryUserDto {
+  profiles: ProfileSummaryDto[];
 }
 
-export interface AccountDetail extends UserAccount {
-  profileType: ProfileType | null;
-  profile: EscortProfile | MemberProfile | null;
-}
-
-export interface AccountSummary {
+/**
+ * Modelo de vista que consumen las tablas del panel.
+ */
+export interface DirectoryRow {
   id: string;
-  username: string;
   email: string;
+  userName: string;
   role: AccountRole;
   status: AccountStatus;
-  profileType: ProfileType | null;
+  joinedAt: string;
+  lastLoginAt: string | null;
+  emailVerified: boolean;
+  accountType: AccountType | null;
 }
 
 export interface AccountFilters {
@@ -60,14 +71,6 @@ export interface AccountFilters {
   role: AccountRole | 'ALL';
 }
 
-export function isEscortProfile(profile: AccountDetail['profile']): profile is EscortProfile {
-  return profile !== null && 'companionName' in profile;
-}
-
-export function isMemberProfile(profile: AccountDetail['profile']): profile is MemberProfile {
-  return profile !== null && 'identity' in profile;
-}
-
-export function canChangeAccountStatus(account: Pick<UserAccount, 'role'>): boolean {
+export function canChangeAccountStatus(account: Pick<DirectoryRow, 'role'>): boolean {
   return account.role !== 'ADMIN';
 }

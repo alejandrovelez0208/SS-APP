@@ -13,8 +13,8 @@
     <mat-label>Gender</mat-label>
     <mat-icon matPrefix>{{ genderIconName }}</mat-icon>
     <mat-select formControlName="gender">
-      @for (gender of genders; track gender) {
-        <mat-option [value]="gender">{{ gender }}</mat-option>
+      @for (gender of genders; track gender.value) {
+        <mat-option [value]="gender.value">{{ gender.label }}</mat-option>
       }
     </mat-select>
 

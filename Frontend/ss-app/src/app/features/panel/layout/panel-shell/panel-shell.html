@@ -1,0 +1,53 @@
+<mat-sidenav-container class="panel-layout">
+  <mat-sidenav #drawer class="panel-sidebar" [mode]="isMobile() ? 'over' : 'side'" [opened]="!isMobile()">
+    <div class="sidebar-inner">
+      <div class="sidebar-brand">
+        <span>Panel</span>
+        <span class="account-badge">{{ accountTypeLabel() }}</span>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Panel navigation">
+        @for (item of navItems(); track item.route) {
+        <a [routerLink]="item.route" routerLinkActive="active" (click)="closeMenu(drawer)">
+          <mat-icon>{{ item.icon }}</mat-icon>
+          {{ item.label }}
+        </a>
+        }
+      </nav>
+
+      <div class="sidebar-footer">
+        @if (account(); as acc) {
+        <div class="sidebar-user">
+          <mat-icon>account_circle</mat-icon>
+          <div>
+            <strong>{{ acc.userName }}</strong>
+            <span>{{ acc.email }}</span>
+          </div>
+        </div>
+        }
+        <a routerLink="/" (click)="closeMenu(drawer)">
+          <mat-icon>arrow_back</mat-icon>
+          Back to App
+        </a>
+        <button type="button" (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          Sign out
+        </button>
+      </div>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="panel-workspace">
+    <header class="mobile-header">
+      <button mat-icon-button type="button" aria-label="Open menu" (click)="drawer.open()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span>Panel</span>
+      <span class="account-badge">{{ accountTypeLabel() }}</span>
+    </header>
+
+    <main class="panel-content">
+      <router-outlet />
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

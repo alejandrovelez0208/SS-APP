@@ -13,9 +13,11 @@ import com.webapplication.ss_app.dtos.request.CatalogCreateRequest;
 import com.webapplication.ss_app.dtos.response.CatalogResponse;
 import com.webapplication.ss_app.dtos.response.MessageResponse;
 import com.webapplication.ss_app.entity.Catalog;
+import com.webapplication.ss_app.exception.BusinessRuleException;
 import com.webapplication.ss_app.exception.CatalogAlreadyExistsException;
 import com.webapplication.ss_app.exception.ResourceNotFoundException;
 import com.webapplication.ss_app.repositories.interfaz.CatalogRepository;
+import com.webapplication.ss_app.repositories.interfaz.ProfileRepository;
 import com.webapplication.ss_app.service.interfaz.CatalogService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,8 @@ public class CatalogServiceImpl implements CatalogService {
 	private static final Sort DEFAULT_SORT = Sort.by("catalogType").and(Sort.by("name"));
 
 	private final CatalogRepository catalogRepository;
+
+	private final ProfileRepository profileRepository;
 
 	@Override
 	@Transactional
@@ -78,11 +82,24 @@ public class CatalogServiceImpl implements CatalogService {
 	}
 
 	@Override
+	@Transactional
 	public MessageResponse deleteItem(Long id) {
 		Catalog catalog = catalogRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Catalog item not found: " + id));
 
+		if (isCatalogInUse(id)) {
+			throw new BusinessRuleException(
+					"This catalog item is used by one or more profiles and cannot be deleted.");
+		}
+
 		catalogRepository.delete(catalog);
 		return new MessageResponse("Item is being deleted");
+	}
+
+	private boolean isCatalogInUse(Long catalogId) {
+		return profileRepository.existsByServices_Id(catalogId)
+				|| profileRepository.existsByDepartures_Id(catalogId)
+				|| profileRepository.existsByChannels_Id(catalogId)
+				|| profileRepository.existsByModalities_Id(catalogId);
 	}
 }

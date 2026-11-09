@@ -18,8 +18,3 @@ export interface City {
     name: string;
     id?: number | string;
 }
-export interface ServiceItem {
-    id: number;
-    code: number;
-    description: string;
-}

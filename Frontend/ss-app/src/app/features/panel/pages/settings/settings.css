@@ -1,0 +1,113 @@
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.settings-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 22px;
+}
+
+.card-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.card-hint {
+  margin: 0;
+  color: var(--gray);
+  font-size: 12px;
+}
+
+.settings-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 13px;
+}
+
+.verification-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 8px;
+  padding: 14px;
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.verification-note mat-icon {
+  color: var(--gold);
+}
+
+.verification-note div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.verification-note strong {
+  font: 600 13px 'Inter', sans-serif;
+}
+
+.verification-note span {
+  color: var(--gray);
+  font-size: 12px;
+}
+
+.danger-title {
+  margin-top: 12px;
+  color: #ff6b76;
+}
+
+.btn-danger {
+  align-self: flex-start;
+  --mat-button-outlined-label-text-color: #ff6b76;
+  --mat-button-outlined-outline-color: rgba(229, 9, 20, 0.65);
+
+  border-radius: 50px !important;
+  font: 600 13px 'Inter', sans-serif;
+}
+
+.plan-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 8px;
+  padding: 14px;
+  border: 1px solid rgba(224, 194, 127, 0.3);
+  border-radius: 10px;
+  background: rgba(224, 194, 127, 0.06);
+}
+
+.plan-box mat-icon {
+  color: var(--gold);
+}
+
+.plan-box div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.plan-box strong {
+  font: 600 13px 'Inter', sans-serif;
+}
+
+.plan-box span {
+  color: var(--gray);
+  font-size: 12px;
+}

@@ -1,0 +1,46 @@
+.form-field {
+  width: 100%;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+mat-tab-group {
+  --mat-tab-header-divider-color: rgba(255, 255, 255, 0.08);
+}
+
+.tab-body {
+  padding: 24px 4px 8px;
+}
+
+.field-hint {
+  color: var(--gray);
+  font-size: 12px;
+}
+
+.slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.slider-label {
+  color: var(--text);
+  font: 500 13px 'Inter', sans-serif;
+}
+
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 6px 16px;
+}
+
+.section-title {
+  margin: 0 0 12px;
+  color: var(--text);
+  font: 600 15px 'Inter', sans-serif;
+}
