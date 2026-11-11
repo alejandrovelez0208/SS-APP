@@ -1,4 +1,5 @@
- /*crear api getUsers to accounts in ADMIN*/
+
+**11-10*2026**: Communication was established between the profile API and the catalog API.
 **11-09*2026**: Feat: Panel is implemented
 **11-07*2026**: Catalog items is being implemented
 **11-06*2026**: Pannel admin is being implemented

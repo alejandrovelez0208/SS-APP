@@ -24,12 +24,12 @@ export const MOCK_SERVICES: ServiceOption[] = [
 ];
 
 export const MOCK_DEPARTURES: DepartureOption[] = [
-  { id: 1, city: 'Bogotá' },
-  { id: 2, city: 'Cali' },
-  { id: 3, city: 'Cartagena' },
-  { id: 4, city: 'Medellín' },
-  { id: 5, city: 'Santa Marta' },
-  { id: 6, city: 'Pereira' },
+  { id: 1, label: 'Events' },
+  { id: 2, label: 'Parties' },
+  { id: 3, label: 'Short trips' },
+  { id: 4, label: 'Dinner dates' },
+  { id: 5, label: 'Travel companion' },
+  { id: 6, label: 'Overnight stays' },
 ];
 
 export const MOCK_CHANNELS: ChannelOption[] = [
@@ -84,7 +84,7 @@ function baseProfile(overrides: Partial<Profile> & Pick<Profile, 'id' | 'profile
     channelIds: [],
     website: '',
     serviceIds: [],
-    departureCities: [],
+    departureIds: [],
     basicRate: 0,
     currency: 'COP',
     availableAllDay: true,
@@ -113,7 +113,7 @@ function independentProfile(): Profile {
     phoneNumber: '3001234567',
     channelIds: [1, 2],
     serviceIds: [1, 4],
-    departureCities: ['Bogotá', 'Cartagena'],
+    departureIds: [1, 3],
     basicRate: 350000,
     availableAllDay: false,
     scheduleFrom: '10:00',
@@ -137,7 +137,7 @@ function agencyProfiles(): Profile[] {
       phoneNumber: '3001234567',
       channelIds: [1],
       serviceIds: [1, 2, 4],
-      departureCities: ['Bogotá'],
+      departureIds: [1, 3],
       basicRate: 350000,
       aboutShort: 'Warm and discreet companion for memorable evenings.',
       photos: [

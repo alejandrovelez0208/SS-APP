@@ -47,5 +47,6 @@ public class ProfileResponse implements Serializable {
 	private ProfileStatus status;
 	private VerificationStatus verificationStatus;
 	private Instant completedAt;
+	private Instant updatedAt;
 	private boolean complete;
 }

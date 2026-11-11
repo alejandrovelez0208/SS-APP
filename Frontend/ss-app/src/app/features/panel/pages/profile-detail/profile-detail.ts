@@ -170,15 +170,15 @@ export class ProfileDetail {
     return this.profile()?.channelIds.includes(id) ?? false;
   }
 
-  selectDeparture(city: string, checked: boolean): void {
-    const current = this.profile()?.departureCities ?? [];
+  selectDeparture(id: number, checked: boolean): void {
+    const current = this.profile()?.departureIds ?? [];
     this.patchDepartures(
-      checked ? [...current, city] : current.filter((value) => value !== city),
+      checked ? [...current, id] : current.filter((value) => value !== id),
     );
   }
 
-  isDepartureSelected(city: string): boolean {
-    return this.profile()?.departureCities.includes(city) ?? false;
+  isDepartureSelected(id: number): boolean {
+    return this.profile()?.departureIds.includes(id) ?? false;
   }
 
   async save(): Promise<void> {
@@ -215,7 +215,7 @@ export class ProfileDetail {
         basicRate: value.basicRate,
         serviceIds: profile.serviceIds,
         channelIds: profile.channelIds,
-        departureCities: profile.departureCities,
+        departureIds: profile.departureIds,
       });
       this.notification.success('Profile saved.');
     } finally {
@@ -292,7 +292,7 @@ export class ProfileDetail {
     void this.state.updateProfile({ channelIds });
   }
 
-  private patchDepartures(departureCities: string[]): void {
-    void this.state.updateProfile({ departureCities });
+  private patchDepartures(departureIds: number[]): void {
+    void this.state.updateProfile({ departureIds });
   }
 }
