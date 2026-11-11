@@ -219,16 +219,16 @@
   <!-- SERVICES -->
   <mat-tab label="Services">
     <div class="tab-body">
-      @for (group of servicesByGroup(); track group.group) {
-      <h3 class="section-title">{{ group.group }}</h3>
       <div class="checkbox-grid">
-        @for (service of group.items; track service.id) {
-        <mat-checkbox [checked]="isServiceSelected(service.id)"
-          (change)="selectService(service.id, $event.checked)">
+        @for (service of services(); track service.id) {
+        <mat-checkbox [checked]="isServiceSelected(service.id)" (change)="selectService(service.id, $event.checked)">
           {{ service.label }}
         </mat-checkbox>
         }
       </div>
+
+      @if (services().length === 0) {
+      <p class="field-hint">No services available.</p>
       }
     </div>
   </mat-tab>
@@ -263,7 +263,7 @@
     <div class="tab-body">
       <p class="field-hint">Places you are available for: events, parties, short trips, etc.</p>
       <div class="checkbox-grid">
-        @for (departure of departures; track departure.id) {
+        @for (departure of departures(); track departure.id) {
         <mat-checkbox [checked]="isDepartureSelected(departure.id)"
           (change)="selectDeparture(departure.id, $event.checked)">
           {{ departure.label }}
@@ -297,9 +297,8 @@
 
       <h3 class="section-title">Contact channels</h3>
       <div class="checkbox-grid">
-        @for (channel of channels; track channel.id) {
-        <mat-checkbox [checked]="isChannelSelected(channel.id)"
-          (change)="selectChannel(channel.id, $event.checked)">
+        @for (channel of channels(); track channel.id) {
+        <mat-checkbox [checked]="isChannelSelected(channel.id)" (change)="selectChannel(channel.id, $event.checked)">
           {{ channel.label }}
         </mat-checkbox>
         }

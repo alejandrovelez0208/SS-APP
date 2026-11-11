@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Account, MockScenario, Profile, ProfileStatus } from '../models/profile.model';
+import { Account, Profile, ProfileStatus } from '../models/profile.model';
 
 /**
  * Puerto de acceso a datos del panel.

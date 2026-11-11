@@ -28,11 +28,6 @@ export type Orientation =
   | 'QUESTIONING'
   | 'OTHER';
 
-/**
- * Scenario usado solo por los datos mock. Desaparece cuando exista backend.
- */
-export type MockScenario = 'INDEPENDENT' | 'AGENCY';
-
 export interface ProfilePhoto {
   id: string;
   /** dataURL en mock; URL real cuando exista el servicio. */
@@ -96,20 +91,4 @@ export interface Account {
   maxProfiles: number;
   verificationStatus: VerificationStatus;
   profiles: Profile[];
-}
-
-export interface ServiceOption {
-  id: number;
-  group: string;
-  label: string;
-}
-
-export interface DepartureOption {
-  id: number;
-  label: string;
-}
-
-export interface ChannelOption {
-  id: number;
-  label: string;
 }
