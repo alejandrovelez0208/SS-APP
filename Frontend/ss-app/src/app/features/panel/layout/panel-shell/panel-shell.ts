@@ -4,7 +4,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
-import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { map } from 'rxjs';
 import { DialogService } from '@shared/services/dialog/dialog.service';
 import { NotificationService } from '@shared/services/notification/notification.service';
@@ -12,7 +12,7 @@ import { AuthSessionService } from '@core/auth/auth-session.service';
 import { AuthApiService } from '@core/auth/auth-api.service';
 import { navFor } from '../../constants/panel-nav.config';
 import { ProfileStateService } from '../../data-access/profile-state.service';
-import { AccountType, MockScenario } from '../../models/profile.model';
+import { AccountType } from '../../models/profile.model';
 
 @Component({
   selector: 'app-panel-shell',
@@ -33,7 +33,6 @@ export class PanelShell implements OnInit {
   private readonly authApi = inject(AuthApiService);
   private readonly dialogService = inject(DialogService);
   private readonly notification = inject(NotificationService);
-  private readonly route = inject(ActivatedRoute);
   private readonly breakpointObserver = inject(BreakpointObserver);
 
   readonly account = this.state.account;
@@ -65,9 +64,7 @@ export class PanelShell implements OnInit {
   );
 
   ngOnInit(): void {
-    const scenario: MockScenario =
-      this.route.snapshot.queryParamMap.get('mock') === 'agency' ? 'AGENCY' : 'INDEPENDENT';
-    void this.state.load(scenario);
+    void this.state.load();
     this.showProfileNotice();
   }
 

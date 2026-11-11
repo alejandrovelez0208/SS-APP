@@ -6,10 +6,31 @@ import { environment } from 'environments/environment';
 export interface ProfileApiResponse {
   id: number;
   profileName: string;
+  gender: string;
+  age: number;
+  hairColor: string | null;
+  heightCm: number | null;
+  weightKg: number | null;
+  orientation: string | null;
+  country: string | null;
+  city: string | null;
+  phoneCountryCode: string | null;
+  phoneNumber: string | null;
+  availableAllDay: boolean;
+  scheduleFrom: string | null;
+  scheduleTo: string | null;
+  website: string | null;
+  basicRate: number | null;
+  currency: string;
+  serviceIds: number[];
+  departureIds: number[];
+  channelIds: number[];
+  modalityIds: number[];
   status: string;
-  complete: boolean;
+  verificationStatus: string;
   completedAt: string | null;
-  emailVerified?: boolean;
+  complete: boolean;
+  updatedAt?: string; // ver punto 2
 }
 
 export interface ProfileUpdatePayload {
@@ -56,4 +77,5 @@ export class ProfileApiService {
   completeMe(): Observable<ProfileApiResponse> {
     return this.http.post<ProfileApiResponse>(`${this.apiUrl}/me/complete`, {});
   }
+
 }

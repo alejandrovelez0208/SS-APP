@@ -45,8 +45,8 @@ export class ProfileStateService {
 
   readonly completion = computed(() => computeCompletion(this.selectedProfile()));
 
-  async load(scenario: MockScenario = 'INDEPENDENT'): Promise<void> {
-    const account = await this.repository.getAccount(scenario);
+  async load(): Promise<void> {
+    const account = await this.repository.getAccount();
     this.accountState.set(account);
     const primary = account.profiles.find((profile) => profile.isPrimary) ?? account.profiles[0];
     this.selectedProfileId.set(primary?.id ?? null);

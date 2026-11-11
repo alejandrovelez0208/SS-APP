@@ -73,7 +73,7 @@ export interface Profile {
   channelIds: number[];
   website: string;
   serviceIds: number[];
-  departureCities: string[];
+  departureIds: number[];
   basicRate: number;
   currency: 'COP';
   availableAllDay: boolean;
@@ -106,7 +106,7 @@ export interface ServiceOption {
 
 export interface DepartureOption {
   id: number;
-  city: string;
+  label: string;
 }
 
 export interface ChannelOption {

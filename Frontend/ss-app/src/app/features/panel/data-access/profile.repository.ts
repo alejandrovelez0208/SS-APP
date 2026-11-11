@@ -9,7 +9,8 @@ import { Account, MockScenario, Profile, ProfileStatus } from '../models/profile
  */
 @Injectable()
 export abstract class ProfileRepository {
-  abstract getAccount(scenario: MockScenario): Promise<Account>;
+
+  abstract getAccount(): Promise<Account>;
   abstract updateProfile(id: string, patch: Partial<Profile>): Promise<Profile>;
   abstract setStatus(id: string, status: ProfileStatus): Promise<Profile>;
   abstract addPhoto(id: string, url: string): Promise<Profile>;

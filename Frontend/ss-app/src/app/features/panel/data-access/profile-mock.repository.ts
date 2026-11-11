@@ -12,8 +12,8 @@ import { ProfileRepository } from './profile.repository';
 export class ProfileMockRepository extends ProfileRepository {
   private readonly accounts = new Map<MockScenario, Account>();
 
-  async getAccount(scenario: MockScenario): Promise<Account> {
-    return this.clone(this.ensureAccount(scenario));
+  async getAccount(): Promise<Account> {
+    return this.clone(this.ensureAccount('INDEPENDENT'));
   }
 
   async updateProfile(id: string, patch: Partial<Profile>): Promise<Profile> {

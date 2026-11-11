@@ -261,12 +261,12 @@
   <!-- DEPARTURES -->
   <mat-tab label="Departures">
     <div class="tab-body">
-      <p class="field-hint">Cities you are available to travel to. No dates needed.</p>
+      <p class="field-hint">Places you are available for: events, parties, short trips, etc.</p>
       <div class="checkbox-grid">
         @for (departure of departures; track departure.id) {
-        <mat-checkbox [checked]="isDepartureSelected(departure.city)"
-          (change)="selectDeparture(departure.city, $event.checked)">
-          {{ departure.city }}
+        <mat-checkbox [checked]="isDepartureSelected(departure.id)"
+          (change)="selectDeparture(departure.id, $event.checked)">
+          {{ departure.label }}
         </mat-checkbox>
         }
       </div>
