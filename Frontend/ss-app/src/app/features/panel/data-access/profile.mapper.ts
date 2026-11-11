@@ -44,12 +44,12 @@ export class AccountMapper {
       orientation: (dto.orientation ?? 'OTHER') as Orientation,
 
       // Recommended (no existen aún en el backend)
-      headline: '',
-      aboutShort: '',
-      aboutLong: '',
-      bustCm: null,
-      waistCm: null,
-      hipsCm: null,
+      headline: dto.headline ?? '',
+      aboutShort: dto.aboutShort ?? '',
+      aboutLong: dto.aboutLong ?? '',
+      bustCm: dto.bustCm ?? null,
+      waistCm: dto.waistCm ?? null,
+      hipsCm: dto.hipsCm ?? null,
 
       // Operations
       phoneCountryCode: dto.phoneCountryCode ?? '',

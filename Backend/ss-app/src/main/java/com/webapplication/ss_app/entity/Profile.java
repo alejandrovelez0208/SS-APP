@@ -132,6 +132,24 @@ public class Profile {
 	@Column(name = "completed_at")
 	private Instant completedAt;
 
+	@Column(length = 80)
+	private String headline;
+
+	@Column(name = "about_short", length = 280)
+	private String aboutShort;
+
+	@Column(name = "about_long", length = 1500)
+	private String aboutLong;
+
+	@Column(name = "bust_cm")
+	private Integer bustCm;
+
+	@Column(name = "waist_cm")
+	private Integer waistCm;
+
+	@Column(name = "hips_cm")
+	private Integer hipsCm;
+
 	@PrePersist
 	void onCreate() {
 		createdAt = updatedAt = Instant.now();

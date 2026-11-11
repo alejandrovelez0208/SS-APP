@@ -30,7 +30,13 @@ export interface ProfileApiResponse {
   verificationStatus: string;
   completedAt: string | null;
   complete: boolean;
-  updatedAt?: string; // ver punto 2
+  updatedAt?: string;
+  headline: string | null;
+  aboutShort: string | null;
+  aboutLong: string | null;
+  bustCm: number | null;
+  waistCm: number | null;
+  hipsCm: number | null;
 }
 
 export interface ProfileUpdatePayload {
@@ -55,6 +61,12 @@ export interface ProfileUpdatePayload {
   departureIds?: number[];
   channelIds?: number[];
   modalityIds?: number[];
+  headline?: string;
+  aboutShort?: string;
+  aboutLong?: string;
+  bustCm?: number | null;
+  waistCm?: number | null;
+  hipsCm?: number | null;
 }
 
 /**

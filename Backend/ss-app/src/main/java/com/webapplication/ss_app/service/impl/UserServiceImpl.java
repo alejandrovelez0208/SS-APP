@@ -67,7 +67,6 @@ public class UserServiceImpl implements UserService {
 
 		accountRepository.save(account);
 
-		/* CREAR EL BORRADOR MULTIPASOS */
 		return new MessageResponse("User created succesfully.");
 	}
 

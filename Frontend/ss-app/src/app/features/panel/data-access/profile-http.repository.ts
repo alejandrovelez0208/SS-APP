@@ -68,6 +68,12 @@ export class ProfileHttpRepository extends ProfileRepository {
     if ('serviceIds' in patch) payload.serviceIds = patch.serviceIds;
     if ('departureIds' in patch) payload.departureIds = patch.departureIds;
     if ('channelIds' in patch) payload.channelIds = patch.channelIds;
+    if ('headline' in patch) payload.headline = patch.headline;
+    if ('aboutShort' in patch) payload.aboutShort = patch.aboutShort;
+    if ('aboutLong' in patch) payload.aboutLong = patch.aboutLong;
+    if ('bustCm' in patch) payload.bustCm = patch.bustCm;
+    if ('waistCm' in patch) payload.waistCm = patch.waistCm;
+    if ('hipsCm' in patch) payload.hipsCm = patch.hipsCm;
 
     return payload;
   }
