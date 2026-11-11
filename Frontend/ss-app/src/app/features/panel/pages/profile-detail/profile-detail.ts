@@ -1,7 +1,6 @@
 import { DecimalPipe, SlicePipe } from '@angular/common';
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -11,34 +10,16 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { NotificationService } from '@shared/services/notification/notification.service';
 import { ProfileStatusChip } from '../../components/profile-status-chip/profile-status-chip';
-import {
-  MOCK_CHANNELS,
-  MOCK_DEPARTURES,
-  MOCK_GENDERS,
-  MOCK_HAIR_COLORS,
-  MOCK_ORIENTATIONS,
-  MOCK_SERVICES,
-} from '../../constants/mock-account.data';
 import { ProfileStateService } from '../../data-access/profile-state.service';
 import {
   Profile,
   ProfileStatus,
   VerificationStatus,
 } from '../../models/profile.model';
-
-const TAB_BY_SECTION: Record<string, number> = {
-  basics: 0,
-  about: 1,
-  photos: 2,
-  rates: 3,
-  services: 4,
-  schedule: 5,
-  departures: 6,
-  contact: 7,
-};
+import { CatalogOptionService } from '@features/panel/data-access/catalog-option-service';import { GENDER_OPTIONS, HAIR_COLORS, ORIENTATION_OPTIONS } from '@features/panel/constants/profile-options';
 
 @Component({
   selector: 'app-panel-profile-detail',
@@ -67,19 +48,18 @@ const TAB_BY_SECTION: Record<string, number> = {
 })
 export class ProfileDetail {
   private readonly state = inject(ProfileStateService);
-  private readonly route = inject(ActivatedRoute);
   private readonly notification = inject(NotificationService);
+  private readonly catalogOptions = inject(CatalogOptionService);
 
   readonly profile = this.state.selectedProfile;
   readonly isAgency = this.state.isAgency;
 
-  readonly genders = MOCK_GENDERS;
-  readonly hairColors = MOCK_HAIR_COLORS;
-  readonly orientations = MOCK_ORIENTATIONS;
-  readonly services = MOCK_SERVICES;
-  readonly serviceGroups = [...new Set(MOCK_SERVICES.map((service) => service.group))];
-  readonly departures = MOCK_DEPARTURES;
-  readonly channels = MOCK_CHANNELS;
+  readonly services = this.catalogOptions.services;
+  readonly channels = this.catalogOptions.channels;
+  readonly departures = this.catalogOptions.departures;
+  readonly genders = GENDER_OPTIONS;
+  readonly orientations = ORIENTATION_OPTIONS;
+  readonly hairColors = HAIR_COLORS;
 
   readonly activeTab = signal(0);
   readonly saving = signal(false);
@@ -113,28 +93,10 @@ export class ProfileDetail {
     basicRate: new FormControl(0, { nonNullable: true }),
   });
 
-  readonly servicesByGroup = computed(() =>
-    this.serviceGroups.map((group) => ({
-      group,
-      items: this.services.filter((service) => service.group === group),
-    })),
-  );
-
   private lastBuiltId: string | null = null;
 
   constructor() {
-    this.route.paramMap.pipe(takeUntilDestroyed()).subscribe((params) => {
-      const id = params.get('id');
-      if (id) {
-        this.state.selectProfile(id);
-      }
-    });
-
-    this.route.queryParamMap.pipe(takeUntilDestroyed()).subscribe((params) => {
-      const section = params.get('section') ?? 'basics';
-      this.activeTab.set(TAB_BY_SECTION[section] ?? 0);
-    });
-
+    this.catalogOptions.load();
     effect(() => {
       const profile = this.profile();
       if (profile && profile.id !== this.lastBuiltId) {

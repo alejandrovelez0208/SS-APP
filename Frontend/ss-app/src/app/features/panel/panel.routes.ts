@@ -1,9 +1,8 @@
 import { Routes } from '@angular/router';
-import { ProfileMockRepository } from './data-access/profile-mock.repository';
+import { ProfileHttpRepository } from './data-access/profile-http.repository';
 import { ProfileRepository } from './data-access/profile.repository';
 import { ProfileStateService } from './data-access/profile-state.service';
 import { panelGuard } from './panel-guard';
-import { ProfileHttpRepository } from './data-access/profile-http.repository';
 
 export const panelRoutes: Routes = [
   {

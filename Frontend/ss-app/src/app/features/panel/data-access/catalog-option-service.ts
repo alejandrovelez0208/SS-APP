@@ -1,5 +1,4 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { CatalogTypeOption } from '@features/admin/constants/catalog-type-options';
 import { Catalog, CatalogType } from '@shared/models/catalog.model';
 import { CatalogApiService } from '@shared/services/catalogs/catalog-api.service';
 import { forkJoin } from 'rxjs';

@@ -2,7 +2,6 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import {
   Account,
   AccountType,
-  MockScenario,
   Profile,
   ProfileStatus,
 } from '../models/profile.model';
@@ -19,6 +18,12 @@ export class ProfileStateService {
 
   private readonly accountState = signal<Account | null>(null);
   private readonly selectedProfileId = signal<string | null>(null);
+
+  private readonly loadingState = signal(false);
+  private readonly errorState = signal<string | null>(null);
+
+  readonly loading = this.loadingState.asReadonly();
+  readonly error = this.errorState.asReadonly();
 
   readonly account = this.accountState.asReadonly();
   readonly accountType = computed(() => this.accountState()?.type);
@@ -46,10 +51,23 @@ export class ProfileStateService {
   readonly completion = computed(() => computeCompletion(this.selectedProfile()));
 
   async load(): Promise<void> {
-    const account = await this.repository.getAccount();
-    this.accountState.set(account);
-    const primary = account.profiles.find((profile) => profile.isPrimary) ?? account.profiles[0];
-    this.selectedProfileId.set(primary?.id ?? null);
+    this.loadingState.set(true);
+    this.errorState.set(null);
+
+    try {
+      const account = await this.repository.getAccount();
+      this.accountState.set(account);
+
+      const primary =
+        account.profiles.find((profile) => profile.isPrimary) ?? account.profiles[0];
+
+      this.selectedProfileId.set(primary?.id ?? null);
+    } catch (error: unknown) {
+      console.error('Error loading profile', error);
+      this.errorState.set('Could not load your profile. Please try again.');
+    } finally {
+      this.loadingState.set(false);
+    }
   }
 
   selectProfile(id: string): void {
