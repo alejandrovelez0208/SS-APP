@@ -49,4 +49,10 @@ public class ProfileResponse implements Serializable {
 	private Instant completedAt;
 	private Instant updatedAt;
 	private boolean complete;
+	private String headline;
+	private String aboutShort;
+	private String aboutLong;
+	private Integer bustCm;
+	private Integer waistCm;
+	private Integer hipsCm;
 }

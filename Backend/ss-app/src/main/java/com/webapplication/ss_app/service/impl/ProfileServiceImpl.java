@@ -119,6 +119,25 @@ public class ProfileServiceImpl implements ProfileService {
 		if (request.getCurrency() != null) {
 			profile.setCurrency(request.getCurrency());
 		}
+
+		if (request.getHeadline() != null) {
+			profile.setHeadline(request.getHeadline().trim());
+		}
+		if (request.getAboutShort() != null) {
+			profile.setAboutShort(request.getAboutShort().trim());
+		}
+		if (request.getAboutLong() != null) {
+			profile.setAboutLong(request.getAboutLong().trim());
+		}
+		if (request.getBustCm() != null) {
+			profile.setBustCm(request.getBustCm());
+		}
+		if (request.getWaistCm() != null) {
+			profile.setWaistCm(request.getWaistCm());
+		}
+		if (request.getHipsCm() != null) {
+			profile.setHipsCm(request.getHipsCm());
+		}
 	}
 
 	private void applyCatalogSelections(Profile profile, ProfileUpdateRequest request) {
@@ -149,8 +168,7 @@ public class ProfileServiceImpl implements ProfileService {
 
 		for (Catalog catalog : found) {
 			if (catalog.getCatalogType() != expected) {
-				throw new BusinessRuleException(
-						"Catalog item '" + catalog.getName() + "' is not of type " + expected);
+				throw new BusinessRuleException("Catalog item '" + catalog.getName() + "' is not of type " + expected);
 			}
 			if (!Boolean.TRUE.equals(catalog.getActive())) {
 				throw new BusinessRuleException("Catalog item '" + catalog.getName() + "' is inactive");
@@ -207,33 +225,20 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	private ProfileResponse toResponse(Profile profile) {
-		return ProfileResponse.builder()
-				.id(profile.getId())
-				.profileName(profile.getProfileName())
-				.gender(profile.getGender())
-				.age(profile.getAge())
-				.hairColor(profile.getHairColor())
-				.heightCm(profile.getHeightCm())
-				.weightKg(profile.getWeightKg())
-				.orientation(profile.getOrientation())
-				.country(profile.getCountry())
-				.city(profile.getCity())
-				.phoneCountryCode(profile.getPhoneCountryCode())
-				.phoneNumber(profile.getPhoneNumber())
-				.availableAllDay(profile.isAvailableAllDay())
-				.scheduleFrom(profile.getScheduleFrom())
-				.scheduleTo(profile.getScheduleTo())
-				.website(profile.getWebsite())
-				.basicRate(profile.getBasicRate())
-				.currency(profile.getCurrency())
-				.serviceIds(idsOf(profile.getServices()))
-				.departureIds(idsOf(profile.getDepartures()))
-				.channelIds(idsOf(profile.getChannels()))
-				.modalityIds(idsOf(profile.getModalities()))
-				.status(profile.getStatus())
-				.verificationStatus(profile.getVerificationStatus())
-				.completedAt(profile.getCompletedAt())
-				.complete(profile.getCompletedAt() != null)
+		return ProfileResponse.builder().id(profile.getId()).profileName(profile.getProfileName())
+				.gender(profile.getGender()).age(profile.getAge()).hairColor(profile.getHairColor())
+				.heightCm(profile.getHeightCm()).weightKg(profile.getWeightKg()).orientation(profile.getOrientation())
+				.country(profile.getCountry()).city(profile.getCity()).phoneCountryCode(profile.getPhoneCountryCode())
+				.phoneNumber(profile.getPhoneNumber()).availableAllDay(profile.isAvailableAllDay())
+				.scheduleFrom(profile.getScheduleFrom()).scheduleTo(profile.getScheduleTo())
+				.website(profile.getWebsite()).basicRate(profile.getBasicRate()).currency(profile.getCurrency())
+				.serviceIds(idsOf(profile.getServices())).departureIds(idsOf(profile.getDepartures()))
+				.channelIds(idsOf(profile.getChannels())).modalityIds(idsOf(profile.getModalities()))
+				.status(profile.getStatus()).verificationStatus(profile.getVerificationStatus())
+				.completedAt(profile.getCompletedAt()).updatedAt(profile.getUpdatedAt())
+				.complete(profile.getCompletedAt() != null).headline(profile.getHeadline())
+				.aboutShort(profile.getAboutShort()).aboutLong(profile.getAboutLong())
+				.bustCm(profile.getBustCm()).waistCm(profile.getWaistCm()).hipsCm(profile.getHipsCm())
 				.build();
 	}
 

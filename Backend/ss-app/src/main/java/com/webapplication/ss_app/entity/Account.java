@@ -34,7 +34,6 @@ public class Account {
 	private Long idAccount;
 
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
 	private AccountType type;
 
 	@Column(nullable = false)
