@@ -30,8 +30,9 @@ export class ProfileHttpRepository extends ProfileRepository {
     return AccountMapper.toProfile(dto);
   }
 
-  override setStatus(_id: string, _status: ProfileStatus): Promise<Profile> {
-    throw new Error('Profile status endpoint is not available yet.');
+  override async setStatus(_id: string, status: ProfileStatus): Promise<Profile> {
+    const dto = await firstValueFrom(this.profileApi.updateStatus(status));
+    return AccountMapper.toProfile(dto);
   }
 
   override addPhoto(_id: string, _url: string): Promise<Profile> {

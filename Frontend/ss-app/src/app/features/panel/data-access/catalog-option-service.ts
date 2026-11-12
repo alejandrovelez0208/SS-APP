@@ -16,6 +16,7 @@ export class CatalogOptionService {
   readonly channels = signal<CatalogOption[]>([]);
   readonly departures = signal<CatalogOption[]>([]);
   readonly modalities = signal<CatalogOption[]>([]);
+  readonly cities = signal<CatalogOption[]>([]);
   readonly loading = signal(false);
 
   private loaded = false;
@@ -29,12 +30,14 @@ export class CatalogOptionService {
       channels: this.catalogApi.searchByType(CatalogType.CHANNEL),
       departures: this.catalogApi.searchByType(CatalogType.TRAVEL),
       modalities: this.catalogApi.searchByType(CatalogType.MODALITY),
+      cities: this.catalogApi.searchByType(CatalogType.CITY),
     }).subscribe({
-      next: ({ services, channels, departures, modalities }) => {
+      next: ({ services, channels, departures, modalities, cities }) => {
         this.services.set(services.map(toOption));
         this.channels.set(channels.map(toOption));
         this.departures.set(departures.map(toOption));
         this.modalities.set(modalities.map(toOption));
+        this.cities.set(cities.map(toOption));
         this.loaded = true;
         this.loading.set(false);
       },

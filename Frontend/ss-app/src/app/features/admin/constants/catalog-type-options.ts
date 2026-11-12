@@ -11,6 +11,7 @@ export const CATALOG_TYPE_OPTIONS: readonly CatalogTypeOption[] = [
   { value: CatalogType.MODALITY, label: 'Service Modality' },
   { value: CatalogType.SERVICE, label: 'Services and Practices' },
   { value: CatalogType.TRAVEL, label: 'Trips and Movements' },
+  { value: CatalogType.CITY, label: 'Base Cities' },
 ];
 
 export function resolveCatalogType(label: string): CatalogType {

@@ -13,11 +13,10 @@ import org.springframework.util.CollectionUtils;
 import com.webapplication.ss_app.dtos.ProfileSummaryDto;
 import com.webapplication.ss_app.dtos.UserDetailDto;
 import com.webapplication.ss_app.dtos.UserDto;
+import com.webapplication.ss_app.dtos.enums.Role;
 import com.webapplication.ss_app.dtos.request.UserRequest;
 import com.webapplication.ss_app.dtos.response.MessageResponse;
-import com.webapplication.ss_app.dtos.enums.Role;
 import com.webapplication.ss_app.entity.Account;
-import com.webapplication.ss_app.entity.Profile;
 import com.webapplication.ss_app.entity.User;
 import com.webapplication.ss_app.exception.BusinessRuleException;
 import com.webapplication.ss_app.exception.EmailAlreadyExistsException;
@@ -60,7 +59,11 @@ public class UserServiceImpl implements UserService {
 		String verificationToken = UUID.randomUUID().toString();
 		user.setVerificationToken(verificationToken);
 		user.setVerificationTokenExpiry(Instant.now().plusSeconds(86400));
-		user.setAccount(account);
+
+		/*
+		 * TODO: Uncomment only when the database is restored user.setRole(Role.ADMIN);
+		 * user.setAccount(account);
+		 */
 
 		account.setUserName(request.getUserName());
 		account.setOwner(user);

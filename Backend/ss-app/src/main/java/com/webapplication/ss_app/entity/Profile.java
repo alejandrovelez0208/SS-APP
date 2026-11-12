@@ -69,7 +69,7 @@ public class Profile {
 
 	private String country;
 
-	private String city;
+	private String city = "Medellín";
 
 	@Column(name = "phone_country_code", length = 10)
 	private String phoneCountryCode;

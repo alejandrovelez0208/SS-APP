@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.webapplication.ss_app.dtos.request.ProfileStatusRequest;
 import com.webapplication.ss_app.dtos.request.ProfileUpdateRequest;
 import com.webapplication.ss_app.dtos.response.ProfileResponse;
 import com.webapplication.ss_app.service.interfaz.ProfileService;
@@ -37,5 +38,11 @@ public class ProfileController {
 	@PostMapping("/me/complete")
 	public ResponseEntity<ProfileResponse> completeMyProfile(Authentication authentication) {
 		return ResponseEntity.ok(profileService.completeMyProfile(authentication.getName()));
+	}
+
+	@PatchMapping("/me/status")
+	public ResponseEntity<ProfileResponse> updateMyProfileStatus(Authentication authentication,
+			@Valid @RequestBody ProfileStatusRequest request) {
+		return ResponseEntity.ok(profileService.updateMyProfileStatus(authentication.getName(), request.getStatus()));
 	}
 }

@@ -46,7 +46,7 @@ export class Signup {
           weight: [60],
           orientation: [{ value: 'HETEROSEXUAL', disabled: false }],
           nationality: ['', Validators.required],
-          baseCity: ['', Validators.required],
+          baseCity: ['Medellín', Validators.required],
           interCodePhone: ['', [Validators.required]],
           phone: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10)]],
           applications: this.fb.group({}),

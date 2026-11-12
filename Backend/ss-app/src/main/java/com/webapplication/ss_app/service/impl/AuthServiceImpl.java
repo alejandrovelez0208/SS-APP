@@ -80,6 +80,7 @@ public class AuthServiceImpl implements AuthService {
 		profile.setAccount(account);
 		profile.setProfileName(userRequest.getUserName());
 		profile.setStatus(ProfileStatus.DRAFT);
+		profile.setCity("Medellín");
 		profileRepository.save(profile);
 
 		emailService.sendVerificationEmail(userRequest.getEmail(), verificationToken);

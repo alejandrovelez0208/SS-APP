@@ -52,7 +52,11 @@ describe('EscortProfileStep', () => {
         },
         {
           provide: SignupCatalogStateService,
-          useValue: { groupedServices: [], getFormulaMap: () => new Map() },
+          useValue: {
+            groupedServices: [],
+            getFormulaMap: () => new Map(),
+            search: () => EMPTY,
+          },
         },
       ],
     }).compileComponents();

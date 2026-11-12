@@ -7,6 +7,7 @@ export enum CatalogType {
   MODALITY = 'MODALITY',
   SERVICE = 'SERVICE',
   TRAVEL = 'TRAVEL',
+  CITY = 'CITY',
 }
 
 /**

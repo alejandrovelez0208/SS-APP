@@ -9,4 +9,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 public interface CatalogRepository extends JpaRepository<Catalog, Long>, JpaSpecificationExecutor<Catalog> {
 
 	boolean existsByCatalogTypeAndNameIgnoreCase(CatalogType catalogType, String name);
+
+	boolean existsByCatalogTypeAndNameIgnoreCaseAndActiveTrue(CatalogType catalogType, String name);
 }

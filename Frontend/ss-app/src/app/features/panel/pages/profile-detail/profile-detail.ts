@@ -1,6 +1,6 @@
 import { DecimalPipe, SlicePipe } from '@angular/common';
 import { Component, effect, inject, signal } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -12,6 +12,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
 import { RouterLink } from '@angular/router';
 import { NotificationService } from '@shared/services/notification/notification.service';
+import { StaticDataService } from '@shared/data/static-data.service';
 import { ProfileStatusChip } from '../../components/profile-status-chip/profile-status-chip';
 import { ProfileStateService } from '../../data-access/profile-state.service';
 import {
@@ -19,7 +20,12 @@ import {
   ProfileStatus,
   VerificationStatus,
 } from '../../models/profile.model';
-import { CatalogOptionService } from '@features/panel/data-access/catalog-option-service';import { GENDER_OPTIONS, HAIR_COLORS, ORIENTATION_OPTIONS } from '@features/panel/constants/profile-options';
+import { CatalogOptionService } from '@features/panel/data-access/catalog-option-service';
+import {
+  GENDER_OPTIONS,
+  HAIR_COLORS,
+  ORIENTATION_OPTIONS,
+} from '@features/panel/constants/profile-options';
 
 @Component({
   selector: 'app-panel-profile-detail',
@@ -50,6 +56,7 @@ export class ProfileDetail {
   private readonly state = inject(ProfileStateService);
   private readonly notification = inject(NotificationService);
   private readonly catalogOptions = inject(CatalogOptionService);
+  private readonly dataService = inject(StaticDataService);
 
   readonly profile = this.state.selectedProfile;
   readonly isAgency = this.state.isAgency;
@@ -57,9 +64,12 @@ export class ProfileDetail {
   readonly services = this.catalogOptions.services;
   readonly channels = this.catalogOptions.channels;
   readonly departures = this.catalogOptions.departures;
+  readonly cities = this.catalogOptions.cities;
   readonly genders = GENDER_OPTIONS;
   readonly orientations = ORIENTATION_OPTIONS;
   readonly hairColors = HAIR_COLORS;
+
+  countries: string[] = [];
 
   readonly activeTab = signal(0);
   readonly saving = signal(false);
@@ -76,8 +86,14 @@ export class ProfileDetail {
     orientation: new FormControl<Profile['orientation']>('HETEROSEXUAL', {
       nonNullable: true,
     }),
-    country: new FormControl('Colombia', { nonNullable: true }),
-    city: new FormControl({ value: 'Medellín', disabled: true }, { nonNullable: true }),
+    country: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+    city: new FormControl('Medellín', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
     headline: new FormControl('', { nonNullable: true }),
     aboutShort: new FormControl('', { nonNullable: true }),
     aboutLong: new FormControl('', { nonNullable: true }),
@@ -97,6 +113,19 @@ export class ProfileDetail {
 
   constructor() {
     this.catalogOptions.load();
+    this.dataService.getNationalities().subscribe({
+      next: (data) => {
+        const names = data.map((country) => country.names.common).sort((a, b) => a.localeCompare(b));
+        this.countries = ['Colombia', ...names.filter((name) => name !== 'Colombia')];
+
+        const selected = this.form.controls.country.value;
+        if (selected && !this.countries.includes(selected)) {
+          this.form.controls.country.setValue('');
+        }
+      },
+      error: (error) => console.error('Error loading countries', error),
+    });
+
     effect(() => {
       const profile = this.profile();
       if (profile && profile.id !== this.lastBuiltId) {
@@ -149,9 +178,22 @@ export class ProfileDetail {
       return;
     }
 
+    const value = this.form.getRawValue();
+    if (!value.country || !this.countries.includes(value.country)) {
+      this.form.controls.country.markAsTouched();
+      this.notification.error('Please select a country from the list.');
+      return;
+    }
+
+    const cityNames = this.cities().map((city) => city.label);
+    if (!value.city || (cityNames.length > 0 && !cityNames.includes(value.city))) {
+      this.form.controls.city.markAsTouched();
+      this.notification.error('Please select a city from the list.');
+      return;
+    }
+
     this.saving.set(true);
     try {
-      const value = this.form.getRawValue();
       await this.state.updateProfile({
         profileName: value.profileName,
         gender: value.gender,
@@ -190,10 +232,21 @@ export class ProfileDetail {
     if (!profile) {
       return;
     }
+
     const next =
-      profile.status === ProfileStatus.PAUSED ? ProfileStatus.ACTIVE : ProfileStatus.PAUSED;
-    await this.state.setStatus(next);
-    this.notification.success(next === ProfileStatus.PAUSED ? 'Profile paused.' : 'Profile resumed.');
+      profile.status === ProfileStatus.PAUSED
+        ? ProfileStatus.ACTIVE
+        : ProfileStatus.PAUSED;
+
+    try {
+      await this.state.setStatus(next);
+      this.notification.success(
+        next === ProfileStatus.PAUSED ? 'Profile paused.' : 'Profile resumed.'
+      );
+    } catch (error) {
+      console.error('Error updating profile status', error);
+      this.notification.error('Could not update profile status. Please try again.');
+    }
   }
 
   addPhoto(files: FileList | null): void {
@@ -220,6 +273,10 @@ export class ProfileDetail {
   }
 
   private writeForm(profile: Profile): void {
+    const country = profile.country?.trim() ?? '';
+    const validCountry =
+      this.countries.length === 0 || this.countries.includes(country) ? country : '';
+
     this.form.patchValue({
       profileName: profile.profileName,
       gender: profile.gender,
@@ -228,8 +285,8 @@ export class ProfileDetail {
       heightCm: profile.heightCm,
       weightKg: profile.weightKg,
       orientation: profile.orientation,
-      country: profile.country,
-      city: profile.city,
+      country: validCountry,
+      city: profile.city?.trim() || 'Medellín',
       headline: profile.headline,
       aboutShort: profile.aboutShort,
       aboutLong: profile.aboutLong,
