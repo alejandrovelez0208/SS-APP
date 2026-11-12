@@ -90,4 +90,8 @@ export class ProfileApiService {
     return this.http.post<ProfileApiResponse>(`${this.apiUrl}/me/complete`, {});
   }
 
+  updateStatus(status: string): Observable<ProfileApiResponse> {
+    return this.http.patch<ProfileApiResponse>(`${this.apiUrl}/me/status`, { status });
+  }
+
 }

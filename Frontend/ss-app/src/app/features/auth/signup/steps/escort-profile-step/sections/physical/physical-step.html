@@ -43,6 +43,9 @@
     @if (form.get('nationality')?.hasError('required')) {
       <mat-error>Nationality is required</mat-error>
     }
+    @if (form.get('nationality')?.hasError('invalidCountry')) {
+      <mat-error>Select a country from the list</mat-error>
+    }
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="field-city">
@@ -58,6 +61,9 @@
     @if (form.get('baseCity')?.hasError('required')) {
       <mat-error>Base city is required</mat-error>
     }
-    <mat-hint>We currently operate exclusively in Medellín.</mat-hint>
+    @if (form.get('baseCity')?.hasError('invalidCity')) {
+      <mat-error>Select a city from the list</mat-error>
+    }
+    <mat-hint>Select the city where you operate.</mat-hint>
   </mat-form-field>
 </div>

@@ -41,8 +41,11 @@ export class PhysicalStep implements OnInit {
     this.heightValue.set(this.form.get('heightCm')?.value ?? 160);
   }
 
-  displayFn = (nationality: Nationality | null): string => {
-    return nationality?.names?.common ?? '';
+  displayFn = (nationality: Nationality | string | null): string => {
+    if (!nationality) {
+      return '';
+    }
+    return typeof nationality === 'string' ? nationality : (nationality.names?.common ?? '');
   };
 
   onHeightChange(value: number): void {

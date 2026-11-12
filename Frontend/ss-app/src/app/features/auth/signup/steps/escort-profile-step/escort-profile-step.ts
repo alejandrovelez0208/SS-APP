@@ -7,7 +7,14 @@ import {
   Output,
   signal,
 } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { EMPTY, map, Observable, startWith } from 'rxjs';
 import { NotificationService } from '@shared/services/notification/notification.service';
@@ -201,6 +208,7 @@ export class EscortProfileStep {
       next: (data) => {
         this.nationalities = data;
         this.setupFilter();
+        this.setupCountryValidation();
       },
       error: (err) => console.error('Error loading nationalities', err),
     });
@@ -217,15 +225,14 @@ export class EscortProfileStep {
       error: (err) => console.error('Error loading InternationalCodes', err),
     });
 
-    this.dataService.getCitiesColombia().subscribe({
+    this.catalogOptions.search(CatalogType.CITY).subscribe({
       next: (data) => {
-        this.baseCity = data;
-        const defaultCity = this.baseCity[0];
-        if (defaultCity) {
-          this.escortProfileform.get('baseCity')?.setValue(defaultCity.name);
-        }
+        this.baseCity = data.map((city) => ({ id: city.id, name: city.description }));
+        const medellin = this.baseCity.find((city) => city.name === 'Medellín');
+        this.escortProfileform.get('baseCity')?.setValue(medellin?.name ?? 'Medellín');
+        this.setupCityValidation();
       },
-      error: (err) => console.error('Error loading Cities of Colombia', err),
+      error: (err) => console.error('Error loading base cities', err),
     });
   }
 
@@ -239,6 +246,56 @@ export class EscortProfileStep {
         return name ? filtered : this._withPinnedFirst(filtered);
       }),
     );
+  }
+
+  private setupCountryValidation(): void {
+    const nationalityCtrl = this.escortProfileform.get('nationality');
+    if (!nationalityCtrl) {
+      return;
+    }
+
+    nationalityCtrl.setValidators([Validators.required, this.countryValidator.bind(this)]);
+    nationalityCtrl.updateValueAndValidity();
+  }
+
+  private setupCityValidation(): void {
+    const cityCtrl = this.escortProfileform.get('baseCity');
+    if (!cityCtrl) {
+      return;
+    }
+
+    cityCtrl.setValidators([Validators.required, this.baseCityValidator.bind(this)]);
+    cityCtrl.updateValueAndValidity();
+  }
+
+  private baseCityValidator(control: AbstractControl): ValidationErrors | null {
+    const value = String(control.value ?? '').trim();
+    if (!value) {
+      return { required: true };
+    }
+    if (this.baseCity.length === 0) {
+      return null;
+    }
+
+    return this.baseCity.some((city) => city.name === value) ? null : { invalidCity: true };
+  }
+
+  private countryValidator(control: AbstractControl): ValidationErrors | null {
+    const value = control.value;
+    if (!value) {
+      return { required: true };
+    }
+
+    const name = typeof value === 'string' ? value : value?.names?.common;
+    if (!name) {
+      return { invalidCountry: true };
+    }
+
+    const exists = this.nationalities.some(
+      (country) => country.names.common.toLowerCase() === String(name).toLowerCase(),
+    );
+
+    return exists ? null : { invalidCountry: true };
   }
 
   private _withPinnedFirst(list: Nationality[]): Nationality[] {

@@ -78,15 +78,29 @@
 
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>Country</mat-label>
-          <input matInput [formControl]="form.controls.country" />
+          <mat-select [formControl]="form.controls.country">
+            @for (country of countries; track country) {
+            <mat-option [value]="country">{{ country }}</mat-option>
+            }
+          </mat-select>
           <mat-icon matPrefix>public</mat-icon>
+          @if (form.controls.country.hasError('required')) {
+          <mat-error>Country is required</mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>Base city</mat-label>
-          <input matInput [formControl]="form.controls.city" />
+          <mat-select [formControl]="form.controls.city">
+            @for (city of cities(); track city.id) {
+            <mat-option [value]="city.label">{{ city.label }}</mat-option>
+            }
+          </mat-select>
           <mat-icon matPrefix>location_city</mat-icon>
-          <mat-hint>We currently operate exclusively in Medellín.</mat-hint>
+          <mat-hint>Select the city where you operate.</mat-hint>
+          @if (form.controls.city.hasError('required')) {
+          <mat-error>Base city is required</mat-error>
+          }
         </mat-form-field>
       </div>
 

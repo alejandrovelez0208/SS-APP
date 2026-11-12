@@ -1,4 +1,5 @@
-
+<!-- Logic verification must be implemented -->
+**11-12*2026**: Logic status enabled is being implemented.
 **11-10*2026**: Communication was established between the profile API and the catalog API.
 **11-09*2026**: Feat: Panel is implemented
 **11-07*2026**: Catalog items is being implemented

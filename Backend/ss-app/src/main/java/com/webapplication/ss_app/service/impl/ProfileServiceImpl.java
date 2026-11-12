@@ -90,10 +90,16 @@ public class ProfileServiceImpl implements ProfileService {
 			profile.setOrientation(request.getOrientation());
 		}
 		if (request.getCountry() != null) {
-			profile.setCountry(request.getCountry());
+			profile.setCountry(request.getCountry().isBlank() ? null : request.getCountry().trim());
 		}
 		if (request.getCity() != null) {
-			profile.setCity(request.getCity());
+			String city = request.getCity().isBlank() ? "Medellín" : request.getCity().trim();
+
+			if (!catalogRepository.existsByCatalogTypeAndNameIgnoreCaseAndActiveTrue(CatalogType.CITY, city)) {
+				throw new BusinessRuleException("City is not available: " + city);
+			}
+
+			profile.setCity(city);
 		}
 		if (request.getPhoneCountryCode() != null) {
 			profile.setPhoneCountryCode(request.getPhoneCountryCode());
@@ -237,9 +243,8 @@ public class ProfileServiceImpl implements ProfileService {
 				.status(profile.getStatus()).verificationStatus(profile.getVerificationStatus())
 				.completedAt(profile.getCompletedAt()).updatedAt(profile.getUpdatedAt())
 				.complete(profile.getCompletedAt() != null).headline(profile.getHeadline())
-				.aboutShort(profile.getAboutShort()).aboutLong(profile.getAboutLong())
-				.bustCm(profile.getBustCm()).waistCm(profile.getWaistCm()).hipsCm(profile.getHipsCm())
-				.build();
+				.aboutShort(profile.getAboutShort()).aboutLong(profile.getAboutLong()).bustCm(profile.getBustCm())
+				.waistCm(profile.getWaistCm()).hipsCm(profile.getHipsCm()).build();
 	}
 
 	private Set<Long> idsOf(Set<Catalog> catalogs) {
@@ -247,5 +252,18 @@ public class ProfileServiceImpl implements ProfileService {
 			return Collections.emptySet();
 		}
 		return catalogs.stream().map(Catalog::getId).collect(java.util.stream.Collectors.toSet());
+	}
+
+	@Override
+	@Transactional
+	public ProfileResponse updateMyProfileStatus(String email, ProfileStatus status) {
+		Profile profile = findProfile(email);
+
+		if (status != ProfileStatus.ACTIVE && status != ProfileStatus.PAUSED) {
+			throw new BusinessRuleException("Only ACTIVE or PAUSED status is allowed");
+		}
+
+		profile.setStatus(status);
+		return toResponse(profileRepository.save(profile));
 	}
 }

@@ -2,7 +2,7 @@ package com.webapplication.ss_app.dtos.enums;
 
 public enum AccountType {
 
-	INDEPENDENT("Independent"), AGENCY("Agency");
+	INDEPENDENT("Independent"), AGENCY("Agency"), ADMIN("Admin");
 
 	AccountType(String descripction) {
 		this.displayName = descripction;
