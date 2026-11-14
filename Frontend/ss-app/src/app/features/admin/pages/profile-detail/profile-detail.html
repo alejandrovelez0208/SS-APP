@@ -1,0 +1,208 @@
+<a class="back-link" routerLink="/admin/profiles">
+  <mat-icon>arrow_back</mat-icon>
+  Back to profiles
+</a>
+
+@if (profile(); as profile) {
+<header class="detail-header">
+  <div class="detail-heading">
+    <span class="profile-avatar profile-avatar-lg">{{ initial(profile.profileName) }}</span>
+    <div>
+      <h1>{{ profile.profileName }}</h1>
+      <p>{{ profile.headline }}</p>
+      <div class="detail-badges">
+        <app-admin-profile-status-chip [state]="profile.status" />
+        <app-verification-chip [status]="profile.verificationStatus" />
+        <span class="type-badge" [class.agency]="profile.accountType === 'AGENCY'">
+          {{ accountTypeLabel(profile.accountType) }}
+        </span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="detail-grid">
+  <section class="detail-card">
+    <h2>Profile</h2>
+    <dl class="fields-grid">
+      <div>
+        <dt>Account</dt>
+        <dd>{{ profile.accountName }}</dd>
+      </div>
+      <div>
+        <dt>Account email</dt>
+        <dd>{{ profile.accountEmail }}</dd>
+      </div>
+      <div>
+        <dt>Account type</dt>
+        <dd>{{ accountTypeLabel(profile.accountType) }}</dd>
+      </div>
+      <div>
+        <dt>Location</dt>
+        <dd>{{ profile.city }}, {{ profile.country }}</dd>
+      </div>
+      <div>
+        <dt>Age</dt>
+        <dd>{{ profile.age }} years</dd>
+      </div>
+      <div>
+        <dt>Gender</dt>
+        <dd>{{ profile.gender }}</dd>
+      </div>
+      <div>
+        <dt>Height / weight</dt>
+        <dd>{{ profile.heightCm }} cm · {{ profile.weightKg }} kg</dd>
+      </div>
+      <div>
+        <dt>Hair color</dt>
+        <dd>{{ profile.hairColor }}</dd>
+      </div>
+      <div>
+        <dt>Orientation</dt>
+        <dd>{{ profile.orientation }}</dd>
+      </div>
+      <div>
+        <dt>Completion</dt>
+        <dd>
+          <div class="completion">
+            <div class="completion-bar"><span [style.width.%]="profile.completion"></span></div>
+            <span>{{ profile.completion }}%</span>
+          </div>
+        </dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="detail-card">
+    <h2>Contact &amp; rates</h2>
+    <dl class="fields-grid">
+      <div>
+        <dt>Phone</dt>
+        <dd>{{ profile.phoneCountryCode }} {{ profile.phoneNumber }}</dd>
+      </div>
+      <div>
+        <dt>Basic rate</dt>
+        <dd>{{ profile.basicRate | currency: profile.currency : 'symbol-narrow' : '1.0-0' }}</dd>
+      </div>
+      <div>
+        <dt>Availability</dt>
+        <dd>
+          {{ profile.availableAllDay ? 'Available all day' : profile.scheduleFrom + ' – ' + profile.scheduleTo }}
+        </dd>
+      </div>
+      <div>
+        <dt>Website</dt>
+        <dd>{{ profile.website || '—' }}</dd>
+      </div>
+      <div>
+        <dt>Channels</dt>
+        <dd class="tag-list">
+          @for (channel of profile.channels; track channel) {
+            <span class="tag">{{ channel }}</span>
+          }
+        </dd>
+      </div>
+      <div>
+        <dt>Modalities</dt>
+        <dd class="tag-list">
+          @for (modality of profile.modalities; track modality) {
+            <span class="tag">{{ modality }}</span>
+          }
+        </dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="detail-card full-card">
+    <h2>Services &amp; departures</h2>
+    <div class="tag-section">
+      <span class="tag-label">Services</span>
+      <div class="tag-list">
+        @for (service of profile.services; track service) {
+          <span class="tag">{{ service }}</span>
+        }
+      </div>
+    </div>
+    <div class="tag-section">
+      <span class="tag-label">Departures</span>
+      <div class="tag-list">
+        @for (departure of profile.departures; track departure) {
+          <span class="tag">{{ departure }}</span>
+        } @empty {
+          <span class="muted">No departures configured.</span>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="detail-card full-card">
+    <div class="media-header">
+      <h2>Photos ({{ profile.photosCount }})</h2>
+      <span class="muted">Last update: {{ profile.updatedAt | date: 'medium' }}</span>
+    </div>
+    <div class="photo-grid">
+      @for (slot of photoSlots(); track slot) {
+        <div class="photo-slot">
+          <mat-icon>image</mat-icon>
+        </div>
+      }
+    </div>
+    <p class="muted">Placeholder gallery. Real images will come from the profile endpoint.</p>
+  </section>
+
+  <section class="detail-card status-card">
+    <div>
+      <h2>Status</h2>
+      <p>{{ statusDescription() }}</p>
+
+      @if (profile.status === 'INACTIVE' && !canReactivate(profile)) {
+        <small>The verification was rejected. Approve it before reactivating the profile.</small>
+      }
+      @if (profile.status === 'DRAFT' && !draftReady()) {
+        <small>Complete and verify the profile before activating it.</small>
+      }
+    </div>
+
+    <div class="status-actions">
+      @if (profile.status === 'ACTIVE' || profile.status === 'PAUSED') {
+        <button mat-stroked-button class="text-button" type="button" (click)="togglePause()">
+          <mat-icon>{{ profile.status === 'PAUSED' ? 'play_circle' : 'pause_circle' }}</mat-icon>
+          {{ profile.status === 'PAUSED' ? 'Resume profile' : 'Pause profile' }}
+        </button>
+        <button mat-flat-button class="status-action danger" type="button" (click)="deactivate()">
+          <mat-icon>block</mat-icon>
+          Deactivate profile
+        </button>
+      } @else if (profile.status === 'INACTIVE') {
+        <button
+          mat-flat-button
+          class="status-action activate"
+          type="button"
+          [disabled]="!canReactivate(profile)"
+          (click)="reactivate()"
+        >
+          <mat-icon>restart_alt</mat-icon>
+          Reactivate profile
+        </button>
+      } @else {
+        <button
+          mat-flat-button
+          class="status-action activate"
+          type="button"
+          [disabled]="!draftReady()"
+          (click)="activateDraft()"
+        >
+          <mat-icon>check_circle</mat-icon>
+          Activate profile
+        </button>
+      }
+    </div>
+  </section>
+</div>
+} @else {
+<section class="data-panel empty-state">
+  <mat-icon>person_search</mat-icon>
+  <p>Profile not found in the mock data.</p>
+  <a mat-stroked-button class="text-button" routerLink="/admin/profiles">Back to profiles</a>
+</section>
+}

@@ -1,0 +1,48 @@
+.verification-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  padding: 4px 9px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--gray);
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.verification-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gray);
+}
+
+.verification-chip.verified {
+  border-color: rgba(16, 185, 129, 0.35);
+  color: #55d9a9;
+}
+
+.verification-chip.verified .verification-dot {
+  background: #10b981;
+}
+
+.verification-chip.pending {
+  border-color: rgba(224, 194, 127, 0.35);
+  color: var(--gold);
+}
+
+.verification-chip.pending .verification-dot {
+  background: var(--gold);
+}
+
+.verification-chip.rejected {
+  border-color: rgba(229, 9, 20, 0.35);
+  color: #ff6b76;
+}
+
+.verification-chip.rejected .verification-dot {
+  background: #e50914;
+}

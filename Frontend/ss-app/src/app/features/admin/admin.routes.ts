@@ -20,6 +20,15 @@ export const adminRoutes: Routes = [
           import('./pages/account-detail/account-detail').then((m) => m.AccountDetailPage),
       },
       {
+        path: 'profiles',
+        loadComponent: () => import('./pages/profiles/profiles').then((m) => m.AdminProfiles),
+      },
+      {
+        path: 'profiles/:id',
+        loadComponent: () =>
+          import('./pages/profile-detail/profile-detail').then((m) => m.AdminProfileDetail),
+      },
+      {
         path: 'user-control',
         loadComponent: () => import('./pages/user-control/user-control').then((m) => m.UserControl),
       },
