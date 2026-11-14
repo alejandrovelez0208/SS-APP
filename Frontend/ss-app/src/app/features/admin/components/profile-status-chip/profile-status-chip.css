@@ -1,0 +1,52 @@
+.profile-status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  width: fit-content;
+  padding: 5px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gray);
+}
+
+.profile-status-chip.active {
+  border-color: rgba(16, 185, 129, 0.35);
+  background: rgba(16, 185, 129, 0.12);
+}
+
+.profile-status-chip.active .status-dot {
+  background: #10b981;
+}
+
+.profile-status-chip.paused {
+  border-color: rgba(224, 194, 127, 0.4);
+  background: rgba(224, 194, 127, 0.12);
+}
+
+.profile-status-chip.paused .status-dot {
+  background: var(--gold);
+}
+
+.profile-status-chip.inactive {
+  border-color: rgba(229, 9, 20, 0.35);
+  background: rgba(229, 9, 20, 0.12);
+}
+
+.profile-status-chip.inactive .status-dot {
+  background: #e50914;
+}
+
+.profile-status-chip.draft .status-dot {
+  background: var(--gray);
+}

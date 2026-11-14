@@ -8,6 +8,7 @@ import { map } from 'rxjs';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { RoleBadge } from '../../components/role-badge/role-badge';
 import { AdminAccountsStateService } from '../../data-access/admin-accounts.state.service';
+import { AdminProfilesMockService } from '../../data-access/admin-profiles.mock.service';
 import { AuthSessionService } from '@core/auth/auth-session.service';
 import { DialogService } from '@shared/services/dialog/dialog.service';
 
@@ -22,7 +23,7 @@ import { DialogService } from '@shared/services/dialog/dialog.service';
     RouterLinkActive,
     RouterOutlet,
   ],
-  providers: [AdminAccountsStateService],
+  providers: [AdminAccountsStateService, AdminProfilesMockService],
   templateUrl: './admin-shell.html',
   styleUrl: './admin-shell.css',
 })

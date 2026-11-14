@@ -1,0 +1,243 @@
+<header class="page-header">
+  <div>
+    <h1>Profiles</h1>
+    <p class="page-description">
+      Review every independent and agency profile and control what the public can see.
+    </p>
+  </div>
+</header>
+
+<section class="profile-stats" aria-label="Profile summary">
+  <article class="profile-stat">
+    <span>Total profiles</span>
+    <strong>{{ overview().total }}</strong>
+  </article>
+  <article class="profile-stat active-stat">
+    <span>Active</span>
+    <strong>{{ overview().active }}</strong>
+  </article>
+  <article class="profile-stat paused-stat">
+    <span>Paused</span>
+    <strong>{{ overview().paused }}</strong>
+  </article>
+  <article class="profile-stat inactive-stat">
+    <span>Inactive</span>
+    <strong>{{ overview().inactive }}</strong>
+  </article>
+  <article class="profile-stat draft-stat">
+    <span>Draft</span>
+    <strong>{{ overview().draft }}</strong>
+  </article>
+</section>
+
+<div class="toolbar profiles-toolbar">
+  <mat-form-field class="search-field" appearance="outline">
+    <mat-icon matPrefix>search</mat-icon>
+    <input
+      matInput
+      type="search"
+      aria-label="Search by profile, account or city"
+      placeholder="Search by profile, account or city"
+      [value]="search()"
+      (input)="updateSearch($event)"
+    />
+  </mat-form-field>
+
+  <mat-chip-listbox
+    class="filter-group"
+    aria-label="Filter by account type"
+    hideSingleSelectionIndicator
+    [value]="accountType()"
+    (change)="updateType($event.value)"
+  >
+    @for (option of typeOptions; track option) {
+      <mat-chip-option class="filter-chip" [class.selected]="accountType() === option" [value]="option">
+        {{ typeFilterLabel(option) }}
+      </mat-chip-option>
+    }
+  </mat-chip-listbox>
+</div>
+
+<mat-chip-listbox
+  class="filter-group status-filters"
+  aria-label="Filter by profile status"
+  hideSingleSelectionIndicator
+  [value]="status()"
+  (change)="updateStatus($event.value)"
+>
+  @for (option of statusOptions; track option) {
+    <mat-chip-option class="filter-chip" [class.selected]="status() === option" [value]="option">
+      {{ statusFilterLabel(option) }}
+    </mat-chip-option>
+  }
+</mat-chip-listbox>
+
+@if (filteredProfiles().length > 0) {
+<section class="data-panel" aria-label="Profiles list">
+  <table class="account-table profile-table">
+    <thead>
+      <tr>
+        <th>Profile</th>
+        <th>Account</th>
+        <th>Status</th>
+        <th>Verification</th>
+        <th>Photos</th>
+        <th class="actions-col"><span class="sr-only">Actions</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (profile of visibleProfiles(); track profile.id) {
+      <tr>
+        <td>
+          <a class="profile-cell" [routerLink]="['/admin/profiles', profile.id]">
+            <span class="profile-avatar">{{ initial(profile.profileName) }}</span>
+            <span class="profile-identity">
+              <strong>{{ profile.profileName }}</strong>
+              <span>{{ profile.headline }}</span>
+            </span>
+          </a>
+        </td>
+        <td>
+          <div class="account-cell">
+            <span class="account-name">{{ profile.accountName }}</span>
+            <span class="account-email">{{ profile.accountEmail }}</span>
+            <span class="type-badge" [class.agency]="profile.accountType === 'AGENCY'">
+              {{ accountTypeLabel(profile.accountType) }}
+            </span>
+          </div>
+        </td>
+        <td><app-admin-profile-status-chip [state]="profile.status" /></td>
+        <td><app-verification-chip [status]="profile.verificationStatus" /></td>
+        <td>
+          <span class="photos-cell">
+            <mat-icon>photo_library</mat-icon>
+            {{ profile.photosCount }}
+          </span>
+        </td>
+        <td class="actions-cell">
+          <a
+            mat-icon-button
+            [routerLink]="['/admin/profiles', profile.id]"
+            aria-label="View profile"
+            title="View profile"
+          >
+            <mat-icon>visibility</mat-icon>
+          </a>
+
+          @if (profile.status === 'ACTIVE' || profile.status === 'PAUSED') {
+            <button
+              mat-icon-button
+              type="button"
+              (click)="togglePause(profile)"
+              [title]="profile.status === 'PAUSED' ? 'Resume profile' : 'Pause profile'"
+              [attr.aria-label]="profile.status === 'PAUSED' ? 'Resume profile' : 'Pause profile'"
+            >
+              <mat-icon>{{ profile.status === 'PAUSED' ? 'play_circle' : 'pause_circle' }}</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              class="danger-icon"
+              type="button"
+              (click)="deactivate(profile)"
+              aria-label="Deactivate profile"
+              title="Deactivate profile"
+            >
+              <mat-icon>block</mat-icon>
+            </button>
+          } @else if (profile.status === 'INACTIVE') {
+            <button
+              mat-icon-button
+              class="success-icon"
+              type="button"
+              [disabled]="!canReactivate(profile)"
+              (click)="reactivate(profile)"
+              [title]="canReactivate(profile) ? 'Reactivate profile' : 'Verify the profile before reactivating it.'"
+              aria-label="Reactivate profile"
+            >
+              <mat-icon>restart_alt</mat-icon>
+            </button>
+          }
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+
+  <div class="account-cards">
+    @for (profile of visibleProfiles(); track profile.id) {
+    <article class="account-card profile-card">
+      <div class="card-top">
+        <span class="profile-avatar">{{ initial(profile.profileName) }}</span>
+        <div class="profile-identity">
+          <strong>{{ profile.profileName }}</strong>
+          <span>{{ profile.headline }}</span>
+        </div>
+        <app-admin-profile-status-chip [state]="profile.status" />
+      </div>
+
+      <div class="card-account">
+        <span class="account-name">{{ profile.accountName }}</span>
+        <span class="account-email">{{ profile.accountEmail }}</span>
+        <span class="type-badge" [class.agency]="profile.accountType === 'AGENCY'">
+          {{ accountTypeLabel(profile.accountType) }}
+        </span>
+      </div>
+
+      <div class="card-meta">
+        <app-verification-chip [status]="profile.verificationStatus" />
+        <span class="photos-cell">
+          <mat-icon>photo_library</mat-icon>
+          {{ profile.photosCount }}
+        </span>
+      </div>
+
+      <div class="account-card-actions">
+        <a mat-stroked-button class="text-button" [routerLink]="['/admin/profiles', profile.id]">
+          View
+        </a>
+
+        @if (profile.status === 'ACTIVE' || profile.status === 'PAUSED') {
+          <button mat-stroked-button class="text-button" type="button" (click)="togglePause(profile)">
+            {{ profile.status === 'PAUSED' ? 'Resume' : 'Pause' }}
+          </button>
+          <button mat-stroked-button class="action-button" type="button" (click)="deactivate(profile)">
+            Deactivate
+          </button>
+        } @else if (profile.status === 'INACTIVE') {
+          <button
+            mat-stroked-button
+            class="action-button activate"
+            type="button"
+            [disabled]="!canReactivate(profile)"
+            (click)="reactivate(profile)"
+          >
+            Reactivate
+          </button>
+        }
+      </div>
+
+      @if (profile.status === 'INACTIVE' && !canReactivate(profile)) {
+        <small class="admin-help">Verify the profile before reactivating it.</small>
+      }
+    </article>
+    }
+  </div>
+</section>
+
+<mat-paginator
+  class="account-paginator"
+  [length]="filteredProfiles().length"
+  [pageSize]="pageSize"
+  [pageIndex]="pageIndex()"
+  [hidePageSize]="true"
+  (page)="updatePage($event)"
+/>
+} @else {
+<section class="data-panel empty-state">
+  <mat-icon>search_off</mat-icon>
+  <p>No profiles match your filters.</p>
+  <button mat-stroked-button class="text-button" type="button" (click)="clearFilters()">
+    Clear filters
+  </button>
+</section>
+}
