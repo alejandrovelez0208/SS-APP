@@ -1,6 +1,6 @@
 import { Injectable, computed, signal } from '@angular/core';
 import {
-  AdminProfile,
+  AdminProfileDetail,
   ProfileFilters,
   ProfileState,
 } from '../models/admin-profile.model';
@@ -13,7 +13,7 @@ import { ADMIN_PROFILES_MOCK } from './admin-profiles.mock';
  */
 @Injectable()
 export class AdminProfilesMockService {
-  private readonly profilesState = signal<AdminProfile[]>(ADMIN_PROFILES_MOCK);
+  private readonly profilesState = signal<AdminProfileDetail[]>(ADMIN_PROFILES_MOCK);
 
   readonly profiles = this.profilesState.asReadonly();
 
@@ -29,7 +29,7 @@ export class AdminProfilesMockService {
     };
   });
 
-  search(filters: ProfileFilters): AdminProfile[] {
+  search(filters: ProfileFilters): AdminProfileDetail[] {
     const search = filters.search.trim().toLowerCase();
 
     return this.profiles()
@@ -48,7 +48,7 @@ export class AdminProfilesMockService {
       );
   }
 
-  findById(id: string): AdminProfile | undefined {
+  findById(id: string): AdminProfileDetail | undefined {
     return this.profiles().find((profile) => profile.id === id);
   }
 

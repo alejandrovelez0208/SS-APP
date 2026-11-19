@@ -12,7 +12,7 @@ import { AdminProfileStatusChip } from '../../components/profile-status-chip/pro
 import { VerificationChip } from '../../components/verification-chip/verification-chip';
 import { AdminProfilesMockService } from '../../data-access/admin-profiles.mock.service';
 import {
-  AdminProfile,
+  AdminProfileSummary,
   ProfileAccountType,
   ProfileState,
   canReactivateProfile,
@@ -133,7 +133,7 @@ export class AdminProfiles {
     }
   }
 
-  togglePause(profile: AdminProfile): void {
+  togglePause(profile: AdminProfileSummary): void {
     const nextStatus: ProfileState = profile.status === 'PAUSED' ? 'ACTIVE' : 'PAUSED';
     this.profilesService.setStatus(profile.id, nextStatus);
     this.notification.success(
@@ -141,7 +141,7 @@ export class AdminProfiles {
     );
   }
 
-  deactivate(profile: AdminProfile): void {
+  deactivate(profile: AdminProfileSummary): void {
     this.dialogService
       .openConfirmation(
         'Deactivate profile?',
@@ -159,7 +159,7 @@ export class AdminProfiles {
       });
   }
 
-  reactivate(profile: AdminProfile): void {
+  reactivate(profile: AdminProfileSummary): void {
     if (!this.canReactivate(profile)) {
       return;
     }
