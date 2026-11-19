@@ -54,10 +54,10 @@ public class SecurityConfig {
 
 	// ---- Solo ADMIN: escritura en datos compartidos ----
 	private static final String[] ADMIN_WRITE_ENDPOINTS = { "/api/catalogs", "/api/catalogs/**",
-			"/api/images/upload", "/api/users/**" };
+			"/api/images/upload", "/api/users/**", "/api/admin/**" };
 
 	// ---- Solo ADMIN: lecturas sensibles ----
-	private static final String[] ADMIN_READ_ENDPOINTS = { "/api/users", "/api/users/**" };
+	private static final String[] ADMIN_READ_ENDPOINTS = { "/api/users", "/api/users/**", "/api/admin/**" };
 
 	@Bean
 	PasswordEncoder passwordEncoder() {

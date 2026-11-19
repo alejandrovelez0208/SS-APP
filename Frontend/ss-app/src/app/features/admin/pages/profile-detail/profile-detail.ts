@@ -11,6 +11,7 @@ import { AdminProfileStatusChip } from '../../components/profile-status-chip/pro
 import { VerificationChip } from '../../components/verification-chip/verification-chip';
 import { AdminProfilesMockService } from '../../data-access/admin-profiles.mock.service';
 import {
+  AdminProfileDetail as AdminProfileDetailView,
   ProfileAccountType,
   canReactivateProfile,
 } from '../../models/admin-profile.model';
@@ -44,7 +45,7 @@ export class AdminProfileDetail {
     { initialValue: this.route.snapshot.paramMap.get('id') ?? '' },
   );
 
-  readonly profile = computed(
+  readonly profile = computed<AdminProfileDetailView | null>(
     () => this.profilesService.findById(this.profileId()) ?? null,
   );
 
