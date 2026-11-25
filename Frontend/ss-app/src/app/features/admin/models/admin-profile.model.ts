@@ -62,6 +62,19 @@ export interface ProfileFilters {
   verificationStatus?: ProfileVerification | 'ALL';
 }
 
+export interface AdminProfileQuery extends ProfileFilters {
+  page: number;
+  size: number;
+}
+
+export interface AdminProfileOverview {
+  total: number;
+  active: number;
+  paused: number;
+  inactive: number;
+  draft: number;
+}
+
 export function canReactivateProfile(
   profile: Pick<AdminProfileSummary, 'status' | 'verificationStatus' | 'complete'>,
 ): boolean {

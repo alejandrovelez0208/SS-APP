@@ -63,3 +63,20 @@ export interface AdminProfileDetailDto extends AdminProfileSummaryDto {
   modalities: string[];
   photos: AdminProfilePhotoDto[];
 }
+
+export interface AdminProfileOverviewDto {
+  total: number;
+  active: number;
+  paused: number;
+  inactive: number;
+  draft: number;
+}
+
+export interface AdminProfilePageDto {
+  content: AdminProfileSummaryDto[];
+  totalElements: number;
+  totalPages: number;
+  page: number;
+  size: number;
+  overview: AdminProfileOverviewDto;
+}

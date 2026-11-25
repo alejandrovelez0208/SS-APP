@@ -4,10 +4,11 @@ import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 import {
   AdminProfileDetailDto,
+  AdminProfilePageDto,
   AdminProfileSummaryDto,
 } from '../models/admin-profile.dto';
 import {
-  ProfileFilters,
+  AdminProfileQuery,
   ProfileState,
 } from '../models/admin-profile.model';
 
@@ -22,24 +23,26 @@ export class AdminProfilesApiService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = `${environment.apiUrl}admin/profiles`;
 
-  getAll(filters: ProfileFilters): Observable<AdminProfileSummaryDto[]> {
-    let params = new HttpParams();
+  getPage(query: AdminProfileQuery): Observable<AdminProfilePageDto> {
+    let params = new HttpParams()
+      .set('page', query.page)
+      .set('size', query.size);
 
-    const search = filters.search.trim();
+    const search = query.search.trim();
     if (search) {
       params = params.set('search', search);
     }
-    if (filters.accountType !== 'ALL') {
-      params = params.set('accountType', filters.accountType);
+    if (query.accountType !== 'ALL') {
+      params = params.set('accountType', query.accountType);
     }
-    if (filters.status !== 'ALL') {
-      params = params.set('status', filters.status);
+    if (query.status !== 'ALL') {
+      params = params.set('status', query.status);
     }
-    if (filters.verificationStatus && filters.verificationStatus !== 'ALL') {
-      params = params.set('verificationStatus', filters.verificationStatus);
+    if (query.verificationStatus && query.verificationStatus !== 'ALL') {
+      params = params.set('verificationStatus', query.verificationStatus);
     }
 
-    return this.http.get<AdminProfileSummaryDto[]>(this.apiUrl, { params });
+    return this.http.get<AdminProfilePageDto>(`${this.apiUrl}/page`, { params });
   }
 
   getById(id: string): Observable<AdminProfileDetailDto> {

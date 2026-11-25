@@ -1,4 +1,5 @@
 
+**14-nov-2026**:Profile pagination is implemented
 **14-11-2026**: Admin profiles API contract.
 **09-11-2026**: Changed are being implemented
 **09-11-2026**: Delete botton in catalogs is implemented.

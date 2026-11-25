@@ -27,9 +27,11 @@ Mapa de endpoints del backend y el servicio TypeScript que los consume.
 
 | Endpoint | Servicio frontend | Feature | Backend |
 |---|---|---|---|
-| `GET /api/admin/profiles` | `AdminProfilesApiService.getAll()` desde `AdminProfilesStateService.load()` | admin | `AdminProfileController.getAll()` |
+| `GET /api/admin/profiles/page` | `AdminProfilesApiService.getPage()` desde `AdminProfilesStateService.load()` | admin | `AdminProfileController.getPage()` |
 | `GET /api/admin/profiles/{id}` | `AdminProfilesApiService.getById()` desde `AdminProfilesStateService.loadDetail()` | admin | `AdminProfileController.getById()` |
 | `PATCH /api/admin/profiles/{id}/status` | `AdminProfilesApiService.updateStatus()` desde `AdminProfilesStateService.changeStatus()` | admin | `AdminProfileController.updateStatus()` |
+
+El endpoint anterior `GET /api/admin/profiles` se mantiene por compatibilidad, pero el panel usa la versión paginada.
 
 Trazabilidad del listado:
 
@@ -37,11 +39,13 @@ Trazabilidad del listado:
 profiles.html
   → AdminProfiles.ngOnInit()
   → AdminProfilesStateService.load()
-  → AdminProfilesApiService.getAll()
-  → GET /api/admin/profiles
-  → AdminProfileController.getAll()
-  → AdminProfileServiceImpl.getAllProfiles()
-  → ProfileRepository.findAllForAdmin()
+  → AdminProfilesApiService.getPage()
+  → GET /api/admin/profiles/page
+  → AdminProfileController.getPage()
+  → AdminProfileServiceImpl.getProfilesPage()
+  → ProfileRepository.findAdminProfileIds()
+  → ProfileRepository.findByIdsWithAccountAndPhotos()
+  → ProfileRepository.countProfilesByStatus()
 ```
 
 Trazabilidad del detalle:

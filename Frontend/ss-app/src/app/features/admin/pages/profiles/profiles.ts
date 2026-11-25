@@ -1,4 +1,13 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  OnInit,
+  effect,
+  inject,
+  signal,
+  untracked,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -6,6 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { RouterLink } from '@angular/router';
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { DialogService } from '@shared/services/dialog/dialog.service';
 import { NotificationService } from '@shared/services/notification/notification.service';
 import { AdminProfileStatusChip } from '../../components/profile-status-chip/profile-status-chip';
@@ -45,6 +55,8 @@ export class AdminProfiles implements OnInit {
   private readonly state = inject(AdminProfilesStateService);
   private readonly dialogService = inject(DialogService);
   private readonly notification = inject(NotificationService);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly searchInput$ = new Subject<string>();
 
   readonly pageSize = 6;
   readonly search = signal('');
@@ -61,57 +73,60 @@ export class AdminProfiles implements OnInit {
   ];
   readonly typeOptions: readonly TypeFilter[] = ['ALL', 'INDEPENDENT', 'AGENCY'];
 
+  readonly profiles = this.state.profiles;
+  readonly total = this.state.total;
   readonly loading = this.state.loading;
   readonly error = this.state.error;
   readonly overview = this.state.overview;
   readonly canReactivate = canReactivateProfile;
 
-  ngOnInit(): void {
-    this.state.load();
+  constructor() {
+    this.searchInput$
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(() => this.loadPage());
+
+    effect(() => {
+      const maxPage = Math.max(
+        0,
+        Math.ceil(this.total() / this.pageSize) - 1,
+      );
+      if (this.pageIndex() > maxPage) {
+        this.pageIndex.set(maxPage);
+        untracked(() => this.loadPage());
+      }
+    });
   }
 
-  readonly filteredProfiles = computed(() => {
-    const search = this.search().trim().toLowerCase();
-
-    return this.state
-      .profiles()
-      .filter((profile) => this.status() === 'ALL' || profile.status === this.status())
-      .filter(
-        (profile) =>
-          this.accountType() === 'ALL' || profile.accountType === this.accountType(),
-      )
-      .filter(
-        (profile) =>
-          !search ||
-          profile.profileName.toLowerCase().includes(search) ||
-          profile.accountName.toLowerCase().includes(search) ||
-          profile.accountEmail.toLowerCase().includes(search) ||
-          profile.city.toLowerCase().includes(search),
-      );
-  });
-
-  readonly visibleProfiles = computed(() => {
-    const start = this.pageIndex() * this.pageSize;
-    return this.filteredProfiles().slice(start, start + this.pageSize);
-  });
+  ngOnInit(): void {
+    this.loadPage();
+  }
 
   updateSearch(event: Event): void {
-    this.search.set((event.target as HTMLInputElement).value);
+    const value = (event.target as HTMLInputElement).value;
+    this.search.set(value);
     this.pageIndex.set(0);
+    this.searchInput$.next(value);
   }
 
   updateStatus(status: StatusFilter): void {
     this.status.set(status);
     this.pageIndex.set(0);
+    this.loadPage();
   }
 
   updateType(type: TypeFilter): void {
     this.accountType.set(type);
     this.pageIndex.set(0);
+    this.loadPage();
   }
 
   updatePage(event: PageEvent): void {
     this.pageIndex.set(event.pageIndex);
+    this.loadPage();
   }
 
   clearFilters(): void {
@@ -119,10 +134,12 @@ export class AdminProfiles implements OnInit {
     this.status.set('ALL');
     this.accountType.set('ALL');
     this.pageIndex.set(0);
+    this.searchInput$.next('');
+    this.loadPage();
   }
 
   retry(): void {
-    this.state.load(true);
+    this.loadPage(true);
   }
 
   initial(name: string): string {
@@ -137,16 +154,6 @@ export class AdminProfiles implements OnInit {
       return 'Independent';
     }
     return '—';
-  }
-
-  reactivateHint(profile: AdminProfileSummary): string {
-    if (profile.verificationStatus === 'REJECTED') {
-      return 'Verify the profile before reactivating it.';
-    }
-    if (!profile.complete) {
-      return 'Complete the profile before reactivating it.';
-    }
-    return 'Reactivate profile';
   }
 
   statusFilterLabel(option: StatusFilter): string {
@@ -173,6 +180,16 @@ export class AdminProfiles implements OnInit {
       default:
         return 'All types';
     }
+  }
+
+  reactivateHint(profile: AdminProfileSummary): string {
+    if (profile.verificationStatus === 'REJECTED') {
+      return 'Verify the profile before reactivating it.';
+    }
+    if (!profile.complete) {
+      return 'Complete the profile before reactivating it.';
+    }
+    return 'Reactivate profile';
   }
 
   togglePause(profile: AdminProfileSummary): void {
@@ -213,6 +230,19 @@ export class AdminProfiles implements OnInit {
       profile.id,
       'ACTIVE',
       'Profile reactivated.',
+    );
+  }
+
+  private loadPage(force = false): void {
+    this.state.load(
+      {
+        search: this.search(),
+        status: this.status(),
+        accountType: this.accountType(),
+        page: this.pageIndex(),
+        size: this.pageSize,
+      },
+      force,
     );
   }
 }
