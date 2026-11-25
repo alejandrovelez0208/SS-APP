@@ -83,7 +83,7 @@
   <p>{{ error() }}</p>
   <button mat-stroked-button class="text-button" type="button" (click)="retry()">Retry</button>
 </section>
-} @else if (filteredProfiles().length > 0) {
+} @else if (profiles().length > 0) {
 <section class="data-panel" aria-label="Profiles list">
   <table class="account-table profile-table">
     <thead>
@@ -97,7 +97,7 @@
       </tr>
     </thead>
     <tbody>
-      @for (profile of visibleProfiles(); track profile.id) {
+      @for (profile of profiles(); track profile.id) {
       <tr>
         <td>
           <a class="profile-cell" [routerLink]="['/admin/profiles', profile.id]">
@@ -175,7 +175,7 @@
   </table>
 
   <div class="account-cards">
-    @for (profile of visibleProfiles(); track profile.id) {
+    @for (profile of profiles(); track profile.id) {
     <article class="account-card profile-card">
       <div class="card-top">
         <span class="profile-avatar">{{ initial(profile.profileName) }}</span>
@@ -237,7 +237,7 @@
 
 <mat-paginator
   class="account-paginator"
-  [length]="filteredProfiles().length"
+  [length]="total()"
   [pageSize]="pageSize"
   [pageIndex]="pageIndex()"
   [hidePageSize]="true"

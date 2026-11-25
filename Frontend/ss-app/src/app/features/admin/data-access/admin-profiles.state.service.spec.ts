@@ -3,9 +3,11 @@ import { TestBed } from '@angular/core/testing';
 import { Observable, Subject, of, throwError } from 'rxjs';
 import {
   AdminProfileDetailDto,
+  AdminProfilePageDto,
   AdminProfileSummaryDto,
 } from '../models/admin-profile.dto';
 import {
+  AdminProfileQuery,
   AdminProfileSummary,
   ProfileState,
 } from '../models/admin-profile.model';
@@ -13,10 +15,18 @@ import { AdminProfilesApiService } from './admin-profiles-api.service';
 import { AdminProfilesStateService } from './admin-profiles.state.service';
 
 interface ApiMock {
-  getAll: () => Observable<AdminProfileSummaryDto[]>;
+  getPage: (query: AdminProfileQuery) => Observable<AdminProfilePageDto>;
   getById: (id: string) => Observable<AdminProfileDetailDto>;
   updateStatus: (id: string, status: ProfileState) => Observable<AdminProfileSummaryDto>;
 }
+
+const DEFAULT_QUERY: AdminProfileQuery = {
+  search: '',
+  status: 'ALL',
+  accountType: 'ALL',
+  page: 0,
+  size: 6,
+};
 
 function summaryDto(
   id: number,
@@ -44,6 +54,27 @@ function summaryDto(
     createdAt: '2026-01-01T00:00:00Z',
     updatedAt: '2026-02-01T00:00:00Z',
     ...overrides,
+  };
+}
+
+function pageDto(
+  content: AdminProfileSummaryDto[],
+  overview: Partial<AdminProfilePageDto['overview']> = {},
+): AdminProfilePageDto {
+  return {
+    content,
+    totalElements: content.length,
+    totalPages: 1,
+    page: 0,
+    size: 6,
+    overview: {
+      total: content.length,
+      active: 0,
+      paused: 0,
+      inactive: 0,
+      draft: 0,
+      ...overview,
+    },
   };
 }
 
@@ -76,7 +107,7 @@ describe('AdminProfilesStateService', () => {
 
   beforeEach(() => {
     api = {
-      getAll: () => of([]),
+      getPage: () => of(pageDto([])),
       getById: () => of(detailDto(1)),
       updateStatus: (id, status) => of(summaryDto(Number(id), { status })),
     };
@@ -91,40 +122,44 @@ describe('AdminProfilesStateService', () => {
     service = TestBed.inject(AdminProfilesStateService);
   });
 
-  it('loads profiles and calculates the overview', () => {
-    api.getAll = () =>
-      of([
-        summaryDto(1, { status: 'ACTIVE' }),
-        summaryDto(2, { status: 'PAUSED' }),
-        summaryDto(3, { status: 'INACTIVE' }),
-        summaryDto(4, { status: 'DRAFT' }),
-      ]);
+  it('loads a page and uses the overview from the server', () => {
+    api.getPage = () =>
+      of(
+        pageDto(
+          [
+            summaryDto(1, { status: 'ACTIVE' }),
+            summaryDto(2, { status: 'PAUSED' }),
+          ],
+          { total: 2, active: 1, paused: 1 },
+        ),
+      );
 
-    service.load();
+    service.load(DEFAULT_QUERY);
 
-    expect(service.profiles().length).toBe(4);
+    expect(service.profiles().length).toBe(2);
+    expect(service.total()).toBe(2);
     expect(service.loading()).toBe(false);
     expect(service.overview()).toEqual({
-      total: 4,
+      total: 2,
       active: 1,
       paused: 1,
-      inactive: 1,
-      draft: 1,
+      inactive: 0,
+      draft: 0,
     });
   });
 
-  it('does not reload unless force is true', () => {
+  it('does not reload the same query unless force is true', () => {
     let calls = 0;
-    api.getAll = () => {
+    api.getPage = () => {
       calls += 1;
-      return of([summaryDto(1)]);
+      return of(pageDto([summaryDto(1)]));
     };
 
-    service.load();
-    service.load();
+    service.load(DEFAULT_QUERY);
+    service.load(DEFAULT_QUERY);
     expect(calls).toBe(1);
 
-    service.load(true);
+    service.load(DEFAULT_QUERY, true);
     expect(calls).toBe(2);
   });
 
@@ -155,10 +190,10 @@ describe('AdminProfilesStateService', () => {
   });
 
   it('updates list and detail after a status change', () => {
-    api.getAll = () => of([summaryDto(1)]);
+    api.getPage = () => of(pageDto([summaryDto(1)]));
     api.getById = () => of(detailDto(1));
 
-    service.load();
+    service.load(DEFAULT_QUERY);
     service.loadDetail('1');
 
     let updated: AdminProfileSummary | undefined;
@@ -169,6 +204,30 @@ describe('AdminProfilesStateService', () => {
     expect(updated?.status).toBe('PAUSED');
     expect(service.profiles()[0].status).toBe('PAUSED');
     expect(service.detail()?.status).toBe('PAUSED');
+  });
+
+  it('removes a profile from the current page when it no longer matches the status filter', () => {
+    const query: AdminProfileQuery = { ...DEFAULT_QUERY, status: 'ACTIVE' };
+    api.getPage = () =>
+      of(
+        pageDto([summaryDto(1, { status: 'ACTIVE' })], {
+          total: 1,
+          active: 1,
+        }),
+      );
+
+    service.load(query);
+    service.changeStatus('1', 'PAUSED').subscribe();
+
+    expect(service.profiles()).toEqual([]);
+    expect(service.total()).toBe(0);
+    expect(service.overview()).toEqual({
+      total: 1,
+      active: 0,
+      paused: 1,
+      inactive: 0,
+      draft: 0,
+    });
   });
 
   it('ignores stale detail responses', () => {

@@ -4,9 +4,12 @@ import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +17,8 @@ import com.webapplication.ss_app.dtos.enums.AccountType;
 import com.webapplication.ss_app.dtos.enums.ProfileStatus;
 import com.webapplication.ss_app.dtos.enums.VerificationStatus;
 import com.webapplication.ss_app.dtos.response.AdminProfileDetailDto;
+import com.webapplication.ss_app.dtos.response.AdminProfileOverviewDto;
+import com.webapplication.ss_app.dtos.response.AdminProfilePageDto;
 import com.webapplication.ss_app.dtos.response.AdminProfilePhotoDto;
 import com.webapplication.ss_app.dtos.response.AdminProfileSummaryDto;
 import com.webapplication.ss_app.entity.Account;
@@ -63,6 +68,64 @@ public class AdminProfileServiceImpl implements AdminProfileService {
 		return uniqueProfiles.values().stream()
 				.map(profile -> toSummary(profile, countsByProfile.get(profile.getId())))
 				.toList();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public AdminProfilePageDto getProfilesPage(String search, AccountType accountType, ProfileStatus status,
+			VerificationStatus verificationStatus, int page, int size) {
+		int safePage = Math.max(page, 0);
+		int safeSize = Math.min(Math.max(size, 1), 50);
+
+		String normalizedSearch = search == null ? "" : search.trim().toLowerCase();
+		String searchPattern = "%" + normalizedSearch + "%";
+
+		Page<Long> idsPage = profileRepository.findAdminProfileIds(searchPattern, accountType, status,
+				verificationStatus, PageRequest.of(safePage, safeSize));
+
+		List<Long> ids = idsPage.getContent();
+		List<AdminProfileSummaryDto> content = List.of();
+
+		if (!ids.isEmpty()) {
+			List<Profile> profiles = profileRepository.findByIdsWithAccountAndPhotos(ids);
+			Map<Long, Profile> profilesById = profiles.stream()
+					.collect(Collectors.toMap(Profile::getId, Function.identity(), (first, ignored) -> first));
+			Map<Long, ProfileCollectionCounts> countsByProfile = profileRepository.countServicesAndChannels(ids)
+					.stream()
+					.collect(Collectors.toMap(ProfileCollectionCounts::getProfileId, Function.identity()));
+
+			content = ids.stream()
+					.map(profilesById::get)
+					.filter(Objects::nonNull)
+					.map(profile -> toSummary(profile, countsByProfile.get(profile.getId())))
+					.toList();
+		}
+
+		return new AdminProfilePageDto(content, idsPage.getTotalElements(), idsPage.getTotalPages(), safePage,
+				safeSize, buildOverview());
+	}
+
+	private AdminProfileOverviewDto buildOverview() {
+		long total = 0;
+		long active = 0;
+		long paused = 0;
+		long inactive = 0;
+		long draft = 0;
+
+		for (Object[] row : profileRepository.countProfilesByStatus()) {
+			ProfileStatus profileStatus = (ProfileStatus) row[0];
+			long count = ((Number) row[1]).longValue();
+			total += count;
+
+			switch (profileStatus) {
+				case ACTIVE -> active = count;
+				case PAUSED -> paused = count;
+				case INACTIVE -> inactive = count;
+				case DRAFT -> draft = count;
+			}
+		}
+
+		return new AdminProfileOverviewDto(total, active, paused, inactive, draft);
 	}
 
 	@Override

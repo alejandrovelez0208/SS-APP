@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -68,6 +70,60 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
 
 	@Query("SELECT m FROM Profile p JOIN p.modalities m WHERE p.id = :id ORDER BY m.name ASC")
 	List<Catalog> findModalitiesByProfileId(@Param("id") Long id);
+
+	/**
+	 * IDs paginados para el listado admin. No hace fetch de colecciones para
+	 * que el paginado y el count se ejecuten correctamente en base de datos.
+	 */
+	@Query(value = """
+			SELECT p.id
+			FROM Profile p
+			JOIN p.account a
+			LEFT JOIN a.owner u
+			WHERE (
+			        LOWER(p.profileName) LIKE :searchPattern
+			        OR LOWER(a.userName) LIKE :searchPattern
+			        OR LOWER(u.email) LIKE :searchPattern
+			        OR LOWER(p.city) LIKE :searchPattern
+			      )
+			  AND (:accountType IS NULL OR a.type = :accountType)
+			  AND (:status IS NULL OR p.status = :status)
+			  AND (:verificationStatus IS NULL OR p.verificationStatus = :verificationStatus)
+			ORDER BY p.updatedAt DESC
+			""", countQuery = """
+			SELECT COUNT(p)
+			FROM Profile p
+			JOIN p.account a
+			LEFT JOIN a.owner u
+			WHERE (
+			        LOWER(p.profileName) LIKE :searchPattern
+			        OR LOWER(a.userName) LIKE :searchPattern
+			        OR LOWER(u.email) LIKE :searchPattern
+			        OR LOWER(p.city) LIKE :searchPattern
+			      )
+			  AND (:accountType IS NULL OR a.type = :accountType)
+			  AND (:status IS NULL OR p.status = :status)
+			  AND (:verificationStatus IS NULL OR p.verificationStatus = :verificationStatus)
+			""")
+	Page<Long> findAdminProfileIds(@Param("searchPattern") String searchPattern,
+			@Param("accountType") AccountType accountType, @Param("status") ProfileStatus status,
+			@Param("verificationStatus") VerificationStatus verificationStatus, Pageable pageable);
+
+	/**
+	 * Carga completa de los perfiles de una página por IDs.
+	 */
+	@Query("""
+			SELECT DISTINCT p
+			FROM Profile p
+			JOIN FETCH p.account a
+			LEFT JOIN FETCH a.owner
+			LEFT JOIN FETCH p.photos
+			WHERE p.id IN :ids
+			""")
+	List<Profile> findByIdsWithAccountAndPhotos(@Param("ids") Collection<Long> ids);
+
+	@Query("SELECT p.status, COUNT(p) FROM Profile p GROUP BY p.status")
+	List<Object[]> countProfilesByStatus();
 
 	/**
 	 * Cuenta servicios y canales por perfil en una sola consulta.
