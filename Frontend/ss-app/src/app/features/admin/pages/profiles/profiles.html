@@ -72,7 +72,18 @@
   }
 </mat-chip-listbox>
 
-@if (filteredProfiles().length > 0) {
+@if (loading()) {
+<section class="data-panel empty-state">
+  <mat-icon>hourglass_empty</mat-icon>
+  <p>Loading profiles…</p>
+</section>
+} @else if (error()) {
+<section class="data-panel empty-state">
+  <mat-icon>error_outline</mat-icon>
+  <p>{{ error() }}</p>
+  <button mat-stroked-button class="text-button" type="button" (click)="retry()">Retry</button>
+</section>
+} @else if (filteredProfiles().length > 0) {
 <section class="data-panel" aria-label="Profiles list">
   <table class="account-table profile-table">
     <thead>
@@ -151,7 +162,7 @@
               type="button"
               [disabled]="!canReactivate(profile)"
               (click)="reactivate(profile)"
-              [title]="canReactivate(profile) ? 'Reactivate profile' : 'Verify the profile before reactivating it.'"
+              [title]="reactivateHint(profile)"
               aria-label="Reactivate profile"
             >
               <mat-icon>restart_alt</mat-icon>
@@ -217,7 +228,7 @@
       </div>
 
       @if (profile.status === 'INACTIVE' && !canReactivate(profile)) {
-        <small class="admin-help">Verify the profile before reactivating it.</small>
+        <small class="admin-help">{{ reactivateHint(profile) }}</small>
       }
     </article>
     }

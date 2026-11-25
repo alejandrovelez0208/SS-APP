@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogData } from '@shared/components/dynamic-form/field-config.model';
-import { DialogDinamic } from 'app/features/admin/components/dialog-dinamic/dialog-dinamic';
+import { DialogDinamic } from '@shared/components/dialog-dinamic/dialog-dinamic';
 import { Observable } from 'rxjs';
 
 @Injectable({

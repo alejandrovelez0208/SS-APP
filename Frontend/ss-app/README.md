@@ -1,4 +1,5 @@
 <!-- Logic verification must be implemented -->
+**24-nov*2026**: Endpoints, controllers and services is being implemented.
 **11-18*2026**: Endpoints and contracts is implemented.
 **11-12*2026**: Logic status enabled is being implemented.
 **11-10*2026**: Communication was established between the profile API and the catalog API.

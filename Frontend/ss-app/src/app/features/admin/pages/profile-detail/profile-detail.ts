@@ -1,5 +1,5 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, computed, inject } from '@angular/core';
+import { Component, DestroyRef, computed, effect, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,10 +9,14 @@ import { NotificationService } from '@shared/services/notification/notification.
 import { map } from 'rxjs';
 import { AdminProfileStatusChip } from '../../components/profile-status-chip/profile-status-chip';
 import { VerificationChip } from '../../components/verification-chip/verification-chip';
-import { AdminProfilesMockService } from '../../data-access/admin-profiles.mock.service';
 import {
-  AdminProfileDetail as AdminProfileDetailView,
+  applyProfileStatus,
+  confirmProfileDeactivation,
+} from '../../data-access/admin-profile-status.actions';
+import { AdminProfilesStateService } from '../../data-access/admin-profiles.state.service';
+import {
   ProfileAccountType,
+  ProfileState,
   canReactivateProfile,
 } from '../../models/admin-profile.model';
 
@@ -36,36 +40,42 @@ import {
 })
 export class AdminProfileDetail {
   private readonly route = inject(ActivatedRoute);
-  private readonly profilesService = inject(AdminProfilesMockService);
+  private readonly state = inject(AdminProfilesStateService);
   private readonly dialogService = inject(DialogService);
   private readonly notification = inject(NotificationService);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly profileId = toSignal(
     this.route.paramMap.pipe(map((params) => params.get('id') ?? '')),
     { initialValue: this.route.snapshot.paramMap.get('id') ?? '' },
   );
 
-  readonly profile = computed<AdminProfileDetailView | null>(
-    () => this.profilesService.findById(this.profileId()) ?? null,
-  );
-
+  readonly profile = this.state.detail;
+  readonly loading = this.state.detailLoading;
+  readonly error = this.state.detailError;
   readonly canReactivate = canReactivateProfile;
-
-  readonly photoSlots = computed(() => {
-    const profile = this.profile();
-    if (!profile) {
-      return [];
-    }
-    return Array.from({ length: profile.photosCount }, (_, index) => index);
-  });
 
   readonly draftReady = computed(() => {
     const profile = this.profile();
     return (
       !!profile &&
-      profile.completion === 100 &&
+      profile.complete &&
       profile.verificationStatus === 'VERIFIED'
     );
+  });
+
+  readonly reactivateHint = computed(() => {
+    const profile = this.profile();
+    if (!profile || profile.status !== 'INACTIVE') {
+      return '';
+    }
+    if (profile.verificationStatus === 'REJECTED') {
+      return 'The verification was rejected. Approve it before reactivating the profile.';
+    }
+    if (!profile.complete) {
+      return 'Complete the profile before reactivating it.';
+    }
+    return '';
   });
 
   readonly statusDescription = computed(() => {
@@ -86,12 +96,36 @@ export class AdminProfileDetail {
     }
   });
 
+  constructor() {
+    effect(() => {
+      const id = this.profileId();
+      if (id) {
+        this.state.loadDetail(id);
+      }
+    });
+
+    this.destroyRef.onDestroy(() => this.state.clearDetail());
+  }
+
+  retry(): void {
+    const id = this.profileId();
+    if (id) {
+      this.state.loadDetail(id);
+    }
+  }
+
   initial(name: string): string {
     return name.charAt(0).toUpperCase();
   }
 
-  accountTypeLabel(type: ProfileAccountType): string {
-    return type === 'AGENCY' ? 'Agency' : 'Independent';
+  accountTypeLabel(type: ProfileAccountType | null): string {
+    if (type === 'AGENCY') {
+      return 'Agency';
+    }
+    if (type === 'INDEPENDENT') {
+      return 'Independent';
+    }
+    return '—';
   }
 
   togglePause(): void {
@@ -100,9 +134,12 @@ export class AdminProfileDetail {
       return;
     }
 
-    const nextStatus = profile.status === 'PAUSED' ? 'ACTIVE' : 'PAUSED';
-    this.profilesService.setStatus(profile.id, nextStatus);
-    this.notification.success(
+    const nextStatus: ProfileState = profile.status === 'PAUSED' ? 'ACTIVE' : 'PAUSED';
+    applyProfileStatus(
+      this.state,
+      this.notification,
+      profile.id,
+      nextStatus,
       nextStatus === 'PAUSED' ? 'Profile paused.' : 'Profile resumed.',
     );
   }
@@ -113,21 +150,20 @@ export class AdminProfileDetail {
       return;
     }
 
-    this.dialogService
-      .openConfirmation(
-        'Deactivate profile?',
-        `"${profile.profileName}" will be hidden from the public site. The account will stay active.`,
-        'Deactivate',
-        'Cancel',
-        'danger',
-      )
-      .subscribe((confirmed) => {
+    confirmProfileDeactivation(this.dialogService, profile.profileName).subscribe(
+      (confirmed) => {
         if (!confirmed) {
           return;
         }
-        this.profilesService.setStatus(profile.id, 'INACTIVE');
-        this.notification.success('Profile deactivated.');
-      });
+        applyProfileStatus(
+          this.state,
+          this.notification,
+          profile.id,
+          'INACTIVE',
+          'Profile deactivated.',
+        );
+      },
+    );
   }
 
   reactivate(): void {
@@ -136,8 +172,13 @@ export class AdminProfileDetail {
       return;
     }
 
-    this.profilesService.setStatus(profile.id, 'ACTIVE');
-    this.notification.success('Profile reactivated.');
+    applyProfileStatus(
+      this.state,
+      this.notification,
+      profile.id,
+      'ACTIVE',
+      'Profile reactivated.',
+    );
   }
 
   activateDraft(): void {
@@ -146,7 +187,12 @@ export class AdminProfileDetail {
       return;
     }
 
-    this.profilesService.setStatus(profile.id, 'ACTIVE');
-    this.notification.success('Profile activated.');
+    applyProfileStatus(
+      this.state,
+      this.notification,
+      profile.id,
+      'ACTIVE',
+      'Profile activated.',
+    );
   }
 }

@@ -8,11 +8,14 @@ import java.util.List;
 import com.webapplication.ss_app.dtos.enums.Orientation;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class AdminProfileDetailDto implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+public class AdminProfileDetailDto extends AdminProfileSummaryDto implements Serializable {
 
 	private static final long serialVersionUID = 8682050843238903943L;
+
 	private String hairColor;
 	private Integer heightCm;
 	private Integer weightKg;

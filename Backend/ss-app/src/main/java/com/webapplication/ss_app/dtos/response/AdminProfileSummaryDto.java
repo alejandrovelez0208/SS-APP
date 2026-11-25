@@ -33,6 +33,7 @@ public class AdminProfileSummaryDto implements Serializable {
 	private VerificationStatus verificationStatus;
 	private int photosCount;
 	private Integer completion;
+	private boolean complete;
 	private Instant createdAt;
 	private Instant updatedAt;
 }

@@ -83,28 +83,39 @@
   </section>
 
   <section class="detail-card full-card">
-    <h2>Profiles ({{ account.profiles.length }})</h2>
+    <div class="section-header">
+      <h2>Profiles ({{ account.profiles.length }})</h2>
+      <a mat-stroked-button class="text-button" routerLink="/admin/profiles">
+        <mat-icon>open_in_new</mat-icon>
+        View all profiles
+      </a>
+    </div>
 
     @if (account.profiles.length > 0) {
     <div class="profile-list">
       @for (profile of account.profiles; track profile.id) {
-      <article class="profile-row">
+      <a
+        class="profile-row"
+        [routerLink]="['/admin/profiles', profile.id]"
+        [title]="'View ' + profile.profileName"
+      >
         <div class="profile-identity">
           <strong>{{ profile.profileName }}</strong>
           <span>
-            {{ profile.gender }} · {{ profile.age ?? '—' }} ·
+            {{ genderLabel(profile.gender) }} · {{ profile.age ?? '—' }} ·
             {{ profile.city || 'No city' }}{{ profile.country ? ', ' + profile.country : '' }}
           </span>
         </div>
         <div class="profile-meta">
-          <span class="profile-status">{{ profile.status }}</span>
-          <span class="profile-status">{{ profile.verificationStatus }}</span>
+          <app-admin-profile-status-chip [state]="profile.status" />
+          <app-verification-chip [status]="profile.verificationStatus" />
           <span class="profile-photos">
             <mat-icon>photo_library</mat-icon>
             {{ profile.photosCount }}
           </span>
+          <mat-icon class="profile-chevron">chevron_right</mat-icon>
         </div>
-      </article>
+      </a>
       }
     </div>
     } @else {

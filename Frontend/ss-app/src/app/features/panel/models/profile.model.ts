@@ -1,32 +1,22 @@
-export enum AccountType {
-  INDEPENDENT = 'INDEPENDENT',
-  AGENCY = 'AGENCY',
-}
+import {
+  AccountType,
+  ProfileStatus,
+  VerificationStatus,
+} from '@shared/models/profile-status.model';
+import type {
+  Gender,
+  Orientation,
+} from '@shared/models/profile-status.model';
 
-export enum ProfileStatus {
-  DRAFT = 'DRAFT',
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
-  PAUSED = 'PAUSED',
-}
-
-export enum VerificationStatus {
-  PENDING = 'PENDING',
-  VERIFIED = 'VERIFIED',
-  REJECTED = 'REJECTED',
-}
-
-export type Gender = 'MALE' | 'FEMALE' | 'NON_BINARY' | 'OTHER';
-
-export type Orientation =
-  | 'HETEROSEXUAL'
-  | 'HOMOSEXUAL'
-  | 'BISEXUAL'
-  | 'ASEXUAL'
-  | 'PANSEXUAL'
-  | 'QUEER'
-  | 'QUESTIONING'
-  | 'OTHER';
+export {
+  AccountType,
+  ProfileStatus,
+  VerificationStatus,
+} from '@shared/models/profile-status.model';
+export type {
+  Gender,
+  Orientation,
+} from '@shared/models/profile-status.model';
 
 export interface ProfilePhoto {
   id: string;
