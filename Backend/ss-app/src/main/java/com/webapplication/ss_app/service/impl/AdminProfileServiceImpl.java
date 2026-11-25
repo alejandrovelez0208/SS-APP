@@ -13,10 +13,17 @@ import org.springframework.transaction.annotation.Transactional;
 import com.webapplication.ss_app.dtos.enums.AccountType;
 import com.webapplication.ss_app.dtos.enums.ProfileStatus;
 import com.webapplication.ss_app.dtos.enums.VerificationStatus;
+import com.webapplication.ss_app.dtos.response.AdminProfileDetailDto;
+import com.webapplication.ss_app.dtos.response.AdminProfilePhotoDto;
 import com.webapplication.ss_app.dtos.response.AdminProfileSummaryDto;
 import com.webapplication.ss_app.entity.Account;
+import com.webapplication.ss_app.entity.Catalog;
 import com.webapplication.ss_app.entity.Profile;
+import com.webapplication.ss_app.entity.ProfilePhoto;
 import com.webapplication.ss_app.entity.User;
+import com.webapplication.ss_app.exception.BusinessRuleException;
+import com.webapplication.ss_app.exception.InvalidProfileStatusException;
+import com.webapplication.ss_app.exception.ResourceNotFoundException;
 import com.webapplication.ss_app.repositories.interfaz.ProfileRepository;
 import com.webapplication.ss_app.repositories.interfaz.ProfileRepository.ProfileCollectionCounts;
 import com.webapplication.ss_app.service.interfaz.AdminProfileService;
@@ -58,11 +65,121 @@ public class AdminProfileServiceImpl implements AdminProfileService {
 				.toList();
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public AdminProfileDetailDto getById(Long id) {
+		Profile profile = profileRepository.findByIdWithAccountAndPhotos(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Profile not found: " + id));
+
+		List<Catalog> services = profileRepository.findServicesByProfileId(id);
+		List<Catalog> departures = profileRepository.findDeparturesByProfileId(id);
+		List<Catalog> channels = profileRepository.findChannelsByProfileId(id);
+		List<Catalog> modalities = profileRepository.findModalitiesByProfileId(id);
+
+		int photosCount = profile.getPhotos() == null ? 0 : profile.getPhotos().size();
+
+		AdminProfileDetailDto dto = new AdminProfileDetailDto();
+		fillSummaryFields(dto, profile, photosCount, services.size(), channels.size());
+
+		dto.setHairColor(profile.getHairColor());
+		dto.setHeightCm(profile.getHeightCm());
+		dto.setWeightKg(profile.getWeightKg());
+		dto.setOrientation(profile.getOrientation());
+		dto.setPhoneCountryCode(profile.getPhoneCountryCode());
+		dto.setPhoneNumber(profile.getPhoneNumber());
+		dto.setWebsite(profile.getWebsite());
+		dto.setBasicRate(profile.getBasicRate());
+		dto.setCurrency(profile.getCurrency());
+		dto.setAvailableAllDay(profile.isAvailableAllDay());
+		dto.setScheduleFrom(profile.getScheduleFrom());
+		dto.setScheduleTo(profile.getScheduleTo());
+		dto.setServices(namesOf(services));
+		dto.setDepartures(namesOf(departures));
+		dto.setChannels(namesOf(channels));
+		dto.setModalities(namesOf(modalities));
+		dto.setPhotos(profile.getPhotos() == null ? List.of()
+				: profile.getPhotos().stream().map(this::toPhotoDto).toList());
+
+		return dto;
+	}
+
+	@Override
+	@Transactional
+	public AdminProfileSummaryDto updateStatus(Long id, ProfileStatus status) {
+		if (status != ProfileStatus.ACTIVE && status != ProfileStatus.PAUSED && status != ProfileStatus.INACTIVE) {
+			throw new InvalidProfileStatusException("Only ACTIVE, PAUSED or INACTIVE are allowed");
+		}
+
+		Profile profile = profileRepository.findByIdWithAccountAndPhotos(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Profile not found: " + id));
+
+		if (profile.getStatus() == status) {
+			return toSummary(profile, countsFor(id));
+		}
+
+		validateTransition(profile, status);
+
+		profile.setStatus(status);
+		profileRepository.save(profile);
+
+		return toSummary(profile, countsFor(id));
+	}
+
+	private ProfileCollectionCounts countsFor(Long id) {
+		return profileRepository.countServicesAndChannels(List.of(id)).stream().findFirst().orElse(null);
+	}
+
+	private void validateTransition(Profile profile, ProfileStatus target) {
+		ProfileStatus current = profile.getStatus();
+
+		switch (target) {
+			case PAUSED -> {
+				if (current != ProfileStatus.ACTIVE) {
+					throw new BusinessRuleException("Only ACTIVE profiles can be paused.");
+				}
+			}
+			case ACTIVE -> {
+				if (current == ProfileStatus.INACTIVE) {
+					if (profile.getVerificationStatus() == VerificationStatus.REJECTED) {
+						throw new BusinessRuleException("A rejected profile cannot be reactivated.");
+					}
+					if (profile.getCompletedAt() == null) {
+						throw new BusinessRuleException("An incomplete profile cannot be reactivated.");
+					}
+				} else if (current == ProfileStatus.DRAFT) {
+					if (profile.getCompletedAt() == null) {
+						throw new BusinessRuleException("An incomplete profile cannot be activated.");
+					}
+					if (profile.getVerificationStatus() != VerificationStatus.VERIFIED) {
+						throw new BusinessRuleException("A profile must be verified before it can be activated.");
+					}
+				} else if (current != ProfileStatus.PAUSED) {
+					throw new BusinessRuleException("Only PAUSED, INACTIVE or DRAFT profiles can be activated.");
+				}
+			}
+			case INACTIVE -> {
+				if (current != ProfileStatus.ACTIVE && current != ProfileStatus.PAUSED) {
+					throw new BusinessRuleException("Only ACTIVE or PAUSED profiles can be deactivated.");
+				}
+			}
+			default -> throw new InvalidProfileStatusException("Only ACTIVE, PAUSED or INACTIVE are allowed");
+		}
+	}
+
 	private AdminProfileSummaryDto toSummary(Profile profile, ProfileCollectionCounts counts) {
-		Account account = profile.getAccount();
-		User owner = account.getOwner();
+		int photosCount = profile.getPhotos() == null ? 0 : profile.getPhotos().size();
+		long servicesCount = counts == null ? 0 : counts.getServicesCount();
+		long channelsCount = counts == null ? 0 : counts.getChannelsCount();
 
 		AdminProfileSummaryDto dto = new AdminProfileSummaryDto();
+		fillSummaryFields(dto, profile, photosCount, servicesCount, channelsCount);
+		return dto;
+	}
+
+	private void fillSummaryFields(AdminProfileSummaryDto dto, Profile profile, int photosCount, long servicesCount,
+			long channelsCount) {
+		Account account = profile.getAccount();
+		User owner = account.getOwner();
 
 		dto.setId(profile.getId());
 		dto.setProfileName(profile.getProfileName());
@@ -86,13 +203,23 @@ public class AdminProfileServiceImpl implements AdminProfileService {
 			dto.setAccountEnabled(owner.isEnabled());
 		}
 
-		int photosCount = profile.getPhotos() == null ? 0 : profile.getPhotos().size();
-		long servicesCount = counts == null ? 0 : counts.getServicesCount();
-		long channelsCount = counts == null ? 0 : counts.getChannelsCount();
-
 		dto.setPhotosCount(photosCount);
 		dto.setCompletion(calculateCompletion(profile, photosCount, servicesCount, channelsCount));
+		dto.setComplete(profile.getCompletedAt() != null);
+	}
 
+	private List<String> namesOf(List<Catalog> catalogs) {
+		return catalogs.stream().map(Catalog::getName).toList();
+	}
+
+	private AdminProfilePhotoDto toPhotoDto(ProfilePhoto photo) {
+		AdminProfilePhotoDto dto = new AdminProfilePhotoDto();
+		dto.setId(photo.getId());
+		dto.setUrl(photo.getUrl());
+		dto.setPrimaryPhoto(photo.isPrimaryPhoto());
+		dto.setSortOrder(photo.getSortOrder());
+		dto.setVisibility(photo.getVisibility());
+		dto.setModerationStatus(photo.getModerationStatus());
 		return dto;
 	}
 

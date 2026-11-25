@@ -3,7 +3,18 @@
   Back to profiles
 </a>
 
-@if (profile(); as profile) {
+@if (loading()) {
+<section class="data-panel empty-state">
+  <mat-icon>hourglass_empty</mat-icon>
+  <p>Loading profile…</p>
+</section>
+} @else if (error()) {
+<section class="data-panel empty-state">
+  <mat-icon>error_outline</mat-icon>
+  <p>{{ error() }}</p>
+  <button mat-stroked-button class="text-button" type="button" (click)="retry()">Retry</button>
+</section>
+} @else if (profile(); as profile) {
 <header class="detail-header">
   <div class="detail-heading">
     <span class="profile-avatar profile-avatar-lg">{{ initial(profile.profileName) }}</span>
@@ -141,13 +152,26 @@
       <span class="muted">Last update: {{ profile.updatedAt | date: 'medium' }}</span>
     </div>
     <div class="photo-grid">
-      @for (slot of photoSlots(); track slot) {
+      @for (photo of profile.photos; track photo.id) {
+        <img
+          class="photo-slot"
+          style="width: 100%; height: 100%; object-fit: cover; border-style: solid"
+          [src]="photo.url"
+          [alt]="profile.profileName"
+          [title]="'Moderation: ' + photo.moderationStatus"
+          loading="lazy"
+        />
+      } @empty {
         <div class="photo-slot">
           <mat-icon>image</mat-icon>
         </div>
       }
     </div>
-    <p class="muted">Placeholder gallery. Real images will come from the profile endpoint.</p>
+    @if (profile.photos.length > 0) {
+      <p class="muted">Photos are loaded from the profile endpoint.</p>
+    } @else {
+      <p class="muted">This profile has no photos yet.</p>
+    }
   </section>
 
   <section class="detail-card status-card">
@@ -155,8 +179,8 @@
       <h2>Status</h2>
       <p>{{ statusDescription() }}</p>
 
-      @if (profile.status === 'INACTIVE' && !canReactivate(profile)) {
-        <small>The verification was rejected. Approve it before reactivating the profile.</small>
+      @if (profile.status === 'INACTIVE' && reactivateHint()) {
+        <small>{{ reactivateHint() }}</small>
       }
       @if (profile.status === 'DRAFT' && !draftReady()) {
         <small>Complete and verify the profile before activating it.</small>
@@ -202,7 +226,7 @@
 } @else {
 <section class="data-panel empty-state">
   <mat-icon>person_search</mat-icon>
-  <p>Profile not found in the mock data.</p>
+  <p>Profile not found.</p>
   <a mat-stroked-button class="text-button" routerLink="/admin/profiles">Back to profiles</a>
 </section>
 }

@@ -7,9 +7,12 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DialogService } from '@shared/services/dialog/dialog.service';
 import { NotificationService } from '@shared/services/notification/notification.service';
 import { AccountStatusChip } from '../../components/account-status-chip/account-status-chip';
+import { AdminProfileStatusChip } from '../../components/profile-status-chip/profile-status-chip';
 import { RoleBadge } from '../../components/role-badge/role-badge';
+import { VerificationChip } from '../../components/verification-chip/verification-chip';
 import { AdminAccountsStateService } from '../../data-access/admin-accounts.state.service';
 import { toAccountRole, toAccountStatus } from '../../data-access/admin-directory.mapper';
+import { genderLabel as formatGender } from '../../data-access/admin-profile.mapper';
 import {
   AccountRole,
   AccountStatus,
@@ -20,11 +23,13 @@ import {
   selector: 'app-admin-account-detail',
   imports: [
     AccountStatusChip,
+    AdminProfileStatusChip,
     DatePipe,
     MatButtonModule,
     MatIconModule,
     RoleBadge,
     RouterLink,
+    VerificationChip,
   ],
   templateUrl: './account-detail.html',
   styleUrls: [
@@ -55,6 +60,7 @@ export class AccountDetailPage implements OnInit {
   });
 
   readonly canChangeStatus = computed(() => this.role() !== 'ADMIN');
+  readonly genderLabel = formatGender;
 
   ngOnInit(): void {
     this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {

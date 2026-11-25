@@ -1,10 +1,12 @@
 import {
-  AdminProfileDetail,
   AdminProfileDetailDto,
-  AdminProfilePhoto,
   AdminProfilePhotoDto,
-  AdminProfileSummary,
   AdminProfileSummaryDto,
+} from '../models/admin-profile.dto';
+import {
+  AdminProfileDetail,
+  AdminProfilePhoto,
+  AdminProfileSummary,
   ApiGender,
   ApiOrientation,
 } from '../models/admin-profile.model';
@@ -16,12 +18,9 @@ export function toAdminProfileSummary(
     id: String(dto.id),
     profileName: dto.profileName,
     headline: dto.headline ?? '',
-    accountId: String(dto.accountId),
     accountName: dto.accountName,
-    accountEmail: dto.accountEmail,
+    accountEmail: dto.accountEmail ?? '',
     accountType: dto.accountType,
-    accountEnabled: dto.accountEnabled,
-    accountStatus: dto.accountStatus,
     gender: genderLabel(dto.gender),
     age: dto.age,
     city: dto.city ?? '',
@@ -30,7 +29,7 @@ export function toAdminProfileSummary(
     verificationStatus: dto.verificationStatus,
     photosCount: dto.photosCount,
     completion: dto.completion,
-    createdAt: dto.createdAt,
+    complete: dto.complete,
     updatedAt: dto.updatedAt,
   };
 }
@@ -64,27 +63,26 @@ export function toAdminProfilePhoto(dto: AdminProfilePhotoDto): AdminProfilePhot
   return {
     id: String(dto.id),
     url: dto.url,
-    primaryPhoto: dto.primaryPhoto,
-    sortOrder: dto.sortOrder,
-    visibility: dto.visibility,
     moderationStatus: dto.moderationStatus,
   };
 }
 
-export function genderLabel(gender: ApiGender): string {
+export function genderLabel(gender: ApiGender | null): string {
   switch (gender) {
     case 'MALE':
-      return 'Masculino';
+      return 'Male';
     case 'FEMALE':
-      return 'Femenino';
+      return 'Female';
     case 'NON_BINARY':
-      return 'No binario';
+      return 'Non-binary';
+    case 'OTHER':
+      return 'Other';
     default:
-      return 'Otro';
+      return '—';
   }
 }
 
-export function orientationLabel(orientation: ApiOrientation): string {
+export function orientationLabel(orientation: ApiOrientation | null): string {
   switch (orientation) {
     case 'HETEROSEXUAL':
       return 'Heterosexual';
@@ -100,8 +98,10 @@ export function orientationLabel(orientation: ApiOrientation): string {
       return 'Queer';
     case 'QUESTIONING':
       return 'Questioning';
+    case 'OTHER':
+      return 'Other';
     default:
-      return 'Otro';
+      return '—';
   }
 }
 

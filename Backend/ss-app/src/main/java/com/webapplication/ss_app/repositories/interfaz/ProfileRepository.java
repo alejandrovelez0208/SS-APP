@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import com.webapplication.ss_app.dtos.enums.AccountType;
 import com.webapplication.ss_app.dtos.enums.ProfileStatus;
 import com.webapplication.ss_app.dtos.enums.VerificationStatus;
+import com.webapplication.ss_app.entity.Catalog;
 import com.webapplication.ss_app.entity.Profile;
 
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
@@ -42,6 +43,31 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
 	List<Profile> findAllForAdmin(@Param("searchPattern") String searchPattern,
 			@Param("accountType") AccountType accountType, @Param("status") ProfileStatus status,
 			@Param("verificationStatus") VerificationStatus verificationStatus);
+
+	/**
+	 * Detalle de un perfil con cuenta, dueño y fotos cargadas.
+	 */
+	@Query("""
+			SELECT DISTINCT p
+			FROM Profile p
+			JOIN FETCH p.account a
+			LEFT JOIN FETCH a.owner
+			LEFT JOIN FETCH p.photos
+			WHERE p.id = :id
+			""")
+	Optional<Profile> findByIdWithAccountAndPhotos(@Param("id") Long id);
+
+	@Query("SELECT s FROM Profile p JOIN p.services s WHERE p.id = :id ORDER BY s.name ASC")
+	List<Catalog> findServicesByProfileId(@Param("id") Long id);
+
+	@Query("SELECT d FROM Profile p JOIN p.departures d WHERE p.id = :id ORDER BY d.name ASC")
+	List<Catalog> findDeparturesByProfileId(@Param("id") Long id);
+
+	@Query("SELECT c FROM Profile p JOIN p.channels c WHERE p.id = :id ORDER BY c.name ASC")
+	List<Catalog> findChannelsByProfileId(@Param("id") Long id);
+
+	@Query("SELECT m FROM Profile p JOIN p.modalities m WHERE p.id = :id ORDER BY m.name ASC")
+	List<Catalog> findModalitiesByProfileId(@Param("id") Long id);
 
 	/**
 	 * Cuenta servicios y canales por perfil en una sola consulta.

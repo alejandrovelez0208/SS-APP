@@ -1,3 +1,9 @@
+import {
+  ApiGender,
+  ProfileState,
+  ProfileVerification,
+} from './admin-profile.model';
+
 /**
  * Roles tal como los expone la API (enum Role del backend).
  */
@@ -33,13 +39,12 @@ export interface DirectoryUserDto {
 export interface ProfileSummaryDto {
   id: number;
   profileName: string;
-  gender: string;
+  gender: ApiGender | null;
   age: number | null;
   city: string | null;
   country: string | null;
-  status: string;
-  verificationStatus: string;
-  phoneNumber: string | null;
+  status: ProfileState;
+  verificationStatus: ProfileVerification;
   photosCount: number;
 }
 
